@@ -46,7 +46,11 @@ const icons: Record<Theme, JSX.Element> = {
   dark: <MoonIcon />
 };
 
-export function ThemeToggle(): JSX.Element {
+interface ThemeToggleProps {
+  className?: string;
+}
+
+export function ThemeToggle({ className = "" }: ThemeToggleProps): JSX.Element {
   const [theme, setTheme] = usePersistentState<Theme>(STORAGE_KEY, "dark");
 
   useEffect(() => {
@@ -68,7 +72,7 @@ export function ThemeToggle(): JSX.Element {
     <button
       type="button"
       onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-      className="inline-flex items-center gap-2 rounded-full border border-slate-300/50 bg-white/70 px-4 py-2 text-sm font-medium text-slate-700 shadow-sm backdrop-blur transition hover:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-400 dark:border-slate-700 dark:bg-slate-800/80 dark:text-slate-200 dark:hover:bg-slate-800"
+      className={`inline-flex items-center gap-2 rounded-full border border-slate-300/50 bg-white/70 px-4 py-2 text-sm font-medium text-slate-700 shadow-sm backdrop-blur transition hover:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-400 dark:border-slate-700 dark:bg-slate-800/80 dark:text-slate-200 dark:hover:bg-slate-800 ${className}`}
       aria-label={label}
     >
       {icons[theme]}

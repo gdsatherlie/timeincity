@@ -5,7 +5,6 @@ import { AdSlot } from "./components/AdSlot";
 import { ClockDisplay } from "./components/ClockDisplay";
 import { EmbedConfigurator } from "./components/EmbedConfigurator";
 import { PopularCities } from "./components/PopularCities";
-import { ThemeToggle } from "./components/ThemeToggle";
 import { TimezoneSelector } from "./components/TimezoneSelector";
 import { WeatherCard } from "./components/WeatherCard";
 import { usePersistentState } from "./hooks/usePersistentState";
@@ -266,7 +265,6 @@ export default function App(): JSX.Element {
                 Instantly switch between global cities, see live weather conditions, and grab an embed for your own site.
               </p>
             </div>
-            <ThemeToggle />
           </div>
         </header>
 
@@ -275,17 +273,17 @@ export default function App(): JSX.Element {
           use24Hour={use24Hour}
           onFormatToggle={() => setUse24Hour((prev) => !prev)}
           locationLabel={locationLabel}
+          onSetDefault={handleSetDefaultLocation}
+          onClearDefault={handleClearDefaultLocation}
+          isDefaultSelection={Boolean(isDefaultSelection)}
+          hasDefault={Boolean(savedLocation)}
+          defaultLabel={defaultLabel}
         />
 
         <TimezoneSelector
           timezones={timezones}
           selectedTimezone={selectedTimezone}
           onSelect={handleTimezoneChange}
-          onSetDefault={handleSetDefaultLocation}
-          onClearDefault={handleClearDefaultLocation}
-          isDefaultSelection={Boolean(isDefaultSelection)}
-          hasDefault={Boolean(savedLocation)}
-          defaultLabel={defaultLabel}
         />
 
         <AdSlot label="Inline ad" />
