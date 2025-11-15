@@ -30,6 +30,7 @@ const FALLBACK_TIMEZONES = [
 
 type WeatherSummary = {
   city: string;
+  state?: string;
   country?: string;
   temperatureC: number;
   temperatureF: number;
@@ -64,6 +65,7 @@ async function fetchWeather(timezone: string, explicitLabel?: string): Promise<W
       name: string;
       latitude: number;
       longitude: number;
+      admin1?: string;
       country?: string;
       timezone: string;
     }>;
@@ -118,6 +120,7 @@ async function fetchWeather(timezone: string, explicitLabel?: string): Promise<W
 
   const summary: WeatherSummary = {
     city: location.name ?? derivedLabel,
+    state: location.admin1,
     country: location.country,
     temperatureC,
     temperatureF: temperatureC * (9 / 5) + 32,
@@ -192,7 +195,29 @@ export default function App(): JSX.Element {
     };
   }, [selectedTimezone, customLabel]);
 
-  const cityLabel = weatherData?.city ?? customLabel ?? decodeTimezoneToLabel(selectedTimezone);
+  const fallbackCityLabel = useMemo(
+    () => customLabel ?? decodeTimezoneToLabel(selectedTimezone),
+    [customLabel, selectedTimezone]
+  );
+  const cityLabel = weatherData?.city ?? fallbackCityLabel;
+
+  const locationLabel = useMemo(() => {
+    const parts = [weatherData?.city ?? fallbackCityLabel, weatherData?.state, weatherData?.country];
+    const seen = new Set<string>();
+    return parts
+      .filter((part): part is string => {
+        if (!part) {
+          return false;
+        }
+        const normalized = part.trim();
+        if (!normalized || seen.has(normalized)) {
+          return false;
+        }
+        seen.add(normalized);
+        return true;
+      })
+      .join(", ");
+  }, [weatherData, fallbackCityLabel]);
 
   useEffect(() => {
     document.title = `Time in ${cityLabel} – TimeInCity`;
@@ -226,13 +251,14 @@ export default function App(): JSX.Element {
           timezone={selectedTimezone}
           use24Hour={use24Hour}
           onFormatToggle={() => setUse24Hour((prev) => !prev)}
+          locationLabel={locationLabel}
         />
+
+        <TimezoneSelector timezones={timezones} selectedTimezone={selectedTimezone} onSelect={handleTimezoneChange} />
 
         <AdSlot label="Inline ad" />
 
         <WeatherCard status={weatherStatus} cityLabel={cityLabel} data={weatherData ?? undefined} error={weatherError} />
-
-        <TimezoneSelector timezones={timezones} selectedTimezone={selectedTimezone} onSelect={handleTimezoneChange} />
 
         <EmbedConfigurator timezone={selectedTimezone} />
       </main>

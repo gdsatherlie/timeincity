@@ -5,9 +5,10 @@ interface ClockDisplayProps {
   timezone: string;
   use24Hour: boolean;
   onFormatToggle: () => void;
+  locationLabel?: string;
 }
 
-export function ClockDisplay({ timezone, use24Hour, onFormatToggle }: ClockDisplayProps): JSX.Element {
+export function ClockDisplay({ timezone, use24Hour, onFormatToggle, locationLabel }: ClockDisplayProps): JSX.Element {
   const createNow = () => {
     const zoned = DateTime.now().setZone(timezone);
     return zoned.isValid ? zoned : DateTime.now();
@@ -38,6 +39,9 @@ export function ClockDisplay({ timezone, use24Hour, onFormatToggle }: ClockDispl
     <section className="flex flex-col gap-6 rounded-3xl border border-slate-200/70 bg-white/80 p-8 shadow-xl shadow-slate-900/5 backdrop-blur dark:border-slate-800 dark:bg-slate-900/80 dark:shadow-black/30">
       <div>
         <p className="text-lg text-slate-500 dark:text-slate-400">Current time</p>
+        {locationLabel && (
+          <p className="text-2xl font-semibold text-slate-700 dark:text-slate-200">{locationLabel}</p>
+        )}
         <h1 className="text-5xl font-semibold tracking-tight sm:text-6xl md:text-7xl">{formattedTime}</h1>
         <p className="text-xl text-slate-600 dark:text-slate-300">{formattedDate}</p>
       </div>
