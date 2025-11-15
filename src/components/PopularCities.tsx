@@ -1,11 +1,11 @@
 import { POPULAR_CITIES, POPULAR_CITIES_COUNT } from "../data/popularCities";
 
 interface PopularCitiesProps {
-  selectedTimezone: string;
+  selectedLabel?: string;
   onSelect: (timezone: string, label?: string) => void;
 }
 
-export function PopularCities({ selectedTimezone, onSelect }: PopularCitiesProps): JSX.Element {
+export function PopularCities({ selectedLabel, onSelect }: PopularCitiesProps): JSX.Element {
   return (
     <section className="flex flex-col gap-4 rounded-3xl border border-slate-200/70 bg-white/70 p-6 shadow-lg shadow-slate-900/5 backdrop-blur dark:border-slate-800 dark:bg-slate-900/70">
       <header className="flex flex-col gap-1">
@@ -17,7 +17,7 @@ export function PopularCities({ selectedTimezone, onSelect }: PopularCitiesProps
       <div className="max-h-[30rem] overflow-y-auto pr-1">
         <div className="flex flex-wrap gap-2">
           {POPULAR_CITIES.map((city) => {
-            const isActive = city.timezone === selectedTimezone;
+            const isActive = city.label === selectedLabel;
             return (
               <button
                 key={city.label}

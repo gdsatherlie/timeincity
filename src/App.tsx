@@ -29,6 +29,11 @@ const FALLBACK_TIMEZONES = [
   "Australia/Sydney"
 ];
 
+type SavedLocation = {
+  timezone: string;
+  label?: string;
+};
+
 type WeatherSummary = {
   city: string;
   state?: string;
@@ -144,8 +149,13 @@ export default function App(): JSX.Element {
     }
   }, []);
 
-  const [selectedTimezone, setSelectedTimezone] = useState(defaultTimezone);
-  const [customLabel, setCustomLabel] = useState<string | undefined>(decodeTimezoneToLabel(defaultTimezone));
+  const [savedLocation, setSavedLocation] = usePersistentState<SavedLocation | null>("timeincity-default-location", null);
+
+  const initialTimezone = savedLocation?.timezone ?? defaultTimezone;
+  const initialLabel = savedLocation?.label ?? decodeTimezoneToLabel(initialTimezone);
+
+  const [selectedTimezone, setSelectedTimezone] = useState(initialTimezone);
+  const [customLabel, setCustomLabel] = useState<string | undefined>(initialLabel);
   const [use24Hour, setUse24Hour] = usePersistentState("timeincity-24hr", false);
 
   const timezones = useMemo(() => {
@@ -229,6 +239,18 @@ export default function App(): JSX.Element {
     setCustomLabel(label ?? decodeTimezoneToLabel(timezone));
   };
 
+  const selectedLabel = customLabel ?? decodeTimezoneToLabel(selectedTimezone);
+  const defaultLabel = savedLocation?.label ?? (savedLocation?.timezone ? decodeTimezoneToLabel(savedLocation.timezone) : undefined);
+  const isDefaultSelection = savedLocation?.timezone === selectedTimezone && savedLocation?.label === selectedLabel;
+
+  const handleSetDefaultLocation = () => {
+    setSavedLocation({ timezone: selectedTimezone, label: selectedLabel });
+  };
+
+  const handleClearDefaultLocation = () => {
+    setSavedLocation(null);
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-100 via-white to-slate-100 text-slate-900 transition-colors dark:from-slate-950 dark:via-slate-950 dark:to-slate-900 dark:text-slate-100">
       <AdSlot label="Top banner ad" sticky="top" />
@@ -255,7 +277,16 @@ export default function App(): JSX.Element {
           locationLabel={locationLabel}
         />
 
-        <TimezoneSelector timezones={timezones} selectedTimezone={selectedTimezone} onSelect={handleTimezoneChange} />
+        <TimezoneSelector
+          timezones={timezones}
+          selectedTimezone={selectedTimezone}
+          onSelect={handleTimezoneChange}
+          onSetDefault={handleSetDefaultLocation}
+          onClearDefault={handleClearDefaultLocation}
+          isDefaultSelection={Boolean(isDefaultSelection)}
+          hasDefault={Boolean(savedLocation)}
+          defaultLabel={defaultLabel}
+        />
 
         <AdSlot label="Inline ad" />
 
@@ -263,7 +294,7 @@ export default function App(): JSX.Element {
 
         <EmbedConfigurator timezone={selectedTimezone} />
 
-        <PopularCities selectedTimezone={selectedTimezone} onSelect={handleTimezoneChange} />
+        <PopularCities selectedLabel={selectedLabel} onSelect={handleTimezoneChange} />
       </main>
       <AdSlot label="Bottom banner ad" sticky="bottom" />
     </div>
