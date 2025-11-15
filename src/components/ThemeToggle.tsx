@@ -53,9 +53,11 @@ export function ThemeToggle(): JSX.Element {
     const root = window.document.documentElement;
     if (theme === "dark") {
       root.classList.add("dark");
+      root.dataset.theme = "dark";
       document.body.classList.add("dark");
     } else {
       root.classList.remove("dark");
+      root.dataset.theme = "light";
       document.body.classList.remove("dark");
     }
   }, [theme]);
