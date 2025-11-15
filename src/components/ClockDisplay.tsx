@@ -61,16 +61,19 @@ export function ClockDisplay({
 
   return (
     <section className="flex flex-col gap-6 rounded-3xl border border-slate-200/70 bg-white/80 p-8 shadow-xl shadow-slate-900/5 backdrop-blur dark:border-slate-800 dark:bg-slate-900/80 dark:shadow-black/30">
-      <div>
-        <p className="text-lg text-slate-500 dark:text-slate-400">Current time</p>
-        {locationLabel && (
-          <p className="text-2xl font-semibold text-slate-700 dark:text-slate-200">{locationLabel}</p>
-        )}
-        <h1 className="text-5xl font-semibold tracking-tight sm:text-6xl md:text-7xl">{formattedTime}</h1>
-        <p className="text-xl text-slate-600 dark:text-slate-300">{formattedDate}</p>
-        <p className="mt-2 text-sm font-medium text-slate-500 dark:text-slate-400">
-          Time zone: <span className="font-semibold text-slate-700 dark:text-slate-200">{timezoneDisplay}</span>
-        </p>
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+        <div>
+          <p className="text-lg text-slate-500 dark:text-slate-400">Current time</p>
+          {locationLabel && (
+            <p className="text-2xl font-semibold text-slate-700 dark:text-slate-200">{locationLabel}</p>
+          )}
+          <h1 className="text-5xl font-semibold tracking-tight sm:text-6xl md:text-7xl">{formattedTime}</h1>
+          <p className="text-xl text-slate-600 dark:text-slate-300">{formattedDate}</p>
+          <p className="mt-2 text-sm font-medium text-slate-500 dark:text-slate-400">
+            Time zone: <span className="font-semibold text-slate-700 dark:text-slate-200">{timezoneDisplay}</span>
+          </p>
+        </div>
+        <ThemeToggle className="self-start" />
       </div>
       <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div className="flex flex-col gap-3">
@@ -112,7 +115,6 @@ export function ClockDisplay({
             </p>
           )}
         </div>
-        <ThemeToggle className="self-end" />
       </div>
     </section>
   );

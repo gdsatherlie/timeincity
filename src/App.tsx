@@ -229,6 +229,19 @@ export default function App(): JSX.Element {
       .join(", ");
   }, [weatherData, fallbackCityLabel]);
 
+  const embedWeatherSummary = useMemo(() => {
+    if (!weatherData) {
+      return undefined;
+    }
+
+    const format = (value: number, suffix: string) => (Number.isFinite(value) ? `${value.toFixed(1)}${suffix}` : `--${suffix}`);
+
+    return `${format(weatherData.temperatureC, "°C")} / ${format(weatherData.temperatureF, "°F")} • wind ${format(
+      weatherData.windSpeed,
+      " km/h"
+    )} • precip ${format(weatherData.precipitation, " mm")}`;
+  }, [weatherData]);
+
   useEffect(() => {
     document.title = `Time in ${cityLabel} – TimeInCity`;
   }, [cityLabel]);
@@ -290,7 +303,7 @@ export default function App(): JSX.Element {
 
         <WeatherCard status={weatherStatus} cityLabel={cityLabel} data={weatherData ?? undefined} error={weatherError} />
 
-        <EmbedConfigurator timezone={selectedTimezone} />
+        <EmbedConfigurator timezone={selectedTimezone} locationLabel={locationLabel} weatherSummary={embedWeatherSummary} />
 
         <PopularCities selectedLabel={selectedLabel} onSelect={handleTimezoneChange} />
       </main>

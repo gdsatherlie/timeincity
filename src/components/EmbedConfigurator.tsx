@@ -1,4 +1,5 @@
-import { useMemo, useState } from "react";
+import { DateTime } from "luxon";
+import { useEffect, useMemo, useState } from "react";
 
 const SIZE_PRESETS = {
   small: { label: "Small", width: 320, height: 180 },
@@ -11,20 +12,54 @@ const THEMES = ["dark", "light"] as const;
 type ThemeOption = (typeof THEMES)[number];
 type SizeKey = keyof typeof SIZE_PRESETS;
 
+const BOOLEAN_PRESETS = [
+  { label: "Show", value: true },
+  { label: "Hide", value: false }
+] as const;
+
 interface EmbedConfiguratorProps {
   timezone: string;
+  locationLabel?: string;
+  weatherSummary?: string;
 }
 
-export function EmbedConfigurator({ timezone }: EmbedConfiguratorProps): JSX.Element {
+export function EmbedConfigurator({ timezone, locationLabel, weatherSummary }: EmbedConfiguratorProps): JSX.Element {
   const [theme, setTheme] = useState<ThemeOption>("dark");
   const [size, setSize] = useState<SizeKey>("medium");
+  const [includeDate, setIncludeDate] = useState(true);
+  const [includeWeather, setIncludeWeather] = useState(true);
+
+  const createNow = () => {
+    const zoned = DateTime.now().setZone(timezone);
+    return zoned.isValid ? zoned : DateTime.now();
+  };
+
+  const [previewNow, setPreviewNow] = useState(() => createNow());
+
+  useEffect(() => {
+    const update = () => setPreviewNow(createNow());
+    update();
+    const interval = window.setInterval(update, 1000);
+    return () => window.clearInterval(interval);
+  }, [timezone]);
+
+  const previewTime = previewNow.toFormat("hh:mm:ss a");
+  const previewDate = previewNow.toFormat("EEEE, MMM d");
+  const previewZone = previewNow.offsetNameShort || previewNow.toFormat("ZZZZ");
+  const previewLocation = locationLabel ?? timezone.split("/").pop()?.replace(/_/g, " ") ?? timezone;
 
   const dimensions = SIZE_PRESETS[size];
 
-  const snippet = useMemo(
-    () => `\n<iframe\n  src="https://timeincity.com/embed?tz=${encodeURIComponent(timezone)}&theme=${theme}"\n  width="${dimensions.width}"\n  height="${dimensions.height}"\n  style="border:0;border-radius:12px;overflow:hidden"\n  loading="lazy"\n></iframe>\n`.trim(),
-    [dimensions.height, dimensions.width, theme, timezone]
-  );
+  const snippet = useMemo(() => {
+    const params = new URLSearchParams({
+      tz: timezone,
+      theme,
+      showDate: includeDate ? "1" : "0",
+      showWeather: includeWeather ? "1" : "0"
+    });
+
+    return `\n<iframe\n  src="https://timeincity.com/embed?${params.toString()}"\n  width="${dimensions.width}"\n  height="${dimensions.height}"\n  style="border:0;border-radius:12px;overflow:hidden"\n  loading="lazy"\n></iframe>\n`.trim();
+  }, [dimensions.height, dimensions.width, includeDate, includeWeather, theme, timezone]);
 
   return (
     <section className="flex flex-col gap-6 rounded-3xl border border-slate-200/70 bg-white/70 p-6 shadow-lg shadow-slate-900/5 backdrop-blur dark:border-slate-800 dark:bg-slate-900/70">
@@ -79,6 +114,50 @@ export function EmbedConfigurator({ timezone }: EmbedConfiguratorProps): JSX.Ele
               })}
             </div>
           </fieldset>
+          <fieldset className="flex flex-col gap-2">
+            <legend className="text-sm font-semibold text-slate-700 dark:text-slate-300">Date</legend>
+            <div className="flex gap-2">
+              {BOOLEAN_PRESETS.map((option) => {
+                const isActive = option.value === includeDate;
+                return (
+                  <button
+                    key={option.label}
+                    type="button"
+                    onClick={() => setIncludeDate(option.value)}
+                    className={`rounded-full border px-4 py-2 text-sm font-medium transition focus:outline-none focus:ring-2 focus:ring-indigo-400 ${
+                      isActive
+                        ? "border-indigo-500 bg-indigo-500 text-white shadow-lg shadow-indigo-500/30"
+                        : "border-slate-200 bg-white/80 text-slate-700 hover:border-indigo-200 hover:text-indigo-600 dark:border-slate-700 dark:bg-slate-800/80 dark:text-slate-200"
+                    }`}
+                  >
+                    {option.label}
+                  </button>
+                );
+              })}
+            </div>
+          </fieldset>
+          <fieldset className="flex flex-col gap-2">
+            <legend className="text-sm font-semibold text-slate-700 dark:text-slate-300">Weather</legend>
+            <div className="flex gap-2">
+              {BOOLEAN_PRESETS.map((option) => {
+                const isActive = option.value === includeWeather;
+                return (
+                  <button
+                    key={option.label}
+                    type="button"
+                    onClick={() => setIncludeWeather(option.value)}
+                    className={`rounded-full border px-4 py-2 text-sm font-medium transition focus:outline-none focus:ring-2 focus:ring-indigo-400 ${
+                      isActive
+                        ? "border-indigo-500 bg-indigo-500 text-white shadow-lg shadow-indigo-500/30"
+                        : "border-slate-200 bg-white/80 text-slate-700 hover:border-indigo-200 hover:text-indigo-600 dark:border-slate-700 dark:bg-slate-800/80 dark:text-slate-200"
+                    }`}
+                  >
+                    {option.label}
+                  </button>
+                );
+              })}
+            </div>
+          </fieldset>
         </div>
         <div className="flex flex-1 flex-col gap-3">
           <span className="text-sm font-semibold text-slate-700 dark:text-slate-300">Preview</span>
@@ -86,10 +165,30 @@ export function EmbedConfigurator({ timezone }: EmbedConfiguratorProps): JSX.Ele
             className={`grid place-items-center overflow-hidden rounded-2xl border border-slate-200 bg-slate-100 p-4 text-sm text-slate-700 shadow-inner dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200`}
             style={{ width: dimensions.width, height: dimensions.height }}
           >
-            <div className={`flex h-full w-full flex-col items-center justify-center gap-2 rounded-xl border p-4 ${theme === "dark" ? "border-slate-700 bg-slate-900 text-slate-100" : "border-slate-200 bg-white text-slate-700"}`}>
-              <span className="text-lg font-semibold">TimeInCity</span>
-              <span className="text-sm opacity-70">{timezone}</span>
-              <span className="text-xs uppercase tracking-wide">Live clock embed</span>
+            <div
+              className={`flex h-full w-full flex-col justify-between rounded-2xl border p-4 ${
+                theme === "dark"
+                  ? "border-slate-700 bg-slate-950 text-slate-100"
+                  : "border-slate-200 bg-white text-slate-800"
+              }`}
+            >
+              <div className="flex items-center justify-between">
+                <span className="text-[0.55rem] font-semibold uppercase tracking-[0.4em] text-indigo-400">TimeInCity</span>
+                <span className="text-[0.6rem] font-medium uppercase tracking-[0.2em] text-slate-500 dark:text-slate-400">
+                  {previewZone}
+                </span>
+              </div>
+              <div className="flex flex-1 flex-col items-center justify-center gap-1 text-center">
+                <p className="text-xs font-semibold uppercase tracking-[0.3em] text-slate-400 dark:text-slate-500">Current time</p>
+                <p className="text-3xl font-semibold sm:text-4xl">{previewTime}</p>
+                {includeDate && <p className="text-sm text-slate-500 dark:text-slate-400">{previewDate}</p>}
+                <p className="mt-2 text-base font-medium">{previewLocation}</p>
+                {includeWeather && (
+                  <p className="text-xs text-slate-500 dark:text-slate-400">
+                    {weatherSummary ?? "Weather loads automatically"}
+                  </p>
+                )}
+              </div>
             </div>
           </div>
         </div>
