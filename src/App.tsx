@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import { AdSlot } from "./components/AdSlot";
 import { ClockDisplay } from "./components/ClockDisplay";
 import { EmbedConfigurator } from "./components/EmbedConfigurator";
+import { PopularCities } from "./components/PopularCities";
 import { ThemeToggle } from "./components/ThemeToggle";
 import { TimezoneSelector } from "./components/TimezoneSelector";
 import { WeatherCard } from "./components/WeatherCard";
@@ -261,6 +262,8 @@ export default function App(): JSX.Element {
         <WeatherCard status={weatherStatus} cityLabel={cityLabel} data={weatherData ?? undefined} error={weatherError} />
 
         <EmbedConfigurator timezone={selectedTimezone} />
+
+        <PopularCities selectedTimezone={selectedTimezone} onSelect={handleTimezoneChange} />
       </main>
       <AdSlot label="Bottom banner ad" sticky="bottom" />
     </div>
