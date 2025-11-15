@@ -1,0 +1,242 @@
+import { DateTime } from "luxon";
+import { useEffect, useMemo, useState } from "react";
+
+import { AdSlot } from "./components/AdSlot";
+import { ClockDisplay } from "./components/ClockDisplay";
+import { EmbedConfigurator } from "./components/EmbedConfigurator";
+import { ThemeToggle } from "./components/ThemeToggle";
+import { TimezoneSelector } from "./components/TimezoneSelector";
+import { WeatherCard } from "./components/WeatherCard";
+import { usePersistentState } from "./hooks/usePersistentState";
+
+const FALLBACK_TIMEZONES = [
+  "Pacific/Midway",
+  "America/Anchorage",
+  "America/Los_Angeles",
+  "America/Denver",
+  "America/Chicago",
+  "America/New_York",
+  "America/Sao_Paulo",
+  "Atlantic/Azores",
+  "Europe/London",
+  "Europe/Paris",
+  "Europe/Berlin",
+  "Asia/Dubai",
+  "Asia/Kolkata",
+  "Asia/Singapore",
+  "Asia/Tokyo",
+  "Australia/Sydney"
+];
+
+type WeatherSummary = {
+  city: string;
+  country?: string;
+  temperatureC: number;
+  temperatureF: number;
+  precipitation: number;
+  windSpeed: number;
+  sunrise: string;
+  sunset: string;
+};
+
+function decodeTimezoneToLabel(timezone: string): string {
+  const lastSegment = timezone.split("/").pop() ?? timezone;
+  return lastSegment.replace(/_/g, " ");
+}
+
+async function fetchWeather(timezone: string, explicitLabel?: string): Promise<WeatherSummary> {
+  const derivedLabel = explicitLabel ?? decodeTimezoneToLabel(timezone);
+
+  const geoParams = new URLSearchParams({
+    name: derivedLabel,
+    count: "1",
+    language: "en"
+  });
+  geoParams.set("timezone", timezone);
+
+  const geoResponse = await fetch(`https://geocoding-api.open-meteo.com/v1/search?${geoParams.toString()}`);
+  if (!geoResponse.ok) {
+    throw new Error("Unable to lookup that location.");
+  }
+
+  const geoJson = (await geoResponse.json()) as {
+    results?: Array<{
+      name: string;
+      latitude: number;
+      longitude: number;
+      country?: string;
+      timezone: string;
+    }>;
+  };
+
+  const location = geoJson.results?.[0];
+
+  if (!location) {
+    throw new Error("No matching location found for that time zone.");
+  }
+
+  const forecastParams = new URLSearchParams({
+    latitude: location.latitude.toString(),
+    longitude: location.longitude.toString(),
+    current: "temperature_2m,precipitation,wind_speed_10m",
+    daily: "sunrise,sunset",
+    timezone,
+    temperature_unit: "celsius",
+    windspeed_unit: "kmh",
+    precipitation_unit: "mm"
+  });
+
+  const forecastResponse = await fetch(`https://api.open-meteo.com/v1/forecast?${forecastParams.toString()}`);
+  if (!forecastResponse.ok) {
+    throw new Error("Unable to fetch weather data.");
+  }
+
+  const forecastJson = (await forecastResponse.json()) as {
+    current?: {
+      temperature_2m?: number;
+      precipitation?: number;
+      wind_speed_10m?: number;
+    };
+    daily?: {
+      sunrise?: string[];
+      sunset?: string[];
+    };
+  };
+
+  const temperatureC = forecastJson.current?.temperature_2m ?? NaN;
+  const precipitation = forecastJson.current?.precipitation ?? NaN;
+  const windSpeed = forecastJson.current?.wind_speed_10m ?? NaN;
+
+  const sunriseISO = forecastJson.daily?.sunrise?.[0];
+  const sunsetISO = forecastJson.daily?.sunset?.[0];
+
+  const formatTime = (value?: string) => {
+    if (!value) return "--:--";
+    const dt = DateTime.fromISO(value).setZone(timezone);
+    return dt.isValid ? dt.toFormat("h:mm a") : "--:--";
+  };
+
+  const summary: WeatherSummary = {
+    city: location.name ?? derivedLabel,
+    country: location.country,
+    temperatureC,
+    temperatureF: temperatureC * (9 / 5) + 32,
+    precipitation,
+    windSpeed,
+    sunrise: formatTime(sunriseISO),
+    sunset: formatTime(sunsetISO)
+  };
+
+  return summary;
+}
+
+export default function App(): JSX.Element {
+  const defaultTimezone = useMemo(() => {
+    try {
+      return Intl.DateTimeFormat().resolvedOptions().timeZone;
+    } catch (error) {
+      console.warn("Could not read local timezone", error);
+      return "UTC";
+    }
+  }, []);
+
+  const [selectedTimezone, setSelectedTimezone] = useState(defaultTimezone);
+  const [customLabel, setCustomLabel] = useState<string | undefined>(decodeTimezoneToLabel(defaultTimezone));
+  const [use24Hour, setUse24Hour] = usePersistentState("timeincity-24hr", false);
+
+  const timezones = useMemo(() => {
+    try {
+      return Intl.supportedValuesOf ? Intl.supportedValuesOf("timeZone") : FALLBACK_TIMEZONES;
+    } catch (error) {
+      console.warn("Intl.supportedValuesOf unavailable", error);
+      return FALLBACK_TIMEZONES;
+    }
+  }, []);
+
+  const [weatherStatus, setWeatherStatus] = useState<"idle" | "loading" | "error" | "success">("loading");
+  const [weatherData, setWeatherData] = useState<WeatherSummary | null>(null);
+  const [weatherError, setWeatherError] = useState<string | undefined>();
+
+  useEffect(() => {
+    if (!selectedTimezone) {
+      return;
+    }
+
+    let cancelled = false;
+
+    const load = async () => {
+      setWeatherStatus("loading");
+      setWeatherError(undefined);
+      try {
+        const summary = await fetchWeather(selectedTimezone, customLabel);
+        if (!cancelled) {
+          setWeatherData(summary);
+          setWeatherStatus("success");
+        }
+      } catch (err) {
+        if (!cancelled) {
+          setWeatherStatus("error");
+          setWeatherData(null);
+          setWeatherError(err instanceof Error ? err.message : "Could not load weather right now.");
+        }
+      }
+    };
+
+    load();
+
+    const refreshInterval = window.setInterval(load, 10 * 60 * 1000);
+
+    return () => {
+      cancelled = true;
+      window.clearInterval(refreshInterval);
+    };
+  }, [selectedTimezone, customLabel]);
+
+  const cityLabel = weatherData?.city ?? customLabel ?? decodeTimezoneToLabel(selectedTimezone);
+
+  useEffect(() => {
+    document.title = `Time in ${cityLabel} – TimeInCity`;
+  }, [cityLabel]);
+
+  const handleTimezoneChange = (timezone: string, label?: string) => {
+    setSelectedTimezone(timezone);
+    setCustomLabel(label ?? decodeTimezoneToLabel(timezone));
+  };
+
+  return (
+    <div className="min-h-screen bg-gradient-to-b from-slate-100 via-white to-slate-100 text-slate-900 transition-colors dark:from-slate-950 dark:via-slate-950 dark:to-slate-900 dark:text-slate-100">
+      <AdSlot label="Top banner ad" sticky="top" />
+      <main className="mx-auto flex w-full max-w-6xl flex-col gap-10 px-4 pb-24 pt-20 sm:px-6 lg:px-8">
+        <header className="flex flex-col gap-6 rounded-3xl border border-slate-200/70 bg-white/80 p-6 shadow-lg shadow-slate-900/5 backdrop-blur dark:border-slate-800 dark:bg-slate-900/70">
+          <div className="flex flex-col items-start gap-4 lg:flex-row lg:items-center lg:justify-between">
+            <div>
+              <p className="text-sm font-semibold uppercase tracking-[0.2em] text-indigo-500">TimeInCity</p>
+              <h1 className="text-4xl font-bold tracking-tight text-slate-900 dark:text-white sm:text-5xl">
+                Track the time & weather anywhere
+              </h1>
+              <p className="mt-3 max-w-2xl text-base text-slate-600 dark:text-slate-300">
+                Instantly switch between global cities, see live weather conditions, and grab an embed for your own site.
+              </p>
+            </div>
+            <ThemeToggle />
+          </div>
+        </header>
+
+        <ClockDisplay
+          timezone={selectedTimezone}
+          use24Hour={use24Hour}
+          onFormatToggle={() => setUse24Hour((prev) => !prev)}
+        />
+
+        <AdSlot label="Inline ad" />
+
+        <WeatherCard status={weatherStatus} cityLabel={cityLabel} data={weatherData ?? undefined} error={weatherError} />
+
+        <TimezoneSelector timezones={timezones} selectedTimezone={selectedTimezone} onSelect={handleTimezoneChange} />
+
+        <EmbedConfigurator timezone={selectedTimezone} />
+      </main>
+      <AdSlot label="Bottom banner ad" sticky="bottom" />
+    </div>
+  );
+}
