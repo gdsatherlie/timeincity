@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import { AdSlot } from "./components/AdSlot";
 import { ClockDisplay } from "./components/ClockDisplay";
 import { EmbedConfigurator } from "./components/EmbedConfigurator";
+import { FavoriteCities } from "./components/FavoriteCities";
 import { PopularCities } from "./components/PopularCities";
 import { TimezoneSelector } from "./components/TimezoneSelector";
 import { WeatherCard } from "./components/WeatherCard";
@@ -149,6 +150,7 @@ export default function App(): JSX.Element {
   }, []);
 
   const [savedLocation, setSavedLocation] = usePersistentState<SavedLocation | null>("timeincity-default-location", null);
+  const [favoriteCities, setFavoriteCities] = usePersistentState<SavedLocation[]>("timeincity-favorite-cities", []);
 
   const initialTimezone = savedLocation?.timezone ?? defaultTimezone;
   const initialLabel = savedLocation?.label ?? decodeTimezoneToLabel(initialTimezone);
@@ -297,6 +299,26 @@ export default function App(): JSX.Element {
     setSavedLocation(null);
   };
 
+  const hasFavorite = favoriteCities.some(
+    (favorite) => favorite.timezone === selectedTimezone && favorite.label === selectedLabel
+  );
+
+  const handleAddFavorite = () => {
+    setFavoriteCities((previous) => {
+      if (previous.some((favorite) => favorite.timezone === selectedTimezone && favorite.label === selectedLabel)) {
+        return previous;
+      }
+      const next = [...previous, { timezone: selectedTimezone, label: selectedLabel }];
+      return next.slice(-24);
+    });
+  };
+
+  const handleRemoveFavorite = (timezone: string, label?: string) => {
+    setFavoriteCities((previous) =>
+      previous.filter((favorite) => !(favorite.timezone === timezone && favorite.label === label))
+    );
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-100 via-white to-slate-100 text-slate-900 transition-colors dark:from-slate-950 dark:via-slate-950 dark:to-slate-900 dark:text-slate-100">
       <AdSlot label="Top banner ad" sticky="top" />
@@ -326,6 +348,16 @@ export default function App(): JSX.Element {
           hasDefault={Boolean(savedLocation)}
           defaultLabel={defaultLabel}
           defaultDifference={defaultDifference}
+        />
+
+        <FavoriteCities
+          favorites={favoriteCities}
+          selectedTimezone={selectedTimezone}
+          selectedLabel={selectedLabel}
+          onSelect={handleTimezoneChange}
+          onRemove={handleRemoveFavorite}
+          onAddCurrent={handleAddFavorite}
+          canAddCurrent={!hasFavorite}
         />
 
         <TimezoneSelector
