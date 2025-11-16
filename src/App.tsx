@@ -3,14 +3,16 @@ import { DateTime } from "luxon";
 import { useEffect, useMemo, useState } from "react";
 
 import { AdSlot } from "./components/AdSlot";
+import { CitySeoSection } from "./components/CitySeoSection";
 import { ClockDisplay } from "./components/ClockDisplay";
 import { EmbedConfigurator } from "./components/EmbedConfigurator";
 import { FavoriteCities } from "./components/FavoriteCities";
+import { HomeSeoSection } from "./components/HomeSeoSection";
 import { PopularCities } from "./components/PopularCities";
 import { TimezoneSelector } from "./components/TimezoneSelector";
 import { WeatherCard } from "./components/WeatherCard";
 import { usePersistentState } from "./hooks/usePersistentState";
-import { POPULAR_CITIES } from "./data/popularCities";
+import { CITY_CONFIGS } from "./data/cities";
 import { slugifyCity } from "./utils/slugifyCity";
 
 const FALLBACK_TIMEZONES = [
@@ -31,25 +33,6 @@ const FALLBACK_TIMEZONES = [
   "Asia/Tokyo",
   "Australia/Sydney"
 ];
-
-const BASE_CITY_SLUGS: Record<string, { name: string; timezone: string }> = {
-  chicago: { name: "Chicago", timezone: "America/Chicago" },
-  "new-york": { name: "New York", timezone: "America/New_York" },
-  "los-angeles": { name: "Los Angeles", timezone: "America/Los_Angeles" },
-  london: { name: "London", timezone: "Europe/London" },
-  paris: { name: "Paris", timezone: "Europe/Paris" },
-  tokyo: { name: "Tokyo", timezone: "Asia/Tokyo" }
-};
-
-const CITY_SLUGS: Record<string, { name: string; timezone: string }> = { ...BASE_CITY_SLUGS };
-
-for (const city of POPULAR_CITIES) {
-  const slug = slugifyCity(city.label);
-  if (!slug || CITY_SLUGS[slug]) {
-    continue;
-  }
-  CITY_SLUGS[slug] = { name: city.label, timezone: city.timezone };
-}
 
 type SavedLocation = {
   timezone: string;
@@ -161,6 +144,11 @@ async function fetchWeather(timezone: string, explicitLabel?: string): Promise<W
   return summary;
 }
 
+function getCitySlugFromPath(pathname: string): string | undefined {
+  const match = pathname.match(/^\/city\/([^/?#]+)/i);
+  return match ? match[1].toLowerCase() : undefined;
+}
+
 export default function App(): JSX.Element {
   const defaultTimezone = useMemo(() => {
     try {
@@ -174,8 +162,18 @@ export default function App(): JSX.Element {
   const [savedLocation, setSavedLocation] = usePersistentState<SavedLocation | null>("timeincity-default-location", null);
   const [favoriteCities, setFavoriteCities] = usePersistentState<SavedLocation[]>("timeincity-favorite-cities", []);
 
-  const initialTimezone = savedLocation?.timezone ?? defaultTimezone;
-  const initialLabel = savedLocation?.label ?? decodeTimezoneToLabel(initialTimezone);
+  const [routeSlug, setRouteSlug] = useState<string | undefined>(() => {
+    if (typeof window === "undefined") {
+      return undefined;
+    }
+    return getCitySlugFromPath(window.location.pathname);
+  });
+
+  const activeCityConfig = routeSlug ? CITY_CONFIGS[routeSlug] : undefined;
+  const isCityRoute = Boolean(routeSlug && activeCityConfig);
+
+  const initialTimezone = activeCityConfig?.timezone ?? savedLocation?.timezone ?? defaultTimezone;
+  const initialLabel = activeCityConfig?.name ?? savedLocation?.label ?? decodeTimezoneToLabel(initialTimezone);
 
   const [selectedTimezone, setSelectedTimezone] = useState(initialTimezone);
   const [customLabel, setCustomLabel] = useState<string | undefined>(initialLabel);
@@ -194,31 +192,64 @@ export default function App(): JSX.Element {
   const [weatherData, setWeatherData] = useState<WeatherSummary | null>(null);
   const [weatherError, setWeatherError] = useState<string | undefined>();
 
-  const syncUrlCityParam = (label?: string) => {
+  const updateRouteForSlug = (slug?: string, options: { replace?: boolean } = {}) => {
+    const { replace = false } = options;
+
+    if (typeof window !== "undefined") {
+      const nextPath = slug ? `/city/${slug}` : "/";
+      const currentPath = window.location.pathname;
+      const hasSearch = Boolean(window.location.search);
+      const needsUpdate = currentPath !== nextPath || hasSearch;
+
+      if (needsUpdate) {
+        if (replace) {
+          window.history.replaceState(window.history.state, "", nextPath);
+        } else {
+          window.history.pushState(window.history.state, "", nextPath);
+        }
+      }
+    }
+
+    setRouteSlug(slug);
+  };
+
+  useEffect(() => {
     if (typeof window === "undefined") {
       return;
     }
     const params = new URLSearchParams(window.location.search);
-    if (label) {
-      const slug = slugifyCity(label);
-      if (slug && CITY_SLUGS[slug]) {
-        params.set("city", slug);
+    const slug = params.get("city");
+    if (slug) {
+      const entry = CITY_CONFIGS[slug.toLowerCase()];
+      if (entry) {
+        updateRouteForSlug(entry.slug, { replace: true });
       } else {
-        params.delete("city");
+        window.history.replaceState(window.history.state, "", window.location.pathname.split("?")[0]);
       }
-    } else {
-      params.delete("city");
     }
-    const query = params.toString();
-    const nextUrl = query ? `?${query}` : window.location.pathname;
-    window.history.replaceState({}, "", nextUrl);
-  };
+  }, []);
+
+  useEffect(() => {
+    if (typeof window === "undefined") {
+      return;
+    }
+    const handler = () => {
+      setRouteSlug(getCitySlugFromPath(window.location.pathname));
+    };
+    window.addEventListener("popstate", handler);
+    return () => window.removeEventListener("popstate", handler);
+  }, []);
 
   const handleTimezoneChange = (timezone: string, label?: string) => {
     setSelectedTimezone(timezone);
     const computedLabel = label ?? decodeTimezoneToLabel(timezone);
     setCustomLabel(computedLabel);
-    syncUrlCityParam(computedLabel);
+    const slug = slugifyCity(computedLabel);
+    if (slug && CITY_CONFIGS[slug]) {
+      updateRouteForSlug(slug);
+    } else {
+      updateRouteForSlug(undefined);
+    }
   };
 
   useEffect(() => {
@@ -255,6 +286,20 @@ export default function App(): JSX.Element {
       window.clearInterval(refreshInterval);
     };
   }, [selectedTimezone, customLabel]);
+
+  useEffect(() => {
+    if (!activeCityConfig) {
+      return;
+    }
+    setSelectedTimezone(activeCityConfig.timezone);
+    setCustomLabel(activeCityConfig.name);
+  }, [activeCityConfig?.timezone, activeCityConfig?.name]);
+
+  useEffect(() => {
+    if (routeSlug && !activeCityConfig) {
+      updateRouteForSlug(undefined, { replace: true });
+    }
+  }, [routeSlug, activeCityConfig]);
 
   const fallbackCityLabel = useMemo(
     () => customLabel ?? decodeTimezoneToLabel(selectedTimezone),
@@ -294,24 +339,12 @@ export default function App(): JSX.Element {
   }, [weatherData]);
 
   useEffect(() => {
-    document.title = `Time in ${cityLabel} – TimeInCity`;
-  }, [cityLabel]);
-
-  useEffect(() => {
-    if (typeof window === "undefined") {
-      return;
-    }
-    const params = new URLSearchParams(window.location.search);
-    const slug = params.get("city");
-    if (!slug) {
-      return;
-    }
-    const entry = CITY_SLUGS[slug.toLowerCase()];
-    if (entry) {
-      setSelectedTimezone(entry.timezone);
-      setCustomLabel(entry.name);
-    }
-  }, []);
+    const primaryLabel = isCityRoute ? activeCityConfig?.name ?? cityLabel : cityLabel;
+    const nextTitle = isCityRoute
+      ? `Current time in ${primaryLabel} — TimeInCity`
+      : `Time in ${primaryLabel} – TimeInCity`;
+    document.title = nextTitle;
+  }, [cityLabel, isCityRoute, activeCityConfig?.name]);
 
   const selectedLabel = customLabel ?? decodeTimezoneToLabel(selectedTimezone);
   const defaultLabel = savedLocation?.label ?? (savedLocation?.timezone ? decodeTimezoneToLabel(savedLocation.timezone) : undefined);
@@ -418,13 +451,7 @@ export default function App(): JSX.Element {
           defaultDifference={defaultDifference}
         />
 
-        <section className="flex flex-col gap-3 rounded-3xl border border-slate-200/70 bg-white/80 p-6 text-slate-700 shadow-lg shadow-slate-900/5 dark:border-slate-800 dark:bg-slate-900/70 dark:text-slate-200">
-          <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100">Exact time and weather in any city</h2>
-          <p className="text-base leading-relaxed">
-            TimeInCity shows the exact current time, date, weather, sunrise, and sunset for any city. Choose a time zone, pick a
-            popular city, or share a direct link so everyone sees the same time.
-          </p>
-        </section>
+        {isCityRoute && activeCityConfig ? <CitySeoSection city={activeCityConfig} /> : <HomeSeoSection />}
 
         <FavoriteCities
           favorites={favoriteCities}

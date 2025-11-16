@@ -1,8 +1,16 @@
+import type { MouseEvent } from "react";
+
+import { CITY_CONFIGS } from "../data/cities";
 import { POPULAR_CITIES, POPULAR_CITIES_COUNT } from "../data/popularCities";
+import { slugifyCity } from "../utils/slugifyCity";
 
 interface PopularCitiesProps {
   selectedLabel?: string;
   onSelect: (timezone: string, label?: string) => void;
+}
+
+function isModifiedEvent(event: MouseEvent<HTMLAnchorElement>): boolean {
+  return event.metaKey || event.ctrlKey || event.shiftKey || event.button !== 0;
 }
 
 export function PopularCities({ selectedLabel, onSelect }: PopularCitiesProps): JSX.Element {
@@ -17,20 +25,33 @@ export function PopularCities({ selectedLabel, onSelect }: PopularCitiesProps): 
       <div className="max-h-[30rem] overflow-y-auto pr-1">
         <div className="flex flex-wrap gap-3">
           {POPULAR_CITIES.map((city) => {
+            const slug = slugifyCity(city.label);
+            const hasLandingPage = Boolean(slug && CITY_CONFIGS[slug]);
+            const href = hasLandingPage ? `/city/${slug}` : "#";
             const isActive = city.label === selectedLabel;
+
+            const baseClasses =
+              "inline-flex min-w-[9rem] items-center justify-center rounded-2xl border px-5 py-3 text-sm font-semibold transition focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400 sm:text-base";
+
+            const stateClasses = isActive
+              ? "border-indigo-500 bg-indigo-500 text-white shadow-lg shadow-indigo-500/30"
+              : "border-slate-200 bg-white/90 text-slate-700 shadow-sm hover:border-indigo-200 hover:bg-white dark:border-slate-700 dark:bg-slate-800/80 dark:text-slate-200";
+
             return (
-              <button
+              <a
                 key={city.label}
-                type="button"
-                onClick={() => onSelect(city.timezone, city.label)}
-                className={`rounded-2xl border px-5 py-2.5 text-sm font-medium transition focus:outline-none focus:ring-2 focus:ring-indigo-400 sm:text-base ${
-                  isActive
-                    ? "border-indigo-500 bg-indigo-500 text-white shadow-lg shadow-indigo-500/30"
-                    : "border-slate-200 bg-white/90 text-slate-700 shadow-sm hover:border-indigo-200 hover:bg-white focus-visible:ring-indigo-400 dark:border-slate-700 dark:bg-slate-800/80 dark:text-slate-200"
-                }`}
+                href={href}
+                className={`${baseClasses} ${stateClasses}`}
+                onClick={(event) => {
+                  if (isModifiedEvent(event)) {
+                    return;
+                  }
+                  event.preventDefault();
+                  onSelect(city.timezone, city.label);
+                }}
               >
                 {city.label}
-              </button>
+              </a>
             );
           })}
         </div>
