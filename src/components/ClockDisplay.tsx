@@ -77,7 +77,7 @@ export function ClockDisplay({
             Time zone: <span className="font-semibold text-slate-700 dark:text-slate-200">{timezoneDisplay}</span>
           </p>
         </div>
-        <ThemeToggle className="self-start sm:-mt-1 sm:self-end" />
+        <ThemeToggle className="self-start sm:self-start sm:ml-auto" />
       </div>
       <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div className="flex flex-col gap-3">
