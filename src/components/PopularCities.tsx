@@ -15,7 +15,7 @@ export function PopularCities({ selectedLabel, onSelect }: PopularCitiesProps): 
         </p>
       </header>
       <div className="max-h-[30rem] overflow-y-auto pr-1">
-        <div className="flex flex-wrap gap-2">
+        <div className="flex flex-wrap gap-3">
           {POPULAR_CITIES.map((city) => {
             const isActive = city.label === selectedLabel;
             return (
@@ -23,10 +23,10 @@ export function PopularCities({ selectedLabel, onSelect }: PopularCitiesProps): 
                 key={city.label}
                 type="button"
                 onClick={() => onSelect(city.timezone, city.label)}
-                className={`rounded-full border px-4 py-2 text-sm font-medium transition focus:outline-none focus:ring-2 focus:ring-indigo-400 ${
+                className={`rounded-2xl border px-5 py-2.5 text-sm font-medium transition focus:outline-none focus:ring-2 focus:ring-indigo-400 sm:text-base ${
                   isActive
                     ? "border-indigo-500 bg-indigo-500 text-white shadow-lg shadow-indigo-500/30"
-                    : "border-slate-200 bg-white/70 text-slate-700 hover:border-indigo-200 hover:text-indigo-600 dark:border-slate-700 dark:bg-slate-800/80 dark:text-slate-200"
+                    : "border-slate-200 bg-white/90 text-slate-700 shadow-sm hover:border-indigo-200 hover:bg-white focus-visible:ring-indigo-400 dark:border-slate-700 dark:bg-slate-800/80 dark:text-slate-200"
                 }`}
               >
                 {city.label}

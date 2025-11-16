@@ -10,6 +10,51 @@
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
       rel="stylesheet"
     />
+    <title>TimeInCity — Exact Time & Weather in Any City</title>
+    <meta
+      name="description"
+      content="See the exact current time, date, weather, sunrise, and sunset for any city in the world. TimeInCity is a fast, accurate world clock with simple embeds."
+    />
+    <meta name="robots" content="index,follow" />
+    <link rel="canonical" href="https://www.timeincity.com/" />
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-REPLACE-ME"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag("js", new Date());
+      gtag("config", "G-REPLACE-ME");
+    </script>
+    <script
+      async
+      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-REPLACE-ME"
+      crossorigin="anonymous"
+    ></script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "How does TimeInCity calculate the current time?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "TimeInCity relies on the browser's clock combined with the selected IANA time zone to render the exact current time, date, and offset."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Does TimeInCity show weather for each city?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes. TimeInCity fetches live temperature, precipitation, wind, sunrise, and sunset data for the selected city using the Open-Meteo APIs."
+            }
+          }
+        ]
+      }
+    </script>
     <script>
       const savedTheme = localStorage.getItem("timeincity-theme");
       const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
@@ -19,7 +64,6 @@
         document.documentElement.dataset.theme = "dark";
       }
     </script>
-    <title>TimeInCity</title>
   </head>
   <body class="min-h-screen bg-slate-950 font-sans text-slate-100 transition-colors duration-300 dark:bg-slate-950 dark:text-slate-100">
     <div id="root"></div>

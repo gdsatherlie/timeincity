@@ -70,7 +70,7 @@ export function FavoriteCities({
             return (
               <div
                 key={`${favorite.timezone}-${label}`}
-                className={`flex items-center gap-2 rounded-full border px-3 py-1.5 text-sm font-medium shadow-sm transition dark:border-slate-700 ${
+                className={`flex items-center gap-2 rounded-2xl border px-4 py-2 text-sm font-medium shadow-sm transition dark:border-slate-700 ${
                   isActive
                     ? "border-indigo-500 bg-indigo-500/10 text-indigo-700 dark:bg-indigo-500/20 dark:text-indigo-200"
                     : "border-slate-200 bg-white/70 text-slate-700 dark:bg-slate-900/60 dark:text-slate-200"
@@ -79,7 +79,7 @@ export function FavoriteCities({
                 <button
                   type="button"
                   onClick={() => onSelect(favorite.timezone, favorite.label)}
-                  className="text-left"
+                  className="text-left text-base"
                 >
                   {label}
                 </button>

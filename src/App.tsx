@@ -10,6 +10,8 @@ import { PopularCities } from "./components/PopularCities";
 import { TimezoneSelector } from "./components/TimezoneSelector";
 import { WeatherCard } from "./components/WeatherCard";
 import { usePersistentState } from "./hooks/usePersistentState";
+import { POPULAR_CITIES } from "./data/popularCities";
+import { slugifyCity } from "./utils/slugifyCity";
 
 const FALLBACK_TIMEZONES = [
   "Pacific/Midway",
@@ -29,6 +31,25 @@ const FALLBACK_TIMEZONES = [
   "Asia/Tokyo",
   "Australia/Sydney"
 ];
+
+const BASE_CITY_SLUGS: Record<string, { name: string; timezone: string }> = {
+  chicago: { name: "Chicago", timezone: "America/Chicago" },
+  "new-york": { name: "New York", timezone: "America/New_York" },
+  "los-angeles": { name: "Los Angeles", timezone: "America/Los_Angeles" },
+  london: { name: "London", timezone: "Europe/London" },
+  paris: { name: "Paris", timezone: "Europe/Paris" },
+  tokyo: { name: "Tokyo", timezone: "Asia/Tokyo" }
+};
+
+const CITY_SLUGS: Record<string, { name: string; timezone: string }> = { ...BASE_CITY_SLUGS };
+
+for (const city of POPULAR_CITIES) {
+  const slug = slugifyCity(city.label);
+  if (!slug || CITY_SLUGS[slug]) {
+    continue;
+  }
+  CITY_SLUGS[slug] = { name: city.label, timezone: city.timezone };
+}
 
 type SavedLocation = {
   timezone: string;
@@ -173,6 +194,33 @@ export default function App(): JSX.Element {
   const [weatherData, setWeatherData] = useState<WeatherSummary | null>(null);
   const [weatherError, setWeatherError] = useState<string | undefined>();
 
+  const syncUrlCityParam = (label?: string) => {
+    if (typeof window === "undefined") {
+      return;
+    }
+    const params = new URLSearchParams(window.location.search);
+    if (label) {
+      const slug = slugifyCity(label);
+      if (slug && CITY_SLUGS[slug]) {
+        params.set("city", slug);
+      } else {
+        params.delete("city");
+      }
+    } else {
+      params.delete("city");
+    }
+    const query = params.toString();
+    const nextUrl = query ? `?${query}` : window.location.pathname;
+    window.history.replaceState({}, "", nextUrl);
+  };
+
+  const handleTimezoneChange = (timezone: string, label?: string) => {
+    setSelectedTimezone(timezone);
+    const computedLabel = label ?? decodeTimezoneToLabel(timezone);
+    setCustomLabel(computedLabel);
+    syncUrlCityParam(computedLabel);
+  };
+
   useEffect(() => {
     if (!selectedTimezone) {
       return;
@@ -249,10 +297,21 @@ export default function App(): JSX.Element {
     document.title = `Time in ${cityLabel} – TimeInCity`;
   }, [cityLabel]);
 
-  const handleTimezoneChange = (timezone: string, label?: string) => {
-    setSelectedTimezone(timezone);
-    setCustomLabel(label ?? decodeTimezoneToLabel(timezone));
-  };
+  useEffect(() => {
+    if (typeof window === "undefined") {
+      return;
+    }
+    const params = new URLSearchParams(window.location.search);
+    const slug = params.get("city");
+    if (!slug) {
+      return;
+    }
+    const entry = CITY_SLUGS[slug.toLowerCase()];
+    if (entry) {
+      setSelectedTimezone(entry.timezone);
+      setCustomLabel(entry.name);
+    }
+  }, []);
 
   const selectedLabel = customLabel ?? decodeTimezoneToLabel(selectedTimezone);
   const defaultLabel = savedLocation?.label ?? (savedLocation?.timezone ? decodeTimezoneToLabel(savedLocation.timezone) : undefined);
@@ -329,7 +388,7 @@ export default function App(): JSX.Element {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-100 via-white to-slate-100 text-slate-900 transition-colors dark:from-slate-950 dark:via-slate-950 dark:to-slate-900 dark:text-slate-100">
-      <AdSlot label="Top banner ad" sticky="top" />
+      <AdSlot label="Top banner ad" slotId="1234567890" sticky="top" />
       <main className="mx-auto flex w-full max-w-6xl flex-col gap-10 px-4 pb-24 pt-20 sm:px-6 lg:px-8">
         <header className="flex flex-col gap-6 rounded-3xl border border-slate-200/70 bg-white/80 p-6 shadow-lg shadow-slate-900/5 backdrop-blur dark:border-slate-800 dark:bg-slate-900/70">
           <div className="flex flex-col items-start gap-4 lg:flex-row lg:items-center lg:justify-between">
@@ -359,6 +418,14 @@ export default function App(): JSX.Element {
           defaultDifference={defaultDifference}
         />
 
+        <section className="flex flex-col gap-3 rounded-3xl border border-slate-200/70 bg-white/80 p-6 text-slate-700 shadow-lg shadow-slate-900/5 dark:border-slate-800 dark:bg-slate-900/70 dark:text-slate-200">
+          <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100">Exact time and weather in any city</h2>
+          <p className="text-base leading-relaxed">
+            TimeInCity shows the exact current time, date, weather, sunrise, and sunset for any city. Choose a time zone, pick a
+            popular city, or share a direct link so everyone sees the same time.
+          </p>
+        </section>
+
         <FavoriteCities
           favorites={favoriteCities}
           selectedTimezone={selectedTimezone}
@@ -375,7 +442,7 @@ export default function App(): JSX.Element {
           onSelect={handleTimezoneChange}
         />
 
-        <AdSlot label="Inline ad" />
+        <AdSlot label="Inline ad" slotId="1234567891" />
 
         <WeatherCard status={weatherStatus} cityLabel={cityLabel} data={weatherData ?? undefined} error={weatherError} />
 
@@ -383,7 +450,7 @@ export default function App(): JSX.Element {
 
         <PopularCities selectedLabel={selectedLabel} onSelect={handleTimezoneChange} />
       </main>
-      <AdSlot label="Bottom banner ad" sticky="bottom" />
+      <AdSlot label="Bottom banner ad" slotId="1234567892" sticky="bottom" />
       <Analytics />
     </div>
   );
