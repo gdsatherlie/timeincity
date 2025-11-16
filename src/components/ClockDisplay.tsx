@@ -10,6 +10,7 @@ interface ClockDisplayProps {
   locationLabel?: string;
   onSetDefault?: () => void;
   onClearDefault?: () => void;
+  onSelectDefault?: () => void;
   isDefaultSelection?: boolean;
   hasDefault?: boolean;
   defaultLabel?: string;
@@ -23,6 +24,7 @@ export function ClockDisplay({
   locationLabel,
   onSetDefault,
   onClearDefault,
+  onSelectDefault,
   isDefaultSelection,
   hasDefault,
   defaultLabel,
@@ -75,7 +77,7 @@ export function ClockDisplay({
             Time zone: <span className="font-semibold text-slate-700 dark:text-slate-200">{timezoneDisplay}</span>
           </p>
         </div>
-        <ThemeToggle className="self-start sm:self-end" />
+        <ThemeToggle className="self-start sm:-mt-1 sm:self-end" />
       </div>
       <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div className="flex flex-col gap-3">
@@ -113,7 +115,17 @@ export function ClockDisplay({
           </div>
           {hasDefault && defaultLabel && (
             <p className="text-xs text-slate-500 dark:text-slate-400">
-              Saved default city: <span className="font-semibold text-slate-800 dark:text-slate-100">{defaultLabel}</span>
+              Saved default city:
+              <button
+                type="button"
+                onClick={isDefaultSelection ? undefined : onSelectDefault}
+                disabled={isDefaultSelection}
+                className={`ml-2 font-semibold transition hover:text-indigo-600 focus:outline-none focus:ring-1 focus:ring-indigo-400 dark:hover:text-indigo-300 ${
+                  isDefaultSelection ? "cursor-default text-slate-400 dark:text-slate-500" : "text-slate-800 dark:text-slate-100"
+                }`}
+              >
+                {defaultLabel}
+              </button>
               {defaultDifference && (
                 <span className="ml-2 text-slate-500 dark:text-slate-400">• {defaultDifference}</span>
               )}

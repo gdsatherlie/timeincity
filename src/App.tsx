@@ -299,6 +299,13 @@ export default function App(): JSX.Element {
     setSavedLocation(null);
   };
 
+  const handleSelectDefaultLocation = () => {
+    if (!savedLocation) {
+      return;
+    }
+    handleTimezoneChange(savedLocation.timezone, savedLocation.label);
+  };
+
   const hasFavorite = favoriteCities.some(
     (favorite) => favorite.timezone === selectedTimezone && favorite.label === selectedLabel
   );
@@ -326,8 +333,8 @@ export default function App(): JSX.Element {
         <header className="flex flex-col gap-6 rounded-3xl border border-slate-200/70 bg-white/80 p-6 shadow-lg shadow-slate-900/5 backdrop-blur dark:border-slate-800 dark:bg-slate-900/70">
           <div className="flex flex-col items-start gap-4 lg:flex-row lg:items-center lg:justify-between">
             <div>
-              <p className="text-sm font-semibold uppercase tracking-[0.2em] text-indigo-500">TimeInCity</p>
-              <h1 className="text-4xl font-bold tracking-tight text-slate-900 dark:text-white sm:text-5xl">
+              <p className="mb-3 text-sm font-semibold uppercase tracking-[0.2em] text-indigo-500">TimeInCity</p>
+              <h1 className="text-4xl font-serif italic tracking-tight text-indigo-600 drop-shadow-sm dark:text-indigo-200 sm:text-5xl">
                 Track the time & weather anywhere
               </h1>
               <p className="mt-3 max-w-2xl text-base text-slate-600 dark:text-slate-300">
@@ -344,6 +351,7 @@ export default function App(): JSX.Element {
           locationLabel={locationLabel}
           onSetDefault={handleSetDefaultLocation}
           onClearDefault={handleClearDefaultLocation}
+          onSelectDefault={handleSelectDefaultLocation}
           isDefaultSelection={Boolean(isDefaultSelection)}
           hasDefault={Boolean(savedLocation)}
           defaultLabel={defaultLabel}
