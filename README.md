@@ -69,6 +69,16 @@ Follow these steps the moment you are ready to go live:
 
 Because all time and weather data loads client-side, you don’t need any backend configuration—Vercel simply hosts the static bundle.
 
+### Quick deployment check
+
+If you want to double-check that the exact commands Vercel will run also succeed locally, execute:
+
+```bash
+npm run verify
+```
+
+The `verify` script runs the TypeScript compiler (`npm run typecheck`) followed by the production build (`npm run build`). When both steps pass locally you can be confident the same bundle will succeed on Vercel.
+
 ## Enabling Vercel Web Analytics
 
 The project already imports Vercel’s lightweight analytics tracker, so once you turn on Analytics in the Vercel dashboard the widget starts sending page-view data automatically. Here’s the full flow:
