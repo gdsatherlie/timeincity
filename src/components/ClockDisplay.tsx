@@ -57,10 +57,10 @@ export function ClockDisplay({
   const formattedDate = useMemo(() => now.toFormat("EEEE, MMMM d, yyyy"), [now]);
 
   const timezoneDisplay = useMemo(() => {
-    const offset = now.toFormat("ZZZZ");
     const abbreviation = now.offsetNameShort;
-    const pieces = [offset, abbreviation].filter(Boolean).join(" • ");
-    return pieces ? `${timezone} (${pieces})` : timezone;
+    const longName = now.offsetNameLong;
+    const pieces = [abbreviation, longName].filter(Boolean).join(" — ");
+    return pieces || timezone;
   }, [now, timezone]);
 
   return (

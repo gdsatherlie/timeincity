@@ -334,7 +334,7 @@ export default function App(): JSX.Element {
           <div className="flex flex-col items-start gap-4 lg:flex-row lg:items-center lg:justify-between">
             <div>
               <p className="mb-3 text-sm font-semibold uppercase tracking-[0.2em] text-indigo-500">TimeInCity</p>
-              <h1 className="text-4xl font-black uppercase tracking-tight text-slate-900 dark:text-slate-100 sm:text-5xl">
+              <h1 className="text-3xl font-black uppercase tracking-tight text-slate-900 dark:text-slate-100 sm:text-4xl">
                 Track the time & weather anywhere
               </h1>
               <p className="mt-3 max-w-2xl text-base text-slate-600 dark:text-slate-300">
