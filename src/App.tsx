@@ -255,6 +255,40 @@ export default function App(): JSX.Element {
   const defaultLabel = savedLocation?.label ?? (savedLocation?.timezone ? decodeTimezoneToLabel(savedLocation.timezone) : undefined);
   const isDefaultSelection = savedLocation?.timezone === selectedTimezone && savedLocation?.label === selectedLabel;
 
+  const defaultDifference = useMemo(() => {
+    if (!savedLocation?.timezone) {
+      return undefined;
+    }
+
+    try {
+      const base = DateTime.utc();
+      const defaultOffset = base.setZone(savedLocation.timezone).offset;
+      const selectedOffset = base.setZone(selectedTimezone).offset;
+      const diffMinutes = defaultOffset - selectedOffset;
+
+      if (diffMinutes === 0) {
+        return "Same time as selected";
+      }
+
+      const absMinutes = Math.abs(diffMinutes);
+      const hours = Math.floor(absMinutes / 60);
+      const minutes = absMinutes % 60;
+      const parts: string[] = [];
+      if (hours > 0) {
+        parts.push(`${hours}h`);
+      }
+      if (minutes > 0) {
+        parts.push(`${minutes}m`);
+      }
+
+      const relation = diffMinutes > 0 ? "ahead of selected" : "behind selected";
+      return `${parts.join(" ")} ${relation}`;
+    } catch (error) {
+      console.warn("Unable to compute timezone difference", error);
+      return undefined;
+    }
+  }, [savedLocation?.timezone, selectedTimezone]);
+
   const handleSetDefaultLocation = () => {
     setSavedLocation({ timezone: selectedTimezone, label: selectedLabel });
   };
@@ -291,6 +325,7 @@ export default function App(): JSX.Element {
           isDefaultSelection={Boolean(isDefaultSelection)}
           hasDefault={Boolean(savedLocation)}
           defaultLabel={defaultLabel}
+          defaultDifference={defaultDifference}
         />
 
         <TimezoneSelector

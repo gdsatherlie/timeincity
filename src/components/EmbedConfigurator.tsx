@@ -7,6 +7,36 @@ const SIZE_PRESETS = {
   large: { label: "Large", width: 640, height: 360 }
 } as const;
 
+const PREVIEW_TYPOGRAPHY = {
+  small: {
+    brand: "text-[0.45rem]",
+    zone: "text-[0.55rem]",
+    eyebrow: "text-[0.55rem]",
+    time: "text-2xl",
+    date: "text-[0.7rem]",
+    location: "text-sm",
+    weather: "text-[0.6rem]"
+  },
+  medium: {
+    brand: "text-[0.55rem]",
+    zone: "text-[0.65rem]",
+    eyebrow: "text-xs",
+    time: "text-3xl",
+    date: "text-sm",
+    location: "text-base",
+    weather: "text-xs"
+  },
+  large: {
+    brand: "text-[0.65rem]",
+    zone: "text-[0.75rem]",
+    eyebrow: "text-sm",
+    time: "text-4xl",
+    date: "text-base",
+    location: "text-lg",
+    weather: "text-sm"
+  }
+} as const;
+
 const THEMES = ["dark", "light"] as const;
 
 type ThemeOption = (typeof THEMES)[number];
@@ -49,6 +79,7 @@ export function EmbedConfigurator({ timezone, locationLabel, weatherSummary }: E
   const previewLocation = locationLabel ?? timezone.split("/").pop()?.replace(/_/g, " ") ?? timezone;
 
   const dimensions = SIZE_PRESETS[size];
+  const previewTypography = PREVIEW_TYPOGRAPHY[size];
 
   const snippet = useMemo(() => {
     const params = new URLSearchParams({
@@ -173,18 +204,24 @@ export function EmbedConfigurator({ timezone, locationLabel, weatherSummary }: E
               }`}
             >
               <div className="flex items-center justify-between">
-                <span className="text-[0.55rem] font-semibold uppercase tracking-[0.4em] text-indigo-400">TimeInCity</span>
-                <span className="text-[0.6rem] font-medium uppercase tracking-[0.2em] text-slate-500 dark:text-slate-400">
+                <span className={`${previewTypography.brand} font-semibold uppercase tracking-[0.4em] text-indigo-400`}>
+                  TimeInCity
+                </span>
+                <span className={`${previewTypography.zone} font-medium uppercase tracking-[0.2em] text-slate-500 dark:text-slate-400`}>
                   {previewZone}
                 </span>
               </div>
               <div className="flex flex-1 flex-col items-center justify-center gap-1 text-center">
-                <p className="text-xs font-semibold uppercase tracking-[0.3em] text-slate-400 dark:text-slate-500">Current time</p>
-                <p className="text-3xl font-semibold sm:text-4xl">{previewTime}</p>
-                {includeDate && <p className="text-sm text-slate-500 dark:text-slate-400">{previewDate}</p>}
-                <p className="mt-2 text-base font-medium">{previewLocation}</p>
+                <p className={`${previewTypography.eyebrow} font-semibold uppercase tracking-[0.3em] text-slate-400 dark:text-slate-500`}>
+                  Current time
+                </p>
+                <p className={`${previewTypography.time} font-semibold`}>{previewTime}</p>
+                {includeDate && (
+                  <p className={`${previewTypography.date} text-slate-500 dark:text-slate-400`}>{previewDate}</p>
+                )}
+                <p className={`mt-2 font-medium ${previewTypography.location}`}>{previewLocation}</p>
                 {includeWeather && (
-                  <p className="text-xs text-slate-500 dark:text-slate-400">
+                  <p className={`${previewTypography.weather} text-slate-500 dark:text-slate-400`}>
                     {weatherSummary ?? "Weather loads automatically"}
                   </p>
                 )}

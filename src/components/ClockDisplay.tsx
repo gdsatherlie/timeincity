@@ -13,6 +13,7 @@ interface ClockDisplayProps {
   isDefaultSelection?: boolean;
   hasDefault?: boolean;
   defaultLabel?: string;
+  defaultDifference?: string;
 }
 
 export function ClockDisplay({
@@ -24,7 +25,8 @@ export function ClockDisplay({
   onClearDefault,
   isDefaultSelection,
   hasDefault,
-  defaultLabel
+  defaultLabel,
+  defaultDifference
 }: ClockDisplayProps): JSX.Element {
   const createNow = () => {
     const zoned = DateTime.now().setZone(timezone);
@@ -73,7 +75,7 @@ export function ClockDisplay({
             Time zone: <span className="font-semibold text-slate-700 dark:text-slate-200">{timezoneDisplay}</span>
           </p>
         </div>
-        <ThemeToggle className="self-start" />
+        <ThemeToggle className="self-start sm:self-end" />
       </div>
       <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div className="flex flex-col gap-3">
@@ -112,6 +114,9 @@ export function ClockDisplay({
           {hasDefault && defaultLabel && (
             <p className="text-xs text-slate-500 dark:text-slate-400">
               Saved default city: <span className="font-semibold text-slate-800 dark:text-slate-100">{defaultLabel}</span>
+              {defaultDifference && (
+                <span className="ml-2 text-slate-500 dark:text-slate-400">• {defaultDifference}</span>
+              )}
             </p>
           )}
         </div>
