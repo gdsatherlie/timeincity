@@ -54,13 +54,17 @@ Open-Meteo’s public APIs do not require authentication, so you don’t need an
 
 ## Deploying to Vercel
 
-1. Push this repository to GitHub (or another Git provider Vercel supports).
-2. In Vercel, choose **New Project → Import Git Repository** and pick your repo.
-3. Vercel usually auto-detects Vite. If it asks for confirmation, use:
+Follow these steps the moment you are ready to go live:
+
+1. **Make sure everything is committed locally.** Run `git status` and ensure there are no pending changes. If there are, commit them.
+2. **Push to GitHub.** Use `git push origin main` (or the branch you want) so Vercel can read the latest code.
+3. **Create the Vercel project.** In the Vercel dashboard click **New Project → Import Git Repository**, then choose the repo you just pushed.
+4. **Confirm the build settings.** Vercel usually detects Vite automatically, but if it asks, set:
    - **Framework preset:** `Vite`
    - **Install command:** `npm install`
    - **Build command:** `npm run build`
    - **Output directory:** `dist`
-4. Deploy. The included `vercel.json` rewrites `/city/*` routes back to the single-page app until dedicated city pages exist.
+5. **Deploy.** Click **Deploy** and wait for the build logs to finish. The included `vercel.json` already rewrites `/city/*` routes back to the single-page app.
+6. **Share the live URL.** As soon as the build succeeds you’ll receive a `https://<project>.vercel.app` link that stays updated every time you push.
 
-Once live, all weather and time data loads client-side so you don’t need any additional infrastructure.
+Because all time and weather data loads client-side, you don’t need any backend configuration—Vercel simply hosts the static bundle.
