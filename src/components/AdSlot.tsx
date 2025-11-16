@@ -1,5 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 
+const ADSENSE_CLIENT_ID = "ca-pub-8663179222160693";
+
 interface AdSlotProps {
   label: string;
   slotId: string;
@@ -75,7 +77,7 @@ export function AdSlot({ label, slotId, sticky }: AdSlotProps): JSX.Element {
         ref={insRef}
         className="adsbygoogle h-full w-full"
         style={{ display: "block" }}
-        data-ad-client="ca-pub-REPLACE-ME"
+        data-ad-client={ADSENSE_CLIENT_ID}
         data-ad-slot={slotId}
         data-ad-format="auto"
         data-full-width-responsive="true"
