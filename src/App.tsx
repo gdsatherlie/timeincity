@@ -422,7 +422,7 @@ export default function App(): JSX.Element {
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-100 via-white to-slate-100 text-slate-900 transition-colors dark:from-slate-950 dark:via-slate-950 dark:to-slate-900 dark:text-slate-100">
       <AdSlot label="Top banner ad" slotId="1234567890" sticky="top" />
-      <main className="mx-auto flex w-full max-w-6xl flex-col gap-10 px-4 pb-24 pt-20 sm:px-6 lg:px-8">
+      <main className="mx-auto flex w-full max-w-6xl flex-col gap-10 px-4 pb-16 pt-12 sm:px-6 lg:px-8">
         <header className="flex flex-col gap-6 rounded-3xl border border-slate-200/70 bg-white/80 p-6 shadow-lg shadow-slate-900/5 backdrop-blur dark:border-slate-800 dark:bg-slate-900/70">
           <div className="flex flex-col items-start gap-4 lg:flex-row lg:items-center lg:justify-between">
             <div>
