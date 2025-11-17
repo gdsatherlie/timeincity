@@ -1,3 +1,4 @@
+import type { CSSProperties } from "react";
 import { useEffect, useMemo, useRef, useState } from "react";
 
 const ADSENSE_CLIENT_ID = "ca-pub-8663179222160693";
@@ -53,16 +54,38 @@ export function AdSlot({ label, slotId, sticky }: AdSlotProps): JSX.Element {
       ? "bottom-0 border-t"
       : "border";
 
-  const containerClasses = useMemo(
-    () =>
-      [
-        "relative z-30 flex w-full items-center justify-center bg-gradient-to-r from-indigo-50/95 via-white to-indigo-50/95",
-        "px-6 py-4 text-xs font-semibold uppercase tracking-[0.2em] text-indigo-500 shadow-md shadow-indigo-500/10",
-        "backdrop-blur dark:from-slate-950/80 dark:via-slate-900/70 dark:to-slate-950/80 dark:text-indigo-200",
-        sticky ? `sticky ${stickyClass} min-h-[68px]` : "rounded-3xl border border-indigo-100 dark:border-slate-800 min-h-[96px]"
-      ].join(" "),
-    [sticky, stickyClass]
-  );
+  const containerClasses = useMemo(() => {
+    const shared = [
+      "relative z-30 flex w-full items-center justify-center bg-gradient-to-r from-indigo-50/95 via-white to-indigo-50/95",
+      "text-xs font-semibold uppercase tracking-[0.2em] text-indigo-500 shadow-md shadow-indigo-500/10",
+      "backdrop-blur dark:from-slate-950/80 dark:via-slate-900/70 dark:to-slate-950/80 dark:text-indigo-200"
+    ];
+
+    if (sticky) {
+      shared.push(`sticky ${stickyClass} px-4 py-2 min-h-[56px]`);
+    } else {
+      shared.push("rounded-3xl border border-indigo-100 dark:border-slate-800 px-6 py-4 min-h-[112px]");
+    }
+
+    return shared.join(" ");
+  }, [sticky, stickyClass]);
+
+  const insStyle = useMemo<CSSProperties>(() => {
+    if (sticky) {
+      return {
+        display: "block",
+        width: "100%",
+        minHeight: "60px",
+        maxHeight: "140px"
+      };
+    }
+
+    return {
+      display: "block",
+      width: "100%",
+      minHeight: "120px"
+    };
+  }, [sticky]);
 
   return (
     <aside className={containerClasses} aria-label={label}>
@@ -75,8 +98,8 @@ export function AdSlot({ label, slotId, sticky }: AdSlotProps): JSX.Element {
       )}
       <ins
         ref={insRef}
-        className="adsbygoogle h-full w-full"
-        style={{ display: "block" }}
+        className="adsbygoogle w-full"
+        style={insStyle}
         data-ad-client={ADSENSE_CLIENT_ID}
         data-ad-slot={slotId}
         data-ad-format="auto"
