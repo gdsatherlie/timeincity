@@ -1,4 +1,5 @@
-import { CityConfig, getCitySeoCopy } from "../data/cities";
+import { CityConfig } from "../data/cities";
+import { getCitySeoCopy } from "../utils/citySeo";
 
 interface CitySeoSectionProps {
   city: CityConfig;
@@ -9,7 +10,7 @@ export function CitySeoSection({ city }: CitySeoSectionProps): JSX.Element {
   return (
     <section className="flex flex-col gap-4 rounded-3xl border border-slate-200/70 bg-white/80 p-6 text-slate-700 shadow-lg shadow-slate-900/5 backdrop-blur dark:border-slate-800 dark:bg-slate-900/70 dark:text-slate-200">
       <header>
-        <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100">{copy.heading}</h2>
+        <h1 className="text-2xl font-semibold text-slate-900 dark:text-slate-100">{copy.heading}</h1>
         <p className="mt-2 text-base leading-relaxed">{copy.intro}</p>
       </header>
       <p className="text-base leading-relaxed">{copy.paragraph}</p>

@@ -58,6 +58,7 @@ export function EmbedConfigurator({ timezone, locationLabel, weatherSummary }: E
   const [size, setSize] = useState<SizeKey>("medium");
   const [includeDate, setIncludeDate] = useState(true);
   const [includeWeather, setIncludeWeather] = useState(true);
+  const [copied, setCopied] = useState(false);
 
   const createNow = () => {
     const zoned = DateTime.now().setZone(timezone);
@@ -194,12 +195,12 @@ export function EmbedConfigurator({ timezone, locationLabel, weatherSummary }: E
           <span className="text-sm font-semibold text-slate-700 dark:text-slate-300">Preview</span>
           <div
             className={`grid place-items-center overflow-hidden rounded-2xl border border-slate-200 bg-slate-100 p-4 text-sm text-slate-700 shadow-inner dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200`}
-            style={{ width: dimensions.width, height: dimensions.height }}
+            style={{ width: "100%", maxWidth: `${dimensions.width}px`, aspectRatio: `${dimensions.width}/${dimensions.height}` }}
           >
             <div
-              className={`flex h-full w-full flex-col justify-between rounded-2xl border p-4 ${
+              className={`flex h-full w-full flex-col justify-between rounded-2xl border p-4 shadow ${
                 theme === "dark"
-                  ? "border-slate-700 bg-slate-950 text-slate-100"
+                  ? "border-slate-800 bg-slate-950 text-slate-100"
                   : "border-slate-200 bg-white text-slate-800"
               }`}
             >
@@ -231,12 +232,31 @@ export function EmbedConfigurator({ timezone, locationLabel, weatherSummary }: E
         </div>
       </div>
       <div className="flex flex-col gap-2">
-        <span className="text-sm font-semibold text-slate-700 dark:text-slate-300">Copy &amp; paste snippet</span>
+        <div className="flex items-center justify-between">
+          <span className="text-sm font-semibold text-slate-700 dark:text-slate-300">Copy embed code</span>
+          <button
+            type="button"
+            onClick={async () => {
+              try {
+                await navigator.clipboard.writeText(snippet);
+                setCopied(true);
+                window.setTimeout(() => setCopied(false), 2500);
+              } catch {
+                setCopied(false);
+              }
+            }}
+            className="rounded-full border border-slate-200 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-slate-600 transition hover:border-indigo-200 hover:text-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-400 dark:border-slate-700 dark:text-slate-300"
+          >
+            {copied ? "Copied" : "Copy code"}
+          </button>
+        </div>
         <textarea
           readOnly
           value={snippet}
+          onFocus={(event) => event.currentTarget.select()}
           className="h-40 w-full resize-none rounded-2xl border border-slate-200 bg-slate-50 p-4 font-mono text-xs text-slate-700 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-400 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200"
         />
+        <p className="text-xs text-slate-500 dark:text-slate-400">Paste this iframe anywhere HTML is allowed to embed the live TimeInCity widget.</p>
       </div>
     </section>
   );

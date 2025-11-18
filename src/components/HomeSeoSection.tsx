@@ -4,27 +4,30 @@ export function HomeSeoSection(): JSX.Element {
       <header>
         <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100">Exact time and weather in any city</h2>
         <p className="mt-2 text-base leading-relaxed">
-          TimeInCity is a lightning-fast world clock that pairs IANA time zones with precise weather, sunrise, and sunset data.
-          Search the current time in any city, answer “what time is it in London?” or “what time is it in Tokyo?” and share a live
-          link so everyone sees the same clock.
+          TimeInCity shows the exact current time, date, weather, sunrise, and sunset for every IANA time zone. Search the current
+          time in London, answer “what time is it in Tokyo,” or keep an eye on a favorite city without opening another tab.
         </p>
       </header>
       <p className="text-base leading-relaxed">
-        Every page updates in real time with browser-accurate clocks, meteorological data, and ready-to-use embed snippets. Use
-        TimeInCity to compare time zones, plan remote meetings, or drop a branded widget into your own site without extra code.
+        Each /city/ page doubles as a world clock with live meteorological data and quick-share links so teammates load the same
+        time. Use the tools below to compare time zones, plan meetings, or embed a branded widget on your website in seconds.
       </p>
-      <div className="grid gap-3 text-sm sm:grid-cols-3">
+      <div className="grid gap-3 text-sm sm:grid-cols-4">
         <div className="rounded-2xl border border-slate-200 bg-white/80 p-4 shadow-sm dark:border-slate-700 dark:bg-slate-900/70">
           <p className="text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">Check current time by city</p>
-          <p className="mt-2 text-base font-semibold text-slate-900 dark:text-slate-100">500+ destinations with local offsets</p>
+          <p className="mt-2 text-base font-semibold text-slate-900 dark:text-slate-100">Instant answers for “what time is it in [city]”</p>
         </div>
         <div className="rounded-2xl border border-slate-200 bg-white/80 p-4 shadow-sm dark:border-slate-700 dark:bg-slate-900/70">
-          <p className="text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">Share links with your team</p>
-          <p className="mt-2 text-base font-semibold text-slate-900 dark:text-slate-100">Send /city/ URLs so everyone loads the same time zone</p>
+          <p className="text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">Compare time zones</p>
+          <p className="mt-2 text-base font-semibold text-slate-900 dark:text-slate-100">Line up offsets for remote teams</p>
+        </div>
+        <div className="rounded-2xl border border-slate-200 bg-white/80 p-4 shadow-sm dark:border-slate-700 dark:bg-slate-900/70">
+          <p className="text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">Get local weather</p>
+          <p className="mt-2 text-base font-semibold text-slate-900 dark:text-slate-100">Temperature, precipitation, sunrise, sunset</p>
         </div>
         <div className="rounded-2xl border border-slate-200 bg-white/80 p-4 shadow-sm dark:border-slate-700 dark:bg-slate-900/70">
           <p className="text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">Embed a live clock</p>
-          <p className="mt-2 text-base font-semibold text-slate-900 dark:text-slate-100">Copy iframe code with theme, date, and weather options</p>
+          <p className="mt-2 text-base font-semibold text-slate-900 dark:text-slate-100">Copy iframe code with theme + weather</p>
         </div>
       </div>
     </section>

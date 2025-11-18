@@ -59,23 +59,6 @@ export const FEATURED_CITY_SLUGS = [
   "san-francisco"
 ].filter((slug) => Boolean(CITY_CONFIGS[slug]));
 
-export interface CitySeoCopy {
-  heading: string;
-  intro: string;
-  paragraph: string;
-}
-
-export function getCitySeoCopy(city: CityConfig): CitySeoCopy {
-  const locationDetail = [city.stateOrRegion, city.country].filter(Boolean).join(", ");
-  const locationSuffix = locationDetail ? ` (${locationDetail})` : "";
-
-  return {
-    heading: `Current time in ${city.name}`,
-    intro: `See the exact current time in ${city.name}, plus today's date, live weather, sunrise, and sunset information.`,
-    paragraph: `TimeInCity is the fastest way to check what time it is in ${city.name}${locationSuffix}. Use it as a world clock, share a direct link with teammates, or embed a live widget so everyone stays in sync with the local time zone.`
-  };
-}
-
 export function resolveCityConfig(slug?: string): CityConfig | undefined {
   if (!slug) {
     return undefined;

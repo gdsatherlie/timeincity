@@ -4,17 +4,22 @@ import { useEffect, useMemo, useState } from "react";
 
 import { AdSlot } from "./components/AdSlot";
 import { CitySeoSection } from "./components/CitySeoSection";
+import { CitySearch } from "./components/CitySearch";
 import { ClockDisplay } from "./components/ClockDisplay";
+import { CompareTimes } from "./components/CompareTimes";
 import { EmbedConfigurator } from "./components/EmbedConfigurator";
 import { FavoriteCities } from "./components/FavoriteCities";
 import { HomeSeoSection } from "./components/HomeSeoSection";
+import { MeetingPlanner } from "./components/MeetingPlanner";
 import { PopularCities } from "./components/PopularCities";
 import { TimezoneSelector } from "./components/TimezoneSelector";
 import { WeatherCard } from "./components/WeatherCard";
 import { usePersistentState } from "./hooks/usePersistentState";
-import { CITY_CONFIGS } from "./data/cities";
+import { CITY_CONFIGS, CITY_CONFIG_LIST, type CityConfig } from "./data/cities";
 import { SHOW_AD_SLOTS } from "./config";
 import { slugifyCity } from "./utils/slugifyCity";
+import { guessDefaultCityFromTimezone } from "./utils/guessDefaultCity";
+import { getCitySeoCopy } from "./utils/citySeo";
 
 const FALLBACK_TIMEZONES = [
   "Pacific/Midway",
@@ -173,11 +178,19 @@ export default function App(): JSX.Element {
   const activeCityConfig = routeSlug ? CITY_CONFIGS[routeSlug] : undefined;
   const isCityRoute = Boolean(routeSlug && activeCityConfig);
 
-  const initialTimezone = activeCityConfig?.timezone ?? savedLocation?.timezone ?? defaultTimezone;
-  const initialLabel = activeCityConfig?.name ?? savedLocation?.label ?? decodeTimezoneToLabel(initialTimezone);
+  const guessedCity = useMemo(() => guessDefaultCityFromTimezone(), []);
+  const shouldUseGuess = !isCityRoute && !savedLocation && Boolean(guessedCity);
+
+  const initialTimezone =
+    activeCityConfig?.timezone ?? savedLocation?.timezone ?? (shouldUseGuess ? guessedCity!.timezone : defaultTimezone);
+  const initialLabel =
+    activeCityConfig?.name ??
+    savedLocation?.label ??
+    (shouldUseGuess ? guessedCity!.name : decodeTimezoneToLabel(initialTimezone));
 
   const [selectedTimezone, setSelectedTimezone] = useState(initialTimezone);
   const [customLabel, setCustomLabel] = useState<string | undefined>(initialLabel);
+  const [autoDetectedCity, setAutoDetectedCity] = useState<CityConfig | null>(() => (shouldUseGuess ? guessedCity ?? null : null));
   const [use24Hour, setUse24Hour] = usePersistentState("timeincity-24hr", false);
 
   const timezones = useMemo(() => {
@@ -241,6 +254,14 @@ export default function App(): JSX.Element {
     return () => window.removeEventListener("popstate", handler);
   }, []);
 
+  useEffect(() => {
+    if (!routeSlug && !savedLocation && guessedCity && selectedTimezone === guessedCity.timezone) {
+      setAutoDetectedCity(guessedCity);
+    } else {
+      setAutoDetectedCity(null);
+    }
+  }, [routeSlug, savedLocation, guessedCity, selectedTimezone]);
+
   const handleTimezoneChange = (timezone: string, label?: string) => {
     setSelectedTimezone(timezone);
     const computedLabel = label ?? decodeTimezoneToLabel(timezone);
@@ -251,6 +272,12 @@ export default function App(): JSX.Element {
     } else {
       updateRouteForSlug(undefined);
     }
+  };
+
+  const handleCityConfigSelect = (city: CityConfig) => {
+    setSelectedTimezone(city.timezone);
+    setCustomLabel(city.name);
+    updateRouteForSlug(city.slug);
   };
 
   useEffect(() => {
@@ -326,6 +353,13 @@ export default function App(): JSX.Element {
       .join(", ");
   }, [weatherData, fallbackCityLabel]);
 
+  const derivedCityFromSelection = useMemo(() => {
+    if (isCityRoute && activeCityConfig) {
+      return activeCityConfig;
+    }
+    return CITY_CONFIG_LIST.find((city) => city.timezone === selectedTimezone) ?? null;
+  }, [isCityRoute, activeCityConfig, selectedTimezone]);
+
   const embedWeatherSummary = useMemo(() => {
     if (!weatherData) {
       return undefined;
@@ -340,12 +374,13 @@ export default function App(): JSX.Element {
   }, [weatherData]);
 
   useEffect(() => {
-    const primaryLabel = isCityRoute ? activeCityConfig?.name ?? cityLabel : cityLabel;
-    const nextTitle = isCityRoute
-      ? `Current time in ${primaryLabel} — TimeInCity`
-      : `Time in ${primaryLabel} – TimeInCity`;
-    document.title = nextTitle;
-  }, [cityLabel, isCityRoute, activeCityConfig?.name]);
+    if (isCityRoute && activeCityConfig) {
+      const copy = getCitySeoCopy(activeCityConfig);
+      document.title = copy.title;
+    } else {
+      document.title = `Time in ${cityLabel} – TimeInCity`;
+    }
+  }, [cityLabel, isCityRoute, activeCityConfig]);
 
   const selectedLabel = customLabel ?? decodeTimezoneToLabel(selectedTimezone);
   const defaultLabel = savedLocation?.label ?? (savedLocation?.timezone ? decodeTimezoneToLabel(savedLocation.timezone) : undefined);
@@ -446,6 +481,8 @@ export default function App(): JSX.Element {
           </div>
         </header>
 
+        <CitySearch onSelectCity={handleCityConfigSelect} />
+
         <ClockDisplay
           timezone={selectedTimezone}
           use24Hour={use24Hour}
@@ -460,11 +497,21 @@ export default function App(): JSX.Element {
           defaultDifference={defaultDifference}
         />
 
+        {autoDetectedCity && !isCityRoute && (
+          <div className="rounded-2xl border border-dashed border-indigo-200 bg-indigo-50/60 px-4 py-3 text-sm text-indigo-700 shadow-sm dark:border-indigo-500/60 dark:bg-indigo-500/10 dark:text-indigo-200">
+            Showing your local time in {autoDetectedCity.name} based on your device time zone.
+          </div>
+        )}
+
         <WeatherCard status={weatherStatus} cityLabel={cityLabel} data={weatherData ?? undefined} error={weatherError} />
 
         {SHOW_AD_SLOTS && <AdSlot label="Inline ad" slotId="1234567891" />}
 
         {isCityRoute && activeCityConfig ? <CitySeoSection city={activeCityConfig} /> : <HomeSeoSection />}
+
+        <CompareTimes initialPrimarySlug={derivedCityFromSelection?.slug} />
+
+        <MeetingPlanner initialCitySlug={derivedCityFromSelection?.slug} />
 
         <EmbedConfigurator timezone={selectedTimezone} locationLabel={locationLabel} weatherSummary={embedWeatherSummary} />
 
