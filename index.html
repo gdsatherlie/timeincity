@@ -1,97 +1,671 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link
-      rel="icon"
-      type="image/svg+xml"
-      href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2032%2032'%3E%3Crect%20width='32'%20height='32'%20rx='6'%20fill='%230f172a'/%3E%3Ctext%20x='16'%20y='21'%20text-anchor='middle'%20font-size='14'%20font-family='Inter'%20fill='white'%3ETC%3C/text%3E%3C/svg%3E"
-    />
+    <title>TimeInCity — World Clock & Weather</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
-      rel="stylesheet"
-    />
-    <title>World Clock, Weather &amp; Local Time in 500+ Cities | TimeInCity</title>
-    <meta
-      name="description"
-      content="Check the current time, weather, sunrise, sunset, and world time zone data for cities worldwide. Compare times, plan meetings, and explore global clocks with TimeInCity."
-    />
-    <meta property="og:type" content="website" />
-    <meta property="og:site_name" content="TimeInCity" />
-    <meta property="og:title" content="World Clock, Weather &amp; Local Time in 500+ Cities | TimeInCity" />
-    <meta
-      property="og:description"
-      content="Check the current time, weather, sunrise, sunset, and world time zone data for cities worldwide. Compare times, plan meetings, and explore global clocks with TimeInCity."
-    />
-    <meta property="og:url" content="https://www.timeincity.com/" />
-    <meta property="og:image" content="https://dummyimage.com/1200x630/0f172a/ffffff&text=TimeInCity" />
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="World Clock, Weather &amp; Local Time in 500+ Cities | TimeInCity" />
-    <meta
-      name="twitter:description"
-      content="Check the current time, weather, sunrise, sunset, and world time zone data for cities worldwide. Compare times, plan meetings, and explore global clocks with TimeInCity."
-    />
-    <meta
-      name="twitter:image"
-      content="https://dummyimage.com/1200x630/0f172a/ffffff&text=TimeInCity"
-    />
-    <meta name="robots" content="index,follow" />
-    <link rel="canonical" href="https://www.timeincity.com/" />
-    <meta name="google-adsense-account" content="ca-pub-8663179222160693" />
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-REGPRCWJRH"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag() {
-        dataLayer.push(arguments);
+    <style>
+      * {
+        box-sizing: border-box;
       }
-      gtag("js", new Date());
-      gtag("config", "G-REGPRCWJRH");
-    </script>
-    <script
-      async
-      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8663179222160693"
-      crossorigin="anonymous"
-    ></script>
-    <script type="application/ld+json">
-      {
-        "@context": "https://schema.org",
-        "@type": "FAQPage",
-        "mainEntity": [
-          {
-            "@type": "Question",
-            "name": "How does TimeInCity calculate the current time?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "TimeInCity relies on the browser's clock combined with the selected IANA time zone to render the exact current time, date, and offset."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "Does TimeInCity show weather for each city?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "Yes. TimeInCity fetches live temperature, precipitation, wind, sunrise, and sunset data for the selected city using the Open-Meteo APIs."
-            }
-          }
-        ]
+      body {
+        margin: 0;
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+          sans-serif;
+        background: #020617;
+        color: #f9fafb;
       }
-    </script>
-    <script>
-      const savedTheme = localStorage.getItem("timeincity-theme");
-      const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-      const initialTheme = savedTheme ?? (prefersDark ? "dark" : "light");
-      if (initialTheme === "dark") {
-        document.documentElement.classList.add("dark");
-        document.documentElement.dataset.theme = "dark";
+      .root-container {
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 16px;
       }
-    </script>
+      button,
+      select {
+        font-family: inherit;
+      }
+    </style>
+
+    <!-- React + ReactDOM + Babel from CDN -->
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
   </head>
-  <body class="min-h-screen bg-slate-950 font-sans text-slate-100 transition-colors duration-300 dark:bg-slate-950 dark:text-slate-100">
+  <body>
     <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
+
+    <script type="text/babel">
+      const { useState, useEffect } = React;
+
+      const getDefaultZone = () => {
+        try {
+          return Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC";
+        } catch {
+          return "UTC";
+        }
+      };
+
+      const formatTime = (date, timeZone, use12h) =>
+        new Intl.DateTimeFormat(undefined, {
+          hour: "2-digit",
+          minute: "2-digit",
+          second: "2-digit",
+          hour12: use12h,
+          timeZone,
+        }).format(date);
+
+      const formatDate = (date, timeZone) =>
+        new Intl.DateTimeFormat(undefined, {
+          weekday: "long",
+          year: "numeric",
+          month: "long",
+          day: "2-digit",
+          timeZone,
+        }).format(date);
+
+      function tzToQuery(tz) {
+        if (!tz) return null;
+        if (tz.includes("/")) {
+          return tz.split("/")[1].replace(/_/g, " ");
+        }
+        return tz.replace(/_/g, " ");
+      }
+
+      async function geocodePlace(name) {
+        const url =
+          "https://geocoding-api.open-meteo.com/v1/search?name=" +
+          encodeURIComponent(name) +
+          "&count=1&language=en&format=json";
+        const res = await fetch(url, { cache: "no-store" });
+        if (!res.ok) return null;
+        const json = await res.json();
+        const r = json && json.results && json.results[0];
+        if (!r) return null;
+        return {
+          name:
+            r.name +
+            (r.admin1 ? ", " + r.admin1 : "") +
+            (r.country ? ", " + r.country : ""),
+          lat: r.latitude,
+          lon: r.longitude,
+          tz: r.timezone,
+        };
+      }
+
+      async function fetchWeather(lat, lon, tz) {
+        const url =
+          "https://api.open-meteo.com/v1/forecast?latitude=" +
+          lat +
+          "&longitude=" +
+          lon +
+          "&current=temperature_2m,precipitation,wind_speed_10m&daily=sunrise,sunset&timezone=" +
+          encodeURIComponent(tz);
+        const res = await fetch(url, { cache: "no-store" });
+        if (!res.ok) return null;
+        return res.json();
+      }
+
+      function summarizeWeather(current) {
+        if (!current) return "—";
+        const c = Math.round(current.temperature_2m);
+        const f = Math.round(c * 1.8 + 32);
+        const w = Math.round(current.wind_speed_10m);
+        const p = current.precipitation;
+        return c + "°C / " + f + "°F • wind " + w + " • precip " + p;
+      }
+
+      const TOP_CITIES = [
+        { name: "Chicago", timezone: "America/Chicago" },
+        { name: "New York", timezone: "America/New_York" },
+        { name: "Los Angeles", timezone: "America/Los_Angeles" },
+        { name: "London", timezone: "Europe/London" },
+        { name: "Paris", timezone: "Europe/Paris" },
+        { name: "Tokyo", timezone: "Asia/Tokyo" },
+        { name: "Sydney", timezone: "Australia/Sydney" },
+        { name: "Toronto", timezone: "America/Toronto" },
+        { name: "Mexico City", timezone: "America/Mexico_City" },
+        { name: "Sao Paulo", timezone: "America/Sao_Paulo" },
+        { name: "Dubai", timezone: "Asia/Dubai" },
+        { name: "Hong Kong", timezone: "Asia/Hong_Kong" },
+        { name: "Mumbai", timezone: "Asia/Kolkata" },
+        { name: "Singapore", timezone: "Asia/Singapore" },
+        { name: "Berlin", timezone: "Europe/Berlin" },
+        { name: "Madrid", timezone: "Europe/Madrid" },
+        { name: "Rome", timezone: "Europe/Rome" },
+        { name: "Istanbul", timezone: "Europe/Istanbul" },
+        { name: "Bangkok", timezone: "Asia/Bangkok" },
+        { name: "Seoul", timezone: "Asia/Seoul" },
+      ];
+
+      const fallbackZones = [
+        "UTC",
+        "America/Chicago",
+        "America/New_York",
+        "America/Los_Angeles",
+        "Europe/London",
+        "Europe/Paris",
+        "Asia/Tokyo",
+      ];
+
+      function TimeInCity() {
+        const [theme, setTheme] = useState("dark");
+        const [tz, setTz] = useState(getDefaultZone());
+        const [now, setNow] = useState(new Date());
+        const [use12h, setUse12h] = useState(false);
+        const [locationName, setLocationName] = useState("");
+        const [weather, setWeather] = useState(null);
+        const [weatherLoading, setWeatherLoading] = useState(false);
+
+        const zones =
+          (Intl && Intl.supportedValuesOf && Intl.supportedValuesOf("timeZone")) ||
+          fallbackZones;
+
+        const displayName = locationName || tz.replace(/_/g, " ");
+        const containerClass =
+          "root-container " +
+          (theme === "dark"
+            ? "bg-neutral-950 text-neutral-50"
+            : "bg-white text-neutral-900");
+
+        useEffect(() => {
+          const id = setInterval(() => setNow(new Date()), 1000);
+          return () => clearInterval(id);
+        }, []);
+
+        useEffect(() => {
+          const query = tzToQuery(tz);
+          if (!query) return;
+          (async () => {
+            setWeatherLoading(true);
+            const geo = await geocodePlace(query);
+            if (!geo) {
+              setWeather(null);
+              setLocationName(query);
+              setWeatherLoading(false);
+              return;
+            }
+            setLocationName(geo.name);
+            const w = await fetchWeather(geo.lat, geo.lon, geo.tz);
+            setWeather(w);
+            setWeatherLoading(false);
+          })();
+        }, [tz]);
+
+        const embedTheme = theme === "dark" ? "dark" : "light";
+        const embedWidth = 480;
+        const embedHeight = 270;
+
+        return (
+          <div
+            className={containerClass}
+            style={{
+              backgroundColor: theme === "dark" ? "#020617" : "#ffffff",
+              color: theme === "dark" ? "#f9fafb" : "#020617",
+            }}
+          >
+            {/* Top Banner Ad */}
+            <div
+              style={{
+                width: "100%",
+                textAlign: "center",
+                padding: "8px 0",
+                fontSize: "11px",
+                position: "sticky",
+                top: 0,
+                zIndex: 50,
+                borderBottom: "1px solid rgba(148, 163, 184, 0.3)",
+                backgroundColor: theme === "dark" ? "#020617ee" : "#ffffffee",
+              }}
+            >
+              Top Banner Ad (728×90)
+            </div>
+
+            <header
+              style={{
+                width: "100%",
+                maxWidth: "960px",
+                padding: "24px 0",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+              }}
+            >
+              <h1 style={{ fontSize: 20, fontWeight: 600 }}>TimeInCity</h1>
+              <button
+                onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+                style={{
+                  fontSize: 11,
+                  padding: "6px 12px",
+                  borderRadius: 999,
+                  border: "1px solid rgba(148,163,184,0.8)",
+                  backgroundColor: theme === "dark" ? "#020617" : "#ffffff",
+                  color: theme === "dark" ? "#e5e7eb" : "#111827",
+                  cursor: "pointer",
+                }}
+              >
+                {theme === "dark" ? "Switch to light" : "Switch to dark"}
+              </button>
+            </header>
+
+            <main style={{ width: "100%", maxWidth: "960px", paddingBottom: 80 }}>
+              {/* Clock */}
+              <section
+                style={{
+                  borderRadius: 24,
+                  padding: 24,
+                  boxShadow: "0 24px 60px rgba(15,23,42,0.6)",
+                  border:
+                    "1px solid " +
+                    (theme === "dark" ? "#1f2937" : "rgba(148,163,184,0.5)"),
+                  backgroundColor: theme === "dark" ? "#020617" : "#ffffff",
+                }}
+              >
+                <p style={{ color: "#9ca3af", fontSize: 13 }}>Current time in</p>
+                <h2 style={{ fontSize: 28, fontWeight: 600, marginTop: 4 }}>
+                  {displayName}
+                </h2>
+
+                <div style={{ marginTop: 24 }}>
+                  <div
+                    style={{
+                      fontSize: "clamp(48px, 13vw, 120px)",
+                      lineHeight: 0.9,
+                      fontWeight: 700,
+                      fontVariantNumeric: "tabular-nums",
+                      userSelect: "none",
+                    }}
+                  >
+                    {formatTime(now, tz, use12h)}
+                  </div>
+                  <div
+                    style={{
+                      marginTop: 8,
+                      color: theme === "dark" ? "#d1d5db" : "#4b5563",
+                      fontSize: 18,
+                    }}
+                  >
+                    {formatDate(now, tz)}
+                  </div>
+                </div>
+
+                <div
+                  style={{
+                    marginTop: 16,
+                    display: "flex",
+                    flexWrap: "wrap",
+                    gap: 12,
+                  }}
+                >
+                  <select
+                    value={tz}
+                    onChange={(e) => setTz(e.target.value)}
+                    style={{
+                      backgroundColor: theme === "dark" ? "#111827" : "#ffffff",
+                      color: theme === "dark" ? "#f9fafb" : "#111827",
+                      borderRadius: 999,
+                      padding: "10px 14px",
+                      border:
+                        "1px solid " +
+                        (theme === "dark" ? "#374151" : "rgba(148,163,184,0.8)"),
+                    }}
+                  >
+                    {zones.map((z) => (
+                      <option key={z} value={z}>
+                        {z}
+                      </option>
+                    ))}
+                  </select>
+
+                  <button
+                    onClick={() => setUse12h((v) => !v)}
+                    style={{
+                      padding: "10px 14px",
+                      borderRadius: 999,
+                      border:
+                        "1px solid " +
+                        (theme === "dark" ? "#374151" : "rgba(148,163,184,0.8)"),
+                      backgroundColor: theme === "dark" ? "#111827" : "#ffffff",
+                      color: theme === "dark" ? "#e5e7eb" : "#111827",
+                      fontSize: 13,
+                      cursor: "pointer",
+                    }}
+                  >
+                    {use12h ? "Switch to 24-hour" : "Switch to 12-hour"}
+                  </button>
+                </div>
+
+                <div
+                  style={{
+                    marginTop: 24,
+                    borderRadius: 16,
+                    padding: 12,
+                    textAlign: "center",
+                    border:
+                      "1px dashed " +
+                      (theme === "dark" ? "#374151" : "rgba(148,163,184,0.8)"),
+                    color: "#9ca3af",
+                    fontSize: 13,
+                  }}
+                >
+                  Ad slot (970×250 / responsive)
+                </div>
+              </section>
+
+              {/* Weather / Sunrise / Sunset */}
+              <section
+                style={{
+                  marginTop: 24,
+                  display: "grid",
+                  gridTemplateColumns: "repeat(auto-fit,minmax(220px,1fr))",
+                  gap: 16,
+                }}
+              >
+                {/* Weather */}
+                <div
+                  style={{
+                    borderRadius: 18,
+                    padding: 20,
+                    border:
+                      "1px solid " +
+                      (theme === "dark" ? "#1f2937" : "rgba(148,163,184,0.5)"),
+                    backgroundColor: theme === "dark" ? "#020617" : "#ffffff",
+                  }}
+                >
+                  <div style={{ fontSize: 18, fontWeight: 600 }}>
+                    Weather in {displayName}
+                  </div>
+                  <div
+                    style={{
+                      color: "#9ca3af",
+                      marginTop: 4,
+                      fontSize: 13,
+                    }}
+                  >
+                    {locationName
+                      ? locationName
+                      : "Select any time zone to see weather."}
+                  </div>
+                  <div style={{ marginTop: 8, fontSize: 14 }}>
+                    {weatherLoading ? (
+                      <div style={{ color: "#9ca3af" }}>Loading…</div>
+                    ) : weather && weather.current ? (
+                      <div
+                        style={{
+                          color:
+                            theme === "dark" ? "#e5e7eb" : "rgb(55 65 81 / 1)",
+                        }}
+                      >
+                        {summarizeWeather(weather.current)}
+                      </div>
+                    ) : (
+                      <div style={{ color: "#6b7280" }}>No data yet.</div>
+                    )}
+                  </div>
+                </div>
+
+                {/* Sunrise */}
+                <div
+                  style={{
+                    borderRadius: 18,
+                    padding: 20,
+                    border:
+                      "1px solid " +
+                      (theme === "dark" ? "#1f2937" : "rgba(148,163,184,0.5)"),
+                    backgroundColor: theme === "dark" ? "#020617" : "#ffffff",
+                  }}
+                >
+                  <div style={{ fontSize: 18, fontWeight: 600 }}>Sunrise</div>
+                  <div
+                    style={{
+                      marginTop: 8,
+                      color: theme === "dark" ? "#e5e7eb" : "#4b5563",
+                      fontSize: 14,
+                    }}
+                  >
+                    {weather && weather.daily && weather.daily.sunrise
+                      ? new Date(weather.daily.sunrise[0]).toLocaleTimeString(
+                          [],
+                          { hour: "2-digit", minute: "2-digit" }
+                        )
+                      : "—"}
+                  </div>
+                </div>
+
+                {/* Sunset */}
+                <div
+                  style={{
+                    borderRadius: 18,
+                    padding: 20,
+                    border:
+                      "1px solid " +
+                      (theme === "dark" ? "#1f2937" : "rgba(148,163,184,0.5)"),
+                    backgroundColor: theme === "dark" ? "#020617" : "#ffffff",
+                  }}
+                >
+                  <div style={{ fontSize: 18, fontWeight: 600 }}>Sunset</div>
+                  <div
+                    style={{
+                      marginTop: 8,
+                      color: theme === "dark" ? "#e5e7eb" : "#4b5563",
+                      fontSize: 14,
+                    }}
+                  >
+                    {weather && weather.daily && weather.daily.sunset
+                      ? new Date(weather.daily.sunset[0]).toLocaleTimeString(
+                          [],
+                          { hour: "2-digit", minute: "2-digit" }
+                        )
+                      : "—"}
+                  </div>
+                </div>
+              </section>
+
+              {/* FAQ */}
+              <section
+                id="faq"
+                style={{
+                  marginTop: 32,
+                  borderRadius: 24,
+                  padding: 24,
+                  border:
+                    "1px solid " +
+                    (theme === "dark" ? "#1f2937" : "rgba(148,163,184,0.5)"),
+                  backgroundColor: theme === "dark" ? "#020617" : "#ffffff",
+                }}
+              >
+                <h3 style={{ fontSize: 22, fontWeight: 600 }}>FAQ</h3>
+                <div
+                  style={{
+                    marginTop: 16,
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: 12,
+                    fontSize: 14,
+                    color: "#9ca3af",
+                  }}
+                >
+                  <details>
+                    <summary
+                      style={{
+                        cursor: "pointer",
+                        color: theme === "dark" ? "#e5e7eb" : "#111827",
+                        fontWeight: 500,
+                      }}
+                    >
+                      Where does the time come from?
+                    </summary>
+                    <div style={{ marginTop: 6, lineHeight: 1.5 }}>
+                      The clock runs in your browser using the Intl API and your
+                      selected IANA time zone.
+                    </div>
+                  </details>
+                  <details>
+                    <summary
+                      style={{
+                        cursor: "pointer",
+                        color: theme === "dark" ? "#e5e7eb" : "#111827",
+                        fontWeight: 500,
+                      }}
+                    >
+                      How do I see weather?
+                    </summary>
+                    <div style={{ marginTop: 6, lineHeight: 1.5 }}>
+                      Just pick any time zone (like America/Chicago or
+                      Europe/London) from the dropdown. Weather, sunrise, and
+                      sunset will update automatically.
+                    </div>
+                  </details>
+                </div>
+              </section>
+
+              {/* Popular cities */}
+              <section
+                style={{
+                  marginTop: 32,
+                  borderRadius: 24,
+                  padding: 24,
+                  border:
+                    "1px solid " +
+                    (theme === "dark" ? "#1f2937" : "rgba(148,163,184,0.5)"),
+                  backgroundColor: theme === "dark" ? "#020617" : "#ffffff",
+                }}
+                aria-label="Popular cities"
+              >
+                <h3
+                  style={{
+                    fontSize: 11,
+                    fontWeight: 600,
+                    textTransform: "uppercase",
+                    letterSpacing: "0.25em",
+                    color: "#9ca3af",
+                    marginBottom: 12,
+                  }}
+                >
+                  Popular cities
+                </h3>
+                <div
+                  style={{
+                    display: "flex",
+                    flexWrap: "wrap",
+                    gap: "6px 16px",
+                    fontSize: 14,
+                  }}
+                >
+                  {TOP_CITIES.sort((a, b) =>
+                    a.name.localeCompare(b.name)
+                  ).map((city) => (
+                    <button
+                      key={city.name}
+                      type="button"
+                      onClick={() => {
+                        setTz(city.timezone);
+                        setLocationName(city.name);
+                      }}
+                      style={{
+                        background: "none",
+                        border: "none",
+                        padding: 0,
+                        color: theme === "dark" ? "#e5e7eb" : "#111827",
+                        cursor: "pointer",
+                        textDecoration: "underline",
+                        textDecorationColor:
+                          theme === "dark" ? "transparent" : "#d1d5db",
+                      }}
+                      onMouseEnter={(e) => {
+                        e.target.style.textDecorationColor =
+                          theme === "dark" ? "#e5e7eb" : "#111827";
+                      }}
+                      onMouseLeave={(e) => {
+                        e.target.style.textDecorationColor =
+                          theme === "dark" ? "transparent" : "#d1d5db";
+                      }}
+                    >
+                      {city.name}
+                    </button>
+                  ))}
+                </div>
+              </section>
+
+              {/* Embed */}
+              <section
+                style={{
+                  marginTop: 32,
+                  borderRadius: 24,
+                  padding: 24,
+                  border:
+                    "1px solid " +
+                    (theme === "dark" ? "#1f2937" : "rgba(148,163,184,0.5)"),
+                  backgroundColor: theme === "dark" ? "#020617" : "#ffffff",
+                }}
+              >
+                <h3 style={{ fontSize: 20, fontWeight: 600, marginBottom: 12 }}>
+                  Embed this clock
+                </h3>
+                <p style={{ color: "#9ca3af", fontSize: 14, marginBottom: 8 }}>
+                  Copy &amp; paste this iframe into any website:
+                </p>
+                <pre
+                  style={{
+                    backgroundColor: "#020617",
+                    color: "#e5e7eb",
+                    padding: 12,
+                    borderRadius: 12,
+                    fontSize: 12,
+                    overflowX: "auto",
+                  }}
+                >
+{`<iframe
+  src="https://timeincity.com?tz=${encodeURIComponent(
+    tz
+  )}&theme=${embedTheme}"
+  width="${embedWidth}"
+  height="${embedHeight}"
+  style="border:0;border-radius:12px;overflow:hidden"
+></iframe>`}
+                </pre>
+              </section>
+
+              <footer
+                style={{
+                  padding: "40px 0 60px",
+                  textAlign: "center",
+                  fontSize: 13,
+                  color: "#9ca3af",
+                }}
+              >
+                © {new Date().getFullYear()} TimeInCity • Current time & weather
+                in any city.
+              </footer>
+            </main>
+
+            {/* Sticky footer ad */}
+            <div
+              style={{
+                position: "fixed",
+                left: 0,
+                right: 0,
+                bottom: 0,
+                textAlign: "center",
+                padding: "10px 0",
+                fontSize: 13,
+                borderTop:
+                  "1px solid " +
+                  (theme === "dark" ? "#1f2937" : "rgba(148,163,184,0.5)"),
+                backgroundColor: theme === "dark" ? "#020617ee" : "#ffffffee",
+                color: theme === "dark" ? "#e5e7eb" : "#111827",
+              }}
+            >
+              Sticky Footer Ad (970×90)
+            </div>
+          </div>
+        );
+      }
+
+      const root = ReactDOM.createRoot(document.getElementById("root"));
+      root.render(<TimeInCity />);
+    </script>
   </body>
 </html>
+
