@@ -13,6 +13,7 @@ import { TimezoneSelector } from "./components/TimezoneSelector";
 import { WeatherCard } from "./components/WeatherCard";
 import { usePersistentState } from "./hooks/usePersistentState";
 import { CITY_CONFIGS } from "./data/cities";
+import { SHOW_AD_SLOTS } from "./config";
 import { slugifyCity } from "./utils/slugifyCity";
 
 const FALLBACK_TIMEZONES = [
@@ -421,6 +422,7 @@ export default function App(): JSX.Element {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-100 via-white to-slate-100 text-slate-900 transition-colors dark:from-slate-950 dark:via-slate-950 dark:to-slate-900 dark:text-slate-100">
+      {SHOW_AD_SLOTS && <AdSlot label="Top banner" slotId="1234567890" sticky="top" />}
       <main className="mx-auto flex w-full max-w-6xl flex-col gap-10 px-4 pb-10 pt-6 sm:px-6 lg:px-8">
         <header className="flex flex-col gap-6 rounded-3xl border border-slate-200/70 bg-white/80 p-6 shadow-lg shadow-slate-900/5 backdrop-blur dark:border-slate-800 dark:bg-slate-900/70">
           <div className="flex flex-col items-start gap-4 lg:flex-row lg:items-center lg:justify-between">
@@ -468,7 +470,7 @@ export default function App(): JSX.Element {
           onSelect={handleTimezoneChange}
         />
 
-        <AdSlot label="Inline ad" slotId="1234567891" />
+        {SHOW_AD_SLOTS && <AdSlot label="Inline ad" slotId="1234567891" />}
 
         <WeatherCard status={weatherStatus} cityLabel={cityLabel} data={weatherData ?? undefined} error={weatherError} />
 
@@ -476,6 +478,7 @@ export default function App(): JSX.Element {
 
         <PopularCities selectedLabel={selectedLabel} onSelect={handleTimezoneChange} />
       </main>
+      {SHOW_AD_SLOTS && <AdSlot label="Footer banner" slotId="1234567892" sticky="bottom" />}
       <Analytics />
     </div>
   );
