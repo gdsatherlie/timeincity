@@ -12,13 +12,14 @@ import { FavoriteCities } from "./components/FavoriteCities";
 import { HomeSeoSection } from "./components/HomeSeoSection";
 import { MeetingPlanner } from "./components/MeetingPlanner";
 import { PopularCities } from "./components/PopularCities";
+import { SiteHeader } from "./components/SiteHeader";
 import { SiteFooter } from "./components/SiteFooter";
 import { StaticPage } from "./components/StaticPage";
 import { TimezoneSelector } from "./components/TimezoneSelector";
 import { WeatherCard } from "./components/WeatherCard";
 import { usePersistentState } from "./hooks/usePersistentState";
 import { CITY_CONFIGS, CITY_CONFIG_LIST, type CityConfig } from "./data/cities";
-import { STATIC_PAGE_CONTENT, type StaticPageSlug } from "./data/staticPages";
+import { STATIC_PAGE_CONTENT, STATIC_PAGE_ROUTES, type StaticPageSlug } from "./data/staticPages";
 import { SHOW_AD_SLOTS } from "./config";
 import { slugifyCity } from "./utils/slugifyCity";
 import { guessDefaultCityFromTimezone } from "./utils/guessDefaultCity";
@@ -65,13 +66,6 @@ function decodeTimezoneToLabel(timezone: string): string {
   return lastSegment.replace(/_/g, " ");
 }
 
-const STATIC_PAGE_PATHS: Record<StaticPageSlug, string> = {
-  about: "/about",
-  privacy: "/privacy",
-  terms: "/terms",
-  contact: "/contact"
-};
-
 function normalizePathname(pathname: string): string {
   const trimmed = pathname.replace(/\/+$/, "");
   if (!trimmed) {
@@ -82,16 +76,12 @@ function normalizePathname(pathname: string): string {
 
 function getStaticPageFromPath(pathname: string): StaticPageSlug | null {
   const normalized = normalizePathname(pathname);
-  for (const [slug, path] of Object.entries(STATIC_PAGE_PATHS)) {
-    if (normalized === path) {
-      return slug as StaticPageSlug;
-    }
-  }
-  return null;
+  const entry = Object.entries(STATIC_PAGE_ROUTES).find(([, meta]) => meta.path === normalized);
+  return entry ? (entry[0] as StaticPageSlug) : null;
 }
 
 function getStaticPagePath(slug: StaticPageSlug): string {
-  return STATIC_PAGE_PATHS[slug];
+  return STATIC_PAGE_ROUTES[slug].path;
 }
 
 async function fetchWeather(timezone: string, explicitLabel?: string): Promise<WeatherSummary> {
@@ -232,6 +222,7 @@ export default function App(): JSX.Element {
   const [customLabel, setCustomLabel] = useState<string | undefined>(initialLabel);
   const [autoDetectedCity, setAutoDetectedCity] = useState<CityConfig | null>(() => (shouldUseGuess ? guessedCity ?? null : null));
   const [use24Hour, setUse24Hour] = usePersistentState("timeincity-24hr", false);
+  const [scrollRequest, setScrollRequest] = useState<{ id: string; timestamp: number } | null>(null);
 
   const timezones = useMemo(() => {
     try {
@@ -434,6 +425,31 @@ export default function App(): JSX.Element {
     }
   }, [cityLabel, isCityRoute, activeCityConfig, staticPage, staticContent]);
 
+  useEffect(() => {
+    if (!scrollRequest || typeof window === "undefined") {
+      return;
+    }
+    const { id } = scrollRequest;
+    const attemptScroll = () => {
+      const target = document.getElementById(id);
+      if (target) {
+        target.scrollIntoView({ behavior: "smooth", block: "start" });
+        setScrollRequest(null);
+        return true;
+      }
+      return false;
+    };
+    if (attemptScroll()) {
+      return;
+    }
+    const timeout = window.setTimeout(() => {
+      if (!attemptScroll()) {
+        setScrollRequest(null);
+      }
+    }, 150);
+    return () => window.clearTimeout(timeout);
+  }, [scrollRequest]);
+
   const selectedLabel = customLabel ?? decodeTimezoneToLabel(selectedTimezone);
   const defaultLabel = savedLocation?.label ?? (savedLocation?.timezone ? decodeTimezoneToLabel(savedLocation.timezone) : undefined);
   const isDefaultSelection = savedLocation?.timezone === selectedTimezone && savedLocation?.label === selectedLabel;
@@ -518,10 +534,35 @@ export default function App(): JSX.Element {
     setRouteSlug(undefined);
   };
 
+  const handleNavigateHome = () => {
+    setStaticPage(null);
+    updateRouteForSlug(undefined);
+  };
+
+  const handleScrollToSection = (sectionId: string) => {
+    handleNavigateHome();
+    setScrollRequest({ id: sectionId, timestamp: Date.now() });
+  };
+
+  const handleNavigateCityShortcut = (slug: string) => {
+    const city = CITY_CONFIGS[slug];
+    if (city) {
+      handleCityConfigSelect(city);
+    } else {
+      handleNavigateHome();
+    }
+  };
+
   if (staticPage && staticContent) {
     return (
       <div className="min-h-screen bg-gradient-to-b from-slate-100 via-white to-slate-100 text-slate-900 transition-colors dark:from-slate-950 dark:via-slate-950 dark:to-slate-900 dark:text-slate-100">
         {SHOW_AD_SLOTS && <AdSlot label="Top banner" slotId="1234567890" sticky="top" />}
+        <SiteHeader
+          onNavigateHome={handleNavigateHome}
+          onNavigateSection={handleScrollToSection}
+          onNavigateCitySlug={handleNavigateCityShortcut}
+          onNavigateStaticPage={handleNavigateToStaticPage}
+        />
         <main className="mx-auto flex w-full max-w-4xl flex-col gap-8 px-4 pb-10 pt-6 sm:px-6 lg:px-8">
           <header className="flex flex-wrap items-center justify-between gap-4 rounded-3xl border border-slate-200/70 bg-white/80 px-6 py-4 shadow-lg shadow-slate-900/5 backdrop-blur dark:border-slate-800 dark:bg-slate-900/70">
             <div>
@@ -537,6 +578,17 @@ export default function App(): JSX.Element {
             </button>
           </header>
           <StaticPage content={staticContent} />
+          {staticPage === "world-time-converter" && (
+            <>
+              <CompareTimes initialPrimarySlug={derivedCityFromSelection?.slug} />
+              <MeetingPlanner initialCitySlug={derivedCityFromSelection?.slug} />
+            </>
+          )}
+          {staticPage === "time-zone-map" && (
+            <div className="rounded-3xl border border-dashed border-slate-300/80 bg-gradient-to-br from-slate-50 to-indigo-50/70 p-6 text-sm text-slate-600 shadow-inner dark:border-slate-700 dark:from-slate-900/80 dark:to-indigo-950/50 dark:text-slate-300">
+              A fully interactive time zone map is coming soon. In the meantime, use the tools above to explore offsets and compare regions.
+            </div>
+          )}
         </main>
         <SiteFooter onNavigate={handleNavigateToStaticPage} currentPage={staticPage} />
         {SHOW_AD_SLOTS && <AdSlot label="Footer banner" slotId="1234567892" sticky="bottom" />}
@@ -548,6 +600,12 @@ export default function App(): JSX.Element {
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-100 via-white to-slate-100 text-slate-900 transition-colors dark:from-slate-950 dark:via-slate-950 dark:to-slate-900 dark:text-slate-100">
       {SHOW_AD_SLOTS && <AdSlot label="Top banner" slotId="1234567890" sticky="top" />}
+      <SiteHeader
+        onNavigateHome={handleNavigateHome}
+        onNavigateSection={handleScrollToSection}
+        onNavigateCitySlug={handleNavigateCityShortcut}
+        onNavigateStaticPage={handleNavigateToStaticPage}
+      />
       <main className="mx-auto flex w-full max-w-6xl flex-col gap-10 px-4 pb-10 pt-6 sm:px-6 lg:px-8">
         <header className="flex flex-col gap-4 rounded-3xl border border-slate-200/70 bg-white/80 p-6 shadow-lg shadow-slate-900/5 backdrop-blur dark:border-slate-800 dark:bg-slate-900/70">
           <p className="text-sm font-semibold uppercase tracking-[0.2em] text-indigo-500">TimeInCity</p>
@@ -595,9 +653,9 @@ export default function App(): JSX.Element {
 
         {isCityRoute && activeCityConfig ? <CitySeoSection city={activeCityConfig} /> : <HomeSeoSection />}
 
-        <CompareTimes initialPrimarySlug={derivedCityFromSelection?.slug} />
+        <CompareTimes id="compare-times" initialPrimarySlug={derivedCityFromSelection?.slug} />
 
-        <MeetingPlanner initialCitySlug={derivedCityFromSelection?.slug} />
+        <MeetingPlanner id="meeting-planner" initialCitySlug={derivedCityFromSelection?.slug} />
 
         <EmbedConfigurator timezone={selectedTimezone} locationLabel={locationLabel} weatherSummary={embedWeatherSummary} />
 
@@ -611,7 +669,7 @@ export default function App(): JSX.Element {
           canAddCurrent={!hasFavorite}
         />
 
-        <PopularCities selectedLabel={selectedLabel} onSelect={handleTimezoneChange} />
+        <PopularCities id="popular-cities" selectedLabel={selectedLabel} onSelect={handleTimezoneChange} />
       </main>
       <SiteFooter onNavigate={handleNavigateToStaticPage} currentPage={staticPage} />
       {SHOW_AD_SLOTS && <AdSlot label="Footer banner" slotId="1234567892" sticky="bottom" />}

@@ -1,16 +1,12 @@
 import type { StaticPageSlug } from "../data/staticPages";
+import { STATIC_PAGE_ROUTES } from "../data/staticPages";
 
 interface SiteFooterProps {
   onNavigate?: (slug: StaticPageSlug) => void;
   currentPage?: StaticPageSlug | null;
 }
 
-const FOOTER_LINKS: Array<{ slug: StaticPageSlug; label: string; href: string }> = [
-  { slug: "about", label: "About", href: "/about" },
-  { slug: "privacy", label: "Privacy Policy", href: "/privacy" },
-  { slug: "terms", label: "Terms of Service", href: "/terms" },
-  { slug: "contact", label: "Contact", href: "/contact" }
-];
+const FOOTER_SLUGS: StaticPageSlug[] = ["about", "privacy", "terms", "contact"];
 
 export function SiteFooter({ onNavigate, currentPage }: SiteFooterProps): JSX.Element {
   return (
@@ -18,12 +14,13 @@ export function SiteFooter({ onNavigate, currentPage }: SiteFooterProps): JSX.El
       <div className="flex flex-wrap items-center gap-4 rounded-3xl border border-slate-200/70 bg-white/70 px-6 py-4 shadow-lg shadow-slate-900/5 backdrop-blur dark:border-slate-800 dark:bg-slate-900/70">
         <span className="font-semibold text-slate-900 dark:text-slate-100">TimeInCity</span>
         <nav className="flex flex-wrap gap-3 text-sm font-semibold">
-          {FOOTER_LINKS.map((link) => {
-            const isActive = currentPage === link.slug;
+          {FOOTER_SLUGS.map((slug) => {
+            const meta = STATIC_PAGE_ROUTES[slug];
+            const isActive = currentPage === slug;
             return (
               <a
-                key={link.slug}
-                href={link.href}
+                key={slug}
+                href={meta.path}
                 className={`transition hover:text-indigo-600 dark:hover:text-indigo-300 ${
                   isActive ? "text-indigo-600 dark:text-indigo-300" : "text-slate-600 dark:text-slate-300"
                 }`}
@@ -35,10 +32,10 @@ export function SiteFooter({ onNavigate, currentPage }: SiteFooterProps): JSX.El
                     return;
                   }
                   event.preventDefault();
-                  onNavigate(link.slug);
+                  onNavigate(slug);
                 }}
               >
-                {link.label}
+                {meta.label}
               </a>
             );
           })}

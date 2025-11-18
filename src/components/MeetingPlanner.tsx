@@ -5,6 +5,7 @@ import { CITY_CONFIG_LIST, CityConfig } from "../data/cities";
 
 interface MeetingPlannerProps {
   initialCitySlug?: string;
+  id?: string;
 }
 
 function formatDateInput(city: CityConfig | undefined): string {
@@ -13,7 +14,7 @@ function formatDateInput(city: CityConfig | undefined): string {
   return now.toFormat("yyyy-LL-dd'T'HH:mm");
 }
 
-export function MeetingPlanner({ initialCitySlug }: MeetingPlannerProps): JSX.Element {
+export function MeetingPlanner({ initialCitySlug, id }: MeetingPlannerProps): JSX.Element {
   const sortedCities = useMemo(() => [...CITY_CONFIG_LIST].sort((a, b) => a.name.localeCompare(b.name)), []);
   const [cityASlug, setCityASlug] = useState(() => initialCitySlug ?? sortedCities[0]?.slug ?? "");
   const [cityBSlug, setCityBSlug] = useState(() => sortedCities.find((city) => city.slug !== cityASlug)?.slug ?? "");
@@ -33,10 +34,16 @@ export function MeetingPlanner({ initialCitySlug }: MeetingPlannerProps): JSX.El
   const converted = cityATime.isValid ? cityATime.setZone(cityB?.timezone ?? "UTC") : null;
 
   return (
-    <section className="flex flex-col gap-4 rounded-3xl border border-slate-200/70 bg-white/70 p-6 shadow-lg shadow-slate-900/5 backdrop-blur dark:border-slate-800 dark:bg-slate-900/70">
+    <section
+      id={id}
+      className="flex flex-col gap-4 rounded-3xl border border-slate-200/70 bg-white/70 p-6 shadow-lg shadow-slate-900/5 backdrop-blur dark:border-slate-800 dark:bg-slate-900/70"
+    >
       <header>
         <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100">Plan a meeting across time zones</h2>
         <p className="text-sm text-slate-600 dark:text-slate-400">Pick a local time and instantly see what it becomes elsewhere.</p>
+        <p className="text-xs text-slate-500 dark:text-slate-400">
+          Choose the meeting city, enter a local time, and TimeInCity converts it for coworkers in other locations.
+        </p>
       </header>
       <div className="grid gap-4 md:grid-cols-2">
         <div className="flex flex-col gap-3 rounded-2xl border border-slate-200 bg-white/80 p-4 shadow-sm dark:border-slate-700 dark:bg-slate-900/70">
@@ -93,6 +100,9 @@ export function MeetingPlanner({ initialCitySlug }: MeetingPlannerProps): JSX.El
         {converted
           ? `If it is ${cityATime.toFormat("DDD t")} in ${cityA?.name}, it will be ${converted.toFormat("DDD t")} in ${cityB?.name}.`
           : "Enter a valid date and time above to see the conversion."}
+      </p>
+      <p className="text-xs text-slate-500 dark:text-slate-400">
+        Meetings stay in sync because the planner respects every city’s daylight saving rules automatically.
       </p>
     </section>
   );

@@ -5,6 +5,7 @@ import { CITY_CONFIG_LIST, CityConfig } from "../data/cities";
 
 interface CompareTimesProps {
   initialPrimarySlug?: string;
+  id?: string;
 }
 
 function formatNowForCity(city: CityConfig | undefined, use24Hour: boolean): string {
@@ -37,7 +38,7 @@ function describeDifference(cityA: CityConfig | undefined, cityB: CityConfig | u
   return `${cityA.name} is ${pieces.join(" ")} ${ahead ? "ahead of" : "behind"} ${cityB.name}.`;
 }
 
-export function CompareTimes({ initialPrimarySlug }: CompareTimesProps): JSX.Element {
+export function CompareTimes({ initialPrimarySlug, id }: CompareTimesProps): JSX.Element {
   const sortedCities = useMemo(() => [...CITY_CONFIG_LIST].sort((a, b) => a.name.localeCompare(b.name)), []);
   const [primarySlug, setPrimarySlug] = useState(() => initialPrimarySlug ?? sortedCities[0]?.slug ?? "");
   const [secondarySlug, setSecondarySlug] = useState(() => sortedCities.find((city) => city.slug !== primarySlug)?.slug ?? "");
@@ -63,11 +64,17 @@ export function CompareTimes({ initialPrimarySlug }: CompareTimesProps): JSX.Ele
   const difference = describeDifference(primaryCity, secondaryCity);
 
   return (
-    <section className="flex flex-col gap-4 rounded-3xl border border-slate-200/70 bg-white/70 p-6 shadow-lg shadow-slate-900/5 backdrop-blur dark:border-slate-800 dark:bg-slate-900/70">
+    <section
+      id={id}
+      className="flex flex-col gap-4 rounded-3xl border border-slate-200/70 bg-white/70 p-6 shadow-lg shadow-slate-900/5 backdrop-blur dark:border-slate-800 dark:bg-slate-900/70"
+    >
       <header className="flex flex-wrap items-center justify-between gap-4">
         <div>
           <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100">Compare city times</h2>
           <p className="text-sm text-slate-600 dark:text-slate-400">See the live offset between any two locations.</p>
+          <p className="text-xs text-slate-500 dark:text-slate-400">
+            Pick a pair of cities to answer “what time is it in [city]?” and share the difference with teammates before meetings.
+          </p>
         </div>
         <button
           type="button"
@@ -103,6 +110,9 @@ export function CompareTimes({ initialPrimarySlug }: CompareTimesProps): JSX.Ele
         ))}
       </div>
       <p className="text-sm font-medium text-slate-600 dark:text-slate-300">{difference}</p>
+      <p className="text-xs text-slate-500 dark:text-slate-400">
+        Use the dropdowns to test any combination—TimeInCity keeps offsets synced with the latest daylight saving time rules.
+      </p>
     </section>
   );
 }

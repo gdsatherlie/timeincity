@@ -6,11 +6,12 @@ import { pathToFileURL } from "node:url";
 import { buildSync } from "esbuild";
 
 const tempDir = mkdtempSync(join(tmpdir(), "timeincity-sitemap-"));
-const bundlePath = join(tempDir, "cities.mjs");
+const cityBundlePath = join(tempDir, "cities.mjs");
+const staticBundlePath = join(tempDir, "static-pages.mjs");
 
 buildSync({
   entryPoints: ["./src/data/cities.ts"],
-  outfile: bundlePath,
+  outfile: cityBundlePath,
   bundle: true,
   platform: "node",
   format: "esm",
@@ -18,19 +19,29 @@ buildSync({
   sourcemap: false
 });
 
-const moduleUrl = pathToFileURL(bundlePath).href;
-const { CITY_CONFIGS = {}, FEATURED_CITY_SLUGS = [] } = await import(moduleUrl);
+buildSync({
+  entryPoints: ["./src/data/staticPages.ts"],
+  outfile: staticBundlePath,
+  bundle: true,
+  platform: "node",
+  format: "esm",
+  target: "node18",
+  sourcemap: false
+});
+
+const cityModuleUrl = pathToFileURL(cityBundlePath).href;
+const staticModuleUrl = pathToFileURL(staticBundlePath).href;
+const { CITY_CONFIGS = {}, FEATURED_CITY_SLUGS = [] } = await import(cityModuleUrl);
+const { STATIC_PAGE_ROUTES = {} } = await import(staticModuleUrl);
 const cities = Object.values(CITY_CONFIGS);
 
 const baseUrl = "https://www.timeincity.com";
 const today = new Date().toISOString().split("T")[0];
 
-const staticPages = [
-  { loc: `${baseUrl}/about`, priority: "0.5" },
-  { loc: `${baseUrl}/privacy`, priority: "0.5" },
-  { loc: `${baseUrl}/terms`, priority: "0.5" },
-  { loc: `${baseUrl}/contact`, priority: "0.5" }
-];
+const staticPages = Object.values(STATIC_PAGE_ROUTES).map((meta) => ({
+  loc: `${baseUrl}${meta.path}`,
+  priority: meta.priority.toFixed(1)
+}));
 
 const urls = [
   { loc: `${baseUrl}/`, priority: "1.0" },
