@@ -3,13 +3,14 @@ import { useMemo } from "react";
 interface FavoriteCity {
   timezone: string;
   label?: string;
+  slug?: string;
 }
 
 interface FavoriteCitiesProps {
   favorites: FavoriteCity[];
   selectedTimezone: string;
   selectedLabel?: string;
-  onSelect: (timezone: string, label?: string) => void;
+  onSelect: (timezone: string, label?: string, slug?: string) => void;
   onRemove: (timezone: string, label?: string) => void;
   onAddCurrent: () => void;
   canAddCurrent: boolean;
@@ -78,7 +79,7 @@ export function FavoriteCities({
               >
                 <button
                   type="button"
-                  onClick={() => onSelect(favorite.timezone, favorite.label)}
+                  onClick={() => onSelect(favorite.timezone, favorite.label, favorite.slug)}
                   className="text-left"
                 >
                   {label}

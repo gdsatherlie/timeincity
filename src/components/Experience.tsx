@@ -2,14 +2,20 @@ import { DateTime } from "luxon";
 import { useEffect, useMemo, useState } from "react";
 
 import { AdSlot } from "./AdSlot";
+import { CitySearch } from "./CitySearch";
 import { ClockDisplay } from "./ClockDisplay";
+import { CompareTimes } from "./CompareTimes";
 import { EmbedConfigurator } from "./EmbedConfigurator";
 import { FavoriteCities } from "./FavoriteCities";
+import { MeetingPlanner } from "./MeetingPlanner";
 import { PopularCities } from "./PopularCities";
 import { TimezoneSelector } from "./TimezoneSelector";
 import { WeatherCard } from "./WeatherCard";
 import { usePersistentState } from "../hooks/usePersistentState";
 import { slugifyCity } from "../utils/slugifyCity";
+import { CITY_LIST, type CityConfig } from "../data/cities";
+import { SHOW_AD_SLOTS } from "../config";
+import { guessDefaultCityFromTimezone } from "../utils/guessDefaultCity";
 
 const FALLBACK_TIMEZONES = [
   "Pacific/Midway",
@@ -33,6 +39,7 @@ const FALLBACK_TIMEZONES = [
 type SavedLocation = {
   timezone: string;
   label?: string;
+  slug?: string;
 };
 
 type WeatherSummary = {
@@ -143,31 +150,24 @@ async function fetchWeather(timezone: string, explicitLabel?: string): Promise<W
 export interface ExperienceProps {
   initialTimezone?: string;
   initialLabel?: string;
+  initialCitySlug?: string;
   onSelectCity?: (slug: string) => void;
 }
 
-export function Experience({ initialTimezone, initialLabel, onSelectCity }: ExperienceProps): JSX.Element {
-  const defaultTimezone = useMemo(() => {
-    if (initialTimezone) {
-      return initialTimezone;
-    }
+export function Experience({ initialTimezone, initialLabel, initialCitySlug, onSelectCity }: ExperienceProps): JSX.Element {
+  const [savedLocation, setSavedLocation] = usePersistentState<SavedLocation | null>("timeincity-default-location", null);
+  const [favoriteCities, setFavoriteCities] = usePersistentState<SavedLocation[]>("timeincity-favorite-cities", []);
+
+  const localTimezone = useMemo(() => {
     try {
       return Intl.DateTimeFormat().resolvedOptions().timeZone;
     } catch (error) {
       console.warn("Could not read local timezone", error);
       return "UTC";
     }
-  }, [initialTimezone]);
+  }, []);
 
-  const [savedLocation, setSavedLocation] = usePersistentState<SavedLocation | null>("timeincity-default-location", null);
-  const [favoriteCities, setFavoriteCities] = usePersistentState<SavedLocation[]>("timeincity-favorite-cities", []);
-
-  const fallbackTimezone = savedLocation?.timezone ?? defaultTimezone;
-  const fallbackLabel = savedLocation?.label ?? initialLabel ?? decodeTimezoneToLabel(fallbackTimezone);
-
-  const [selectedTimezone, setSelectedTimezone] = useState(fallbackTimezone);
-  const [customLabel, setCustomLabel] = useState<string | undefined>(fallbackLabel);
-  const [use24Hour, setUse24Hour] = usePersistentState("timeincity-24hr", false);
+  const autoDetectedCity = useMemo(() => guessDefaultCityFromTimezone(), []);
 
   const timezones = useMemo(() => {
     try {
@@ -177,6 +177,17 @@ export function Experience({ initialTimezone, initialLabel, onSelectCity }: Expe
       return FALLBACK_TIMEZONES;
     }
   }, []);
+
+  const fallbackTimezone = savedLocation?.timezone ?? initialTimezone ?? autoDetectedCity?.timezone ?? localTimezone;
+  const fallbackLabel =
+    savedLocation?.label ?? initialLabel ?? autoDetectedCity?.name ?? decodeTimezoneToLabel(fallbackTimezone);
+
+  const [selectedTimezone, setSelectedTimezone] = useState(fallbackTimezone);
+  const [customLabel, setCustomLabel] = useState<string | undefined>(fallbackLabel);
+  const [currentSlug, setCurrentSlug] = useState<string | undefined>(
+    savedLocation?.slug ?? initialCitySlug ?? autoDetectedCity?.slug
+  );
+  const [use24Hour, setUse24Hour] = usePersistentState("timeincity-24hr", false);
 
   const [weatherStatus, setWeatherStatus] = useState<"idle" | "loading" | "error" | "success">("loading");
   const [weatherData, setWeatherData] = useState<WeatherSummary | null>(null);
@@ -254,21 +265,37 @@ export function Experience({ initialTimezone, initialLabel, onSelectCity }: Expe
     )} • precip ${format(weatherData.precipitation, " mm")}`;
   }, [weatherData]);
 
-  useEffect(() => {
-    document.title = `Time in ${cityLabel} – TimeInCity`;
-  }, [cityLabel]);
-
-  const handleTimezoneChange = (timezone: string, label?: string) => {
+  const handleTimezoneChange = (
+    timezone: string,
+    label?: string,
+    slug?: string,
+    options?: { navigate?: boolean }
+  ) => {
     setSelectedTimezone(timezone);
-    setCustomLabel(label ?? decodeTimezoneToLabel(timezone));
-    if (onSelectCity && label) {
-      onSelectCity(slugifyCity(label));
+    const resolvedLabel = label ?? decodeTimezoneToLabel(timezone);
+    setCustomLabel(resolvedLabel);
+
+    const derivedSlug =
+      slug ??
+      CITY_LIST.find((city) => city.timezone === timezone && (!label || city.name.toLowerCase() === label.toLowerCase()))?.slug;
+    setCurrentSlug(derivedSlug);
+
+    if (options?.navigate === false) {
+      return;
+    }
+
+    if (onSelectCity) {
+      const destinationSlug = derivedSlug ?? (label ? slugifyCity(label) : undefined);
+      if (destinationSlug) {
+        onSelectCity(destinationSlug);
+      }
     }
   };
 
   const selectedLabel = customLabel ?? decodeTimezoneToLabel(selectedTimezone);
   const defaultLabel = savedLocation?.label ?? (savedLocation?.timezone ? decodeTimezoneToLabel(savedLocation.timezone) : undefined);
-  const isDefaultSelection = savedLocation?.timezone === selectedTimezone && savedLocation?.label === selectedLabel;
+  const isDefaultSelection =
+    savedLocation?.timezone === selectedTimezone && savedLocation?.label === selectedLabel && savedLocation?.slug === currentSlug;
 
   const defaultDifference = useMemo(() => {
     if (!savedLocation?.timezone) {
@@ -305,7 +332,7 @@ export function Experience({ initialTimezone, initialLabel, onSelectCity }: Expe
   }, [savedLocation?.timezone, selectedTimezone]);
 
   const handleSetDefaultLocation = () => {
-    setSavedLocation({ timezone: selectedTimezone, label: selectedLabel });
+    setSavedLocation({ timezone: selectedTimezone, label: selectedLabel, slug: currentSlug });
   };
 
   const handleClearDefaultLocation = () => {
@@ -316,86 +343,102 @@ export function Experience({ initialTimezone, initialLabel, onSelectCity }: Expe
     if (!savedLocation) {
       return;
     }
-    handleTimezoneChange(savedLocation.timezone, savedLocation.label);
+    handleTimezoneChange(savedLocation.timezone, savedLocation.label, savedLocation.slug);
   };
 
   const hasFavorite = favoriteCities.some(
-    (favorite) => favorite.timezone === selectedTimezone && favorite.label === selectedLabel
+    (favorite) => favorite.timezone === selectedTimezone && (favorite.label ?? decodeTimezoneToLabel(favorite.timezone)) === selectedLabel
   );
 
   const handleAddFavorite = () => {
     setFavoriteCities((previous) => {
-      if (previous.some((favorite) => favorite.timezone === selectedTimezone && favorite.label === selectedLabel)) {
+      if (
+        previous.some(
+          (favorite) =>
+            favorite.timezone === selectedTimezone &&
+            (favorite.label ?? decodeTimezoneToLabel(favorite.timezone)) === selectedLabel
+        )
+      ) {
         return previous;
       }
-      const next = [...previous, { timezone: selectedTimezone, label: selectedLabel }];
+      const next = [...previous, { timezone: selectedTimezone, label: selectedLabel, slug: currentSlug }];
       return next.slice(-24);
     });
   };
 
   const handleRemoveFavorite = (timezone: string, label?: string) => {
-    setFavoriteCities((previous) =>
-      previous.filter((favorite) => !(favorite.timezone === timezone && favorite.label === label))
-    );
+    setFavoriteCities((previous) => previous.filter((favorite) => !(favorite.timezone === timezone && favorite.label === label)));
+  };
+
+  const selectedCityConfig = useMemo(() => {
+    if (currentSlug) {
+      return CITY_LIST.find((city) => city.slug === currentSlug);
+    }
+    return CITY_LIST.find((city) => city.timezone === selectedTimezone && city.name === selectedLabel);
+  }, [currentSlug, selectedLabel, selectedTimezone]);
+
+  const showAutoNotice = Boolean(!savedLocation && !initialTimezone && autoDetectedCity && selectedTimezone === autoDetectedCity.timezone);
+
+  const handleCitySearchSelect = (city: CityConfig) => {
+    handleTimezoneChange(city.timezone, city.name, city.slug);
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-100 via-white to-slate-100 text-slate-900 transition-colors dark:from-slate-950 dark:via-slate-950 dark:to-slate-900 dark:text-slate-100">
-      <AdSlot label="Top banner ad" sticky="top" />
-      <main className="mx-auto flex w-full max-w-6xl flex-col gap-10 px-4 pb-24 pt-20 sm:px-6 lg:px-8">
-        <header className="flex flex-col gap-6 rounded-3xl border border-slate-200/70 bg-white/80 p-6 shadow-lg shadow-slate-900/5 backdrop-blur dark:border-slate-800 dark:bg-slate-900/70">
-          <div className="flex flex-col items-start gap-4 lg:flex-row lg:items-center lg:justify-between">
-            <div>
-              <p className="mb-3 text-sm font-semibold uppercase tracking-[0.2em] text-indigo-500">TimeInCity</p>
-              <h1 className="text-3xl font-black uppercase tracking-tight text-slate-900 dark:text-slate-100 sm:text-4xl">
-                Track the time & weather anywhere
-              </h1>
-              <p className="mt-3 max-w-2xl text-base text-slate-600 dark:text-slate-300">
-                Instantly switch between global cities, see live weather conditions, and grab an embed for your own site.
-              </p>
-            </div>
+    <div className="flex flex-col gap-8">
+      <section className="flex flex-col gap-4 rounded-3xl border border-slate-200/70 bg-white/80 p-6 shadow-lg shadow-slate-900/5 backdrop-blur dark:border-slate-800 dark:bg-slate-900/70">
+        <p className="text-sm font-semibold uppercase tracking-[0.2em] text-indigo-500">TimeInCity</p>
+        <h1 className="text-3xl font-black uppercase tracking-tight text-slate-900 dark:text-slate-100 sm:text-4xl">
+          Track the time &amp; weather anywhere
+        </h1>
+        <p className="text-base text-slate-600 dark:text-slate-300">
+          Instantly switch between global cities, check sunrise and weather, compare time zones, and grab a live embed for your own site.
+        </p>
+        {showAutoNotice ? (
+          <div className="rounded-2xl border border-indigo-200/80 bg-indigo-50/80 px-4 py-3 text-sm font-medium text-indigo-700 dark:border-indigo-500/40 dark:bg-indigo-500/10 dark:text-indigo-200">
+            Showing your local time in {autoDetectedCity?.name} based on your browser time zone.
           </div>
-        </header>
+        ) : null}
+      </section>
 
-        <ClockDisplay
-          timezone={selectedTimezone}
-          use24Hour={use24Hour}
-          onFormatToggle={() => setUse24Hour((prev) => !prev)}
-          locationLabel={locationLabel}
-          onSetDefault={handleSetDefaultLocation}
-          onClearDefault={handleClearDefaultLocation}
-          onSelectDefault={handleSelectDefaultLocation}
-          isDefaultSelection={Boolean(isDefaultSelection)}
-          hasDefault={Boolean(savedLocation)}
-          defaultLabel={defaultLabel}
-          defaultDifference={defaultDifference}
-        />
+      <ClockDisplay
+        timezone={selectedTimezone}
+        use24Hour={use24Hour}
+        onFormatToggle={() => setUse24Hour((prev) => !prev)}
+        locationLabel={locationLabel}
+        onSetDefault={handleSetDefaultLocation}
+        onClearDefault={handleClearDefaultLocation}
+        onSelectDefault={handleSelectDefaultLocation}
+        isDefaultSelection={Boolean(isDefaultSelection)}
+        hasDefault={Boolean(savedLocation)}
+        defaultLabel={defaultLabel}
+        defaultDifference={defaultDifference}
+      />
 
-        <FavoriteCities
-          favorites={favoriteCities}
-          selectedTimezone={selectedTimezone}
-          selectedLabel={selectedLabel}
-          onSelect={handleTimezoneChange}
-          onRemove={handleRemoveFavorite}
-          onAddCurrent={handleAddFavorite}
-          canAddCurrent={!hasFavorite}
-        />
+      <WeatherCard status={weatherStatus} cityLabel={cityLabel} data={weatherData ?? undefined} error={weatherError} />
 
-        <TimezoneSelector
-          timezones={timezones}
-          selectedTimezone={selectedTimezone}
-          onSelect={handleTimezoneChange}
-        />
+      <FavoriteCities
+        favorites={favoriteCities}
+        selectedTimezone={selectedTimezone}
+        selectedLabel={selectedLabel}
+        onSelect={(timezone, label, slug) => handleTimezoneChange(timezone, label, slug)}
+        onRemove={handleRemoveFavorite}
+        onAddCurrent={handleAddFavorite}
+        canAddCurrent={!hasFavorite}
+      />
 
-        <AdSlot label="Inline ad" />
+      <TimezoneSelector timezones={timezones} selectedTimezone={selectedTimezone} onSelect={handleTimezoneChange}>
+        <CitySearch cities={CITY_LIST} onSelectCity={handleCitySearchSelect} />
+      </TimezoneSelector>
 
-        <WeatherCard status={weatherStatus} cityLabel={cityLabel} data={weatherData ?? undefined} error={weatherError} />
+      {SHOW_AD_SLOTS ? <AdSlot label="Inline ad" /> : null}
 
-        <EmbedConfigurator timezone={selectedTimezone} locationLabel={locationLabel} weatherSummary={embedWeatherSummary} />
+      <EmbedConfigurator timezone={selectedTimezone} locationLabel={locationLabel} weatherSummary={embedWeatherSummary} />
 
-        <PopularCities selectedLabel={selectedLabel} onSelect={handleTimezoneChange} />
-      </main>
-      <AdSlot label="Bottom banner ad" sticky="bottom" />
+      <CompareTimes cities={CITY_LIST} initialCitySlug={selectedCityConfig?.slug ?? currentSlug} />
+
+      <MeetingPlanner cities={CITY_LIST} initialCitySlug={selectedCityConfig?.slug ?? currentSlug} />
+
+      <PopularCities selectedLabel={selectedLabel} onSelect={handleTimezoneChange} />
     </div>
   );
 }

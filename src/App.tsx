@@ -7,12 +7,14 @@ import { SiteHeader } from "./components/SiteHeader";
 import { SiteFooter } from "./components/SiteFooter";
 import { RichTextPage } from "./components/RichTextPage";
 import { RegionDirectory } from "./components/RegionDirectory";
+import { AdSlot } from "./components/AdSlot";
 import { CITY_CONFIGS, CITY_LIST, type CityConfig, type RegionSlug } from "./data/cities";
 import { STATIC_PAGES, type StaticPageContent } from "./data/staticPages";
 import { LEGAL_PAGES, type LegalPageContent } from "./data/legalPages";
 import { REGION_PAGES } from "./data/regionPages";
 import { getCitySeoCopy } from "./utils/citySeo";
 import { slugifyCity } from "./utils/slugifyCity";
+import { SHOW_AD_SLOTS } from "./config";
 
 const DEFAULT_TITLE = "TimeInCity — Exact Time & Weather in Any City";
 const DEFAULT_DESCRIPTION =
@@ -220,7 +222,12 @@ export default function App(): JSX.Element {
       case "city":
         return (
           <div className="flex flex-col gap-10">
-            <Experience initialTimezone={route.city.timezone} initialLabel={route.city.name} onSelectCity={handleCityNavigate} />
+            <Experience
+              initialTimezone={route.city.timezone}
+              initialLabel={route.city.name}
+              initialCitySlug={route.city.slug}
+              onSelectCity={handleCityNavigate}
+            />
             <CitySeoSection city={route.city} />
           </div>
         );
@@ -244,9 +251,11 @@ export default function App(): JSX.Element {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-100 via-white to-slate-100 text-slate-900 transition-colors dark:from-slate-950 dark:via-slate-950 dark:to-slate-900 dark:text-slate-100">
+      {SHOW_AD_SLOTS ? <AdSlot label="Top banner ad" sticky="top" /> : null}
       <SiteHeader onNavigate={navigate} currentPath={currentPath} />
       <main className="mx-auto flex w-full max-w-6xl flex-col gap-8 px-4 py-12 sm:px-6 lg:px-8">{mainContent}</main>
       <SiteFooter onNavigate={navigate} />
+      {SHOW_AD_SLOTS ? <AdSlot label="Bottom banner ad" sticky="bottom" /> : null}
     </div>
   );
 }
