@@ -425,7 +425,7 @@ export default function App(): JSX.Element {
       {SHOW_AD_SLOTS && <AdSlot label="Top banner" slotId="1234567890" sticky="top" />}
       <main className="mx-auto flex w-full max-w-6xl flex-col gap-10 px-4 pb-10 pt-6 sm:px-6 lg:px-8">
         <header className="flex flex-col gap-6 rounded-3xl border border-slate-200/70 bg-white/80 p-6 shadow-lg shadow-slate-900/5 backdrop-blur dark:border-slate-800 dark:bg-slate-900/70">
-          <div className="flex flex-col items-start gap-4 lg:flex-row lg:items-center lg:justify-between">
+          <div className="grid gap-6 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)] lg:items-start">
             <div>
               <p className="mb-3 text-sm font-semibold uppercase tracking-[0.2em] text-indigo-500">TimeInCity</p>
               <h1 className="text-3xl font-black uppercase tracking-tight text-slate-900 dark:text-slate-100 sm:text-4xl">
@@ -435,6 +435,14 @@ export default function App(): JSX.Element {
                 Instantly switch between global cities, see live weather conditions, and grab an embed for your own site.
               </p>
             </div>
+            <TimezoneSelector
+              variant="embedded"
+              timezones={timezones}
+              selectedTimezone={selectedTimezone}
+              onSelect={handleTimezoneChange}
+              title="Choose a city or time zone"
+              description="Select any IANA time zone"
+            />
           </div>
         </header>
 
@@ -452,7 +460,13 @@ export default function App(): JSX.Element {
           defaultDifference={defaultDifference}
         />
 
+        <WeatherCard status={weatherStatus} cityLabel={cityLabel} data={weatherData ?? undefined} error={weatherError} />
+
+        {SHOW_AD_SLOTS && <AdSlot label="Inline ad" slotId="1234567891" />}
+
         {isCityRoute && activeCityConfig ? <CitySeoSection city={activeCityConfig} /> : <HomeSeoSection />}
+
+        <EmbedConfigurator timezone={selectedTimezone} locationLabel={locationLabel} weatherSummary={embedWeatherSummary} />
 
         <FavoriteCities
           favorites={favoriteCities}
@@ -463,18 +477,6 @@ export default function App(): JSX.Element {
           onAddCurrent={handleAddFavorite}
           canAddCurrent={!hasFavorite}
         />
-
-        <TimezoneSelector
-          timezones={timezones}
-          selectedTimezone={selectedTimezone}
-          onSelect={handleTimezoneChange}
-        />
-
-        {SHOW_AD_SLOTS && <AdSlot label="Inline ad" slotId="1234567891" />}
-
-        <WeatherCard status={weatherStatus} cityLabel={cityLabel} data={weatherData ?? undefined} error={weatherError} />
-
-        <EmbedConfigurator timezone={selectedTimezone} locationLabel={locationLabel} weatherSummary={embedWeatherSummary} />
 
         <PopularCities selectedLabel={selectedLabel} onSelect={handleTimezoneChange} />
       </main>
