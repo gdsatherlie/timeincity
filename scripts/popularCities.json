@@ -1,0 +1,2002 @@
+[
+  {
+    "label": "Abidjan",
+    "timezone": "Africa/Abidjan"
+  },
+  {
+    "label": "Abu Dhabi",
+    "timezone": "Asia/Dubai"
+  },
+  {
+    "label": "Abuja",
+    "timezone": "Africa/Lagos"
+  },
+  {
+    "label": "Accra",
+    "timezone": "Africa/Accra"
+  },
+  {
+    "label": "Adana",
+    "timezone": "Europe/Istanbul"
+  },
+  {
+    "label": "Adelaide",
+    "timezone": "Australia/Adelaide"
+  },
+  {
+    "label": "Agra",
+    "timezone": "Asia/Kolkata"
+  },
+  {
+    "label": "Ahmedabad",
+    "timezone": "Asia/Kolkata"
+  },
+  {
+    "label": "Aleppo",
+    "timezone": "Asia/Damascus"
+  },
+  {
+    "label": "Alexandria",
+    "timezone": "Africa/Cairo"
+  },
+  {
+    "label": "Algiers",
+    "timezone": "Africa/Algiers"
+  },
+  {
+    "label": "Amman",
+    "timezone": "Asia/Amman"
+  },
+  {
+    "label": "Amritsar",
+    "timezone": "Asia/Kolkata"
+  },
+  {
+    "label": "Amsterdam",
+    "timezone": "Europe/Amsterdam"
+  },
+  {
+    "label": "Andorra",
+    "timezone": "Europe/Andorra"
+  },
+  {
+    "label": "Anguilla",
+    "timezone": "America/Anguilla"
+  },
+  {
+    "label": "Ankara",
+    "timezone": "Europe/Istanbul"
+  },
+  {
+    "label": "Anshan",
+    "timezone": "Asia/Shanghai"
+  },
+  {
+    "label": "Antalya",
+    "timezone": "Europe/Istanbul"
+  },
+  {
+    "label": "Antananarivo",
+    "timezone": "Indian/Antananarivo"
+  },
+  {
+    "label": "Antigua",
+    "timezone": "America/Antigua"
+  },
+  {
+    "label": "Antwerp",
+    "timezone": "Europe/Brussels"
+  },
+  {
+    "label": "Araguaina",
+    "timezone": "America/Araguaina"
+  },
+  {
+    "label": "Aruba",
+    "timezone": "America/Aruba"
+  },
+  {
+    "label": "Asmara",
+    "timezone": "Africa/Asmara"
+  },
+  {
+    "label": "Atikokan",
+    "timezone": "America/Atikokan"
+  },
+  {
+    "label": "Atlanta",
+    "timezone": "America/New_York"
+  },
+  {
+    "label": "Auckland",
+    "timezone": "Pacific/Auckland"
+  },
+  {
+    "label": "Austin",
+    "timezone": "America/Chicago"
+  },
+  {
+    "label": "Bacolod",
+    "timezone": "Asia/Manila"
+  },
+  {
+    "label": "Baghdad",
+    "timezone": "Asia/Baghdad"
+  },
+  {
+    "label": "Bahia",
+    "timezone": "America/Bahia"
+  },
+  {
+    "label": "Bahrain",
+    "timezone": "Asia/Bahrain"
+  },
+  {
+    "label": "Baku",
+    "timezone": "Asia/Baku"
+  },
+  {
+    "label": "Baltimore",
+    "timezone": "America/New_York"
+  },
+  {
+    "label": "Bamako",
+    "timezone": "Africa/Bamako"
+  },
+  {
+    "label": "Bandung",
+    "timezone": "Asia/Jakarta"
+  },
+  {
+    "label": "Bangalore",
+    "timezone": "Asia/Kolkata"
+  },
+  {
+    "label": "Bangkok",
+    "timezone": "Asia/Bangkok"
+  },
+  {
+    "label": "Bangui",
+    "timezone": "Africa/Bangui"
+  },
+  {
+    "label": "Barbados",
+    "timezone": "America/Barbados"
+  },
+  {
+    "label": "Barcelona",
+    "timezone": "Europe/Madrid"
+  },
+  {
+    "label": "Barranquilla",
+    "timezone": "America/Bogota"
+  },
+  {
+    "label": "Basra",
+    "timezone": "Asia/Baghdad"
+  },
+  {
+    "label": "Beijing",
+    "timezone": "Asia/Shanghai"
+  },
+  {
+    "label": "Bekasi",
+    "timezone": "Asia/Jakarta"
+  },
+  {
+    "label": "Belem",
+    "timezone": "America/Belem"
+  },
+  {
+    "label": "Belize",
+    "timezone": "America/Belize"
+  },
+  {
+    "label": "Belo Horizonte",
+    "timezone": "America/Sao_Paulo"
+  },
+  {
+    "label": "Bengaluru",
+    "timezone": "Asia/Kolkata"
+  },
+  {
+    "label": "Benin City",
+    "timezone": "Africa/Lagos"
+  },
+  {
+    "label": "Berlin",
+    "timezone": "Europe/Berlin"
+  },
+  {
+    "label": "Bermuda",
+    "timezone": "Atlantic/Bermuda"
+  },
+  {
+    "label": "Bhopal",
+    "timezone": "Asia/Kolkata"
+  },
+  {
+    "label": "Birmingham",
+    "timezone": "Europe/London"
+  },
+  {
+    "label": "Blanc-Sablon",
+    "timezone": "America/Blanc-Sablon"
+  },
+  {
+    "label": "Boa Vista",
+    "timezone": "America/Boa_Vista"
+  },
+  {
+    "label": "Bogor",
+    "timezone": "Asia/Jakarta"
+  },
+  {
+    "label": "Bogota",
+    "timezone": "America/Bogota"
+  },
+  {
+    "label": "Bologna",
+    "timezone": "Europe/Rome"
+  },
+  {
+    "label": "Bordeaux",
+    "timezone": "Europe/Paris"
+  },
+  {
+    "label": "Boston",
+    "timezone": "America/New_York"
+  },
+  {
+    "label": "Brasilia",
+    "timezone": "America/Sao_Paulo"
+  },
+  {
+    "label": "Brazzaville",
+    "timezone": "Africa/Brazzaville"
+  },
+  {
+    "label": "Brisbane",
+    "timezone": "Australia/Brisbane"
+  },
+  {
+    "label": "Bristol",
+    "timezone": "Europe/London"
+  },
+  {
+    "label": "Brno",
+    "timezone": "Europe/Prague"
+  },
+  {
+    "label": "Broken Hill",
+    "timezone": "Australia/Broken_Hill"
+  },
+  {
+    "label": "Brooklyn",
+    "timezone": "America/New_York"
+  },
+  {
+    "label": "Brunei",
+    "timezone": "Asia/Brunei"
+  },
+  {
+    "label": "Brussels",
+    "timezone": "Europe/Brussels"
+  },
+  {
+    "label": "Bucharest",
+    "timezone": "Europe/Bucharest"
+  },
+  {
+    "label": "Budapest",
+    "timezone": "Europe/Budapest"
+  },
+  {
+    "label": "Buenos Aires",
+    "timezone": "America/Argentina/Buenos_Aires"
+  },
+  {
+    "label": "Buffalo",
+    "timezone": "America/New_York"
+  },
+  {
+    "label": "Bujumbura",
+    "timezone": "Africa/Bujumbura"
+  },
+  {
+    "label": "Busan",
+    "timezone": "Asia/Seoul"
+  },
+  {
+    "label": "Busingen",
+    "timezone": "Europe/Busingen"
+  },
+  {
+    "label": "Cagayan de Oro",
+    "timezone": "Asia/Manila"
+  },
+  {
+    "label": "Cairo",
+    "timezone": "Africa/Cairo"
+  },
+  {
+    "label": "Calgary",
+    "timezone": "America/Edmonton"
+  },
+  {
+    "label": "Cali",
+    "timezone": "America/Bogota"
+  },
+  {
+    "label": "Calicut",
+    "timezone": "Asia/Kolkata"
+  },
+  {
+    "label": "Cambridge Bay",
+    "timezone": "America/Cambridge_Bay"
+  },
+  {
+    "label": "Campinas",
+    "timezone": "America/Sao_Paulo"
+  },
+  {
+    "label": "Campo Grande",
+    "timezone": "America/Campo_Grande"
+  },
+  {
+    "label": "Canberra",
+    "timezone": "Australia/Sydney"
+  },
+  {
+    "label": "Cancun",
+    "timezone": "America/Cancun"
+  },
+  {
+    "label": "Cape Town",
+    "timezone": "Africa/Johannesburg"
+  },
+  {
+    "label": "Cape Verde",
+    "timezone": "Atlantic/Cape_Verde"
+  },
+  {
+    "label": "Caracas",
+    "timezone": "America/Caracas"
+  },
+  {
+    "label": "Cartagena",
+    "timezone": "America/Bogota"
+  },
+  {
+    "label": "Casablanca",
+    "timezone": "Africa/Casablanca"
+  },
+  {
+    "label": "Casey",
+    "timezone": "Antarctica/Casey"
+  },
+  {
+    "label": "Catamarca",
+    "timezone": "America/Argentina/Catamarca"
+  },
+  {
+    "label": "Cebu City",
+    "timezone": "Asia/Manila"
+  },
+  {
+    "label": "Ceuta",
+    "timezone": "Africa/Ceuta"
+  },
+  {
+    "label": "Changchun",
+    "timezone": "Asia/Shanghai"
+  },
+  {
+    "label": "Changsha",
+    "timezone": "Asia/Shanghai"
+  },
+  {
+    "label": "Changzhou",
+    "timezone": "Asia/Shanghai"
+  },
+  {
+    "label": "Chengdu",
+    "timezone": "Asia/Shanghai"
+  },
+  {
+    "label": "Chennai",
+    "timezone": "Asia/Kolkata"
+  },
+  {
+    "label": "Cheongju",
+    "timezone": "Asia/Seoul"
+  },
+  {
+    "label": "Chiba",
+    "timezone": "Asia/Tokyo"
+  },
+  {
+    "label": "Chittagong",
+    "timezone": "Asia/Dhaka"
+  },
+  {
+    "label": "Chongqing",
+    "timezone": "Asia/Shanghai"
+  },
+  {
+    "label": "Christmas",
+    "timezone": "Indian/Christmas"
+  },
+  {
+    "label": "Cincinnati",
+    "timezone": "America/New_York"
+  },
+  {
+    "label": "Cleveland",
+    "timezone": "America/New_York"
+  },
+  {
+    "label": "Cocos",
+    "timezone": "Indian/Cocos"
+  },
+  {
+    "label": "Cologne",
+    "timezone": "Europe/Berlin"
+  },
+  {
+    "label": "Colombo",
+    "timezone": "Asia/Colombo"
+  },
+  {
+    "label": "Columbus",
+    "timezone": "America/New_York"
+  },
+  {
+    "label": "Conakry",
+    "timezone": "Africa/Conakry"
+  },
+  {
+    "label": "Copenhagen",
+    "timezone": "Europe/Copenhagen"
+  },
+  {
+    "label": "Cordoba",
+    "timezone": "America/Argentina/Cordoba"
+  },
+  {
+    "label": "Costa Rica",
+    "timezone": "America/Costa_Rica"
+  },
+  {
+    "label": "Coyhaique",
+    "timezone": "America/Coyhaique"
+  },
+  {
+    "label": "Creston",
+    "timezone": "America/Creston"
+  },
+  {
+    "label": "Cuiaba",
+    "timezone": "America/Cuiaba"
+  },
+  {
+    "label": "Curacao",
+    "timezone": "America/Curacao"
+  },
+  {
+    "label": "Curitiba",
+    "timezone": "America/Sao_Paulo"
+  },
+  {
+    "label": "Daegu",
+    "timezone": "Asia/Seoul"
+  },
+  {
+    "label": "Daejeon",
+    "timezone": "Asia/Seoul"
+  },
+  {
+    "label": "Dakar",
+    "timezone": "Africa/Dakar"
+  },
+  {
+    "label": "Dalian",
+    "timezone": "Asia/Shanghai"
+  },
+  {
+    "label": "Dallas",
+    "timezone": "America/Chicago"
+  },
+  {
+    "label": "Damascus",
+    "timezone": "Asia/Damascus"
+  },
+  {
+    "label": "Dar es Salaam",
+    "timezone": "Africa/Dar_es_Salaam"
+  },
+  {
+    "label": "Darwin",
+    "timezone": "Australia/Darwin"
+  },
+  {
+    "label": "Davao City",
+    "timezone": "Asia/Manila"
+  },
+  {
+    "label": "Davis",
+    "timezone": "Antarctica/Davis"
+  },
+  {
+    "label": "Dawson",
+    "timezone": "America/Dawson"
+  },
+  {
+    "label": "Dawson Creek",
+    "timezone": "America/Dawson_Creek"
+  },
+  {
+    "label": "Delhi",
+    "timezone": "Asia/Kolkata"
+  },
+  {
+    "label": "Denver",
+    "timezone": "America/Denver"
+  },
+  {
+    "label": "Detroit",
+    "timezone": "America/Detroit"
+  },
+  {
+    "label": "Dhaka",
+    "timezone": "Asia/Dhaka"
+  },
+  {
+    "label": "Djibouti",
+    "timezone": "Africa/Djibouti"
+  },
+  {
+    "label": "Doha",
+    "timezone": "Asia/Qatar"
+  },
+  {
+    "label": "Dominica",
+    "timezone": "America/Dominica"
+  },
+  {
+    "label": "Dongguan",
+    "timezone": "Asia/Shanghai"
+  },
+  {
+    "label": "Douala",
+    "timezone": "Africa/Douala"
+  },
+  {
+    "label": "Dubai",
+    "timezone": "Asia/Dubai"
+  },
+  {
+    "label": "Dublin",
+    "timezone": "Europe/Dublin"
+  },
+  {
+    "label": "DumontDUrville",
+    "timezone": "Antarctica/DumontDUrville"
+  },
+  {
+    "label": "Durban",
+    "timezone": "Africa/Johannesburg"
+  },
+  {
+    "label": "Dusseldorf",
+    "timezone": "Europe/Berlin"
+  },
+  {
+    "label": "Easter",
+    "timezone": "Pacific/Easter"
+  },
+  {
+    "label": "Edinburgh",
+    "timezone": "Europe/London"
+  },
+  {
+    "label": "Edmonton",
+    "timezone": "America/Edmonton"
+  },
+  {
+    "label": "Eirunepe",
+    "timezone": "America/Eirunepe"
+  },
+  {
+    "label": "Ekurhuleni",
+    "timezone": "Africa/Johannesburg"
+  },
+  {
+    "label": "El Aaiun",
+    "timezone": "Africa/El_Aaiun"
+  },
+  {
+    "label": "El Paso",
+    "timezone": "America/Denver"
+  },
+  {
+    "label": "Enugu",
+    "timezone": "Africa/Lagos"
+  },
+  {
+    "label": "Esfahan",
+    "timezone": "Asia/Tehran"
+  },
+  {
+    "label": "Eucla",
+    "timezone": "Australia/Eucla"
+  },
+  {
+    "label": "Famagusta",
+    "timezone": "Asia/Famagusta"
+  },
+  {
+    "label": "Florence",
+    "timezone": "Europe/Rome"
+  },
+  {
+    "label": "Fort Lauderdale",
+    "timezone": "America/New_York"
+  },
+  {
+    "label": "Fort Nelson",
+    "timezone": "America/Fort_Nelson"
+  },
+  {
+    "label": "Fort Worth",
+    "timezone": "America/Chicago"
+  },
+  {
+    "label": "Fortaleza",
+    "timezone": "America/Fortaleza"
+  },
+  {
+    "label": "Foshan",
+    "timezone": "Asia/Shanghai"
+  },
+  {
+    "label": "Frankfurt",
+    "timezone": "Europe/Berlin"
+  },
+  {
+    "label": "Freetown",
+    "timezone": "Africa/Freetown"
+  },
+  {
+    "label": "Fresno",
+    "timezone": "America/Los_Angeles"
+  },
+  {
+    "label": "Fukuoka",
+    "timezone": "Asia/Tokyo"
+  },
+  {
+    "label": "Fuzhou",
+    "timezone": "Asia/Shanghai"
+  },
+  {
+    "label": "Gaborone",
+    "timezone": "Africa/Gaborone"
+  },
+  {
+    "label": "Galapagos",
+    "timezone": "Pacific/Galapagos"
+  },
+  {
+    "label": "Gdansk",
+    "timezone": "Europe/Warsaw"
+  },
+  {
+    "label": "Geneva",
+    "timezone": "Europe/Zurich"
+  },
+  {
+    "label": "Genoa",
+    "timezone": "Europe/Rome"
+  },
+  {
+    "label": "Ghent",
+    "timezone": "Europe/Brussels"
+  },
+  {
+    "label": "Glace Bay",
+    "timezone": "America/Glace_Bay"
+  },
+  {
+    "label": "Glasgow",
+    "timezone": "Europe/London"
+  },
+  {
+    "label": "Goiania",
+    "timezone": "America/Sao_Paulo"
+  },
+  {
+    "label": "Gold Coast",
+    "timezone": "Australia/Brisbane"
+  },
+  {
+    "label": "Goose Bay",
+    "timezone": "America/Goose_Bay"
+  },
+  {
+    "label": "Gothenburg",
+    "timezone": "Europe/Stockholm"
+  },
+  {
+    "label": "Granada",
+    "timezone": "Europe/Madrid"
+  },
+  {
+    "label": "Guadalajara",
+    "timezone": "America/Mexico_City"
+  },
+  {
+    "label": "Guangzhou",
+    "timezone": "Asia/Shanghai"
+  },
+  {
+    "label": "Guatemala City",
+    "timezone": "America/Guatemala"
+  },
+  {
+    "label": "Guayaquil",
+    "timezone": "America/Guayaquil"
+  },
+  {
+    "label": "Guiyang",
+    "timezone": "Asia/Shanghai"
+  },
+  {
+    "label": "Gujranwala",
+    "timezone": "Asia/Karachi"
+  },
+  {
+    "label": "Gwangju",
+    "timezone": "Asia/Seoul"
+  },
+  {
+    "label": "Halifax",
+    "timezone": "America/Halifax"
+  },
+  {
+    "label": "Hangzhou",
+    "timezone": "Asia/Shanghai"
+  },
+  {
+    "label": "Hanoi",
+    "timezone": "Asia/Bangkok"
+  },
+  {
+    "label": "Harare",
+    "timezone": "Africa/Harare"
+  },
+  {
+    "label": "Harbin",
+    "timezone": "Asia/Shanghai"
+  },
+  {
+    "label": "Hartford",
+    "timezone": "America/New_York"
+  },
+  {
+    "label": "Havana",
+    "timezone": "America/Havana"
+  },
+  {
+    "label": "Helsinki",
+    "timezone": "Europe/Helsinki"
+  },
+  {
+    "label": "Ho Chi Minh City",
+    "timezone": "Asia/Ho_Chi_Minh"
+  },
+  {
+    "label": "Hobart",
+    "timezone": "Australia/Hobart"
+  },
+  {
+    "label": "Hong Kong",
+    "timezone": "Asia/Hong_Kong"
+  },
+  {
+    "label": "Honolulu",
+    "timezone": "Pacific/Honolulu"
+  },
+  {
+    "label": "Houston",
+    "timezone": "America/Chicago"
+  },
+  {
+    "label": "Hyderabad",
+    "timezone": "Asia/Kolkata"
+  },
+  {
+    "label": "Ibadan",
+    "timezone": "Africa/Lagos"
+  },
+  {
+    "label": "Ikeja",
+    "timezone": "Africa/Lagos"
+  },
+  {
+    "label": "Incheon",
+    "timezone": "Asia/Seoul"
+  },
+  {
+    "label": "Indianapolis",
+    "timezone": "America/Indiana/Indianapolis"
+  },
+  {
+    "label": "Indore",
+    "timezone": "Asia/Kolkata"
+  },
+  {
+    "label": "Inuvik",
+    "timezone": "America/Inuvik"
+  },
+  {
+    "label": "Iqaluit",
+    "timezone": "America/Iqaluit"
+  },
+  {
+    "label": "Isfahan",
+    "timezone": "Asia/Tehran"
+  },
+  {
+    "label": "Islamabad",
+    "timezone": "Asia/Karachi"
+  },
+  {
+    "label": "Istanbul",
+    "timezone": "Europe/Istanbul"
+  },
+  {
+    "label": "Izmir",
+    "timezone": "Europe/Istanbul"
+  },
+  {
+    "label": "Jacksonville",
+    "timezone": "America/New_York"
+  },
+  {
+    "label": "Jaipur",
+    "timezone": "Asia/Kolkata"
+  },
+  {
+    "label": "Jakarta",
+    "timezone": "Asia/Jakarta"
+  },
+  {
+    "label": "Jeddah",
+    "timezone": "Asia/Riyadh"
+  },
+  {
+    "label": "Jerusalem",
+    "timezone": "Asia/Jerusalem"
+  },
+  {
+    "label": "Johannesburg",
+    "timezone": "Africa/Johannesburg"
+  },
+  {
+    "label": "Johor Bahru",
+    "timezone": "Asia/Kuala_Lumpur"
+  },
+  {
+    "label": "Juarez",
+    "timezone": "America/Ojinaga"
+  },
+  {
+    "label": "Jujuy",
+    "timezone": "America/Argentina/Jujuy"
+  },
+  {
+    "label": "Kabul",
+    "timezone": "Asia/Kabul"
+  },
+  {
+    "label": "Kampala",
+    "timezone": "Africa/Kampala"
+  },
+  {
+    "label": "Kano",
+    "timezone": "Africa/Lagos"
+  },
+  {
+    "label": "Kansas City",
+    "timezone": "America/Chicago"
+  },
+  {
+    "label": "Karachi",
+    "timezone": "Asia/Karachi"
+  },
+  {
+    "label": "Kathmandu",
+    "timezone": "Asia/Kathmandu"
+  },
+  {
+    "label": "Kawasaki",
+    "timezone": "Asia/Tokyo"
+  },
+  {
+    "label": "Khartoum",
+    "timezone": "Africa/Khartoum"
+  },
+  {
+    "label": "Khulna",
+    "timezone": "Asia/Dhaka"
+  },
+  {
+    "label": "Kigali",
+    "timezone": "Africa/Kigali"
+  },
+  {
+    "label": "Kingston",
+    "timezone": "America/Jamaica"
+  },
+  {
+    "label": "Kinshasa",
+    "timezone": "Africa/Kinshasa"
+  },
+  {
+    "label": "Kobe",
+    "timezone": "Asia/Tokyo"
+  },
+  {
+    "label": "Kochi",
+    "timezone": "Asia/Kolkata"
+  },
+  {
+    "label": "Kolkata",
+    "timezone": "Asia/Kolkata"
+  },
+  {
+    "label": "Kota Kinabalu",
+    "timezone": "Asia/Kuching"
+  },
+  {
+    "label": "Krakow",
+    "timezone": "Europe/Warsaw"
+  },
+  {
+    "label": "Kralendijk",
+    "timezone": "America/Kralendijk"
+  },
+  {
+    "label": "Kuala Lumpur",
+    "timezone": "Asia/Kuala_Lumpur"
+  },
+  {
+    "label": "Kumasi",
+    "timezone": "Africa/Accra"
+  },
+  {
+    "label": "Kunming",
+    "timezone": "Asia/Shanghai"
+  },
+  {
+    "label": "Kuwait City",
+    "timezone": "Asia/Kuwait"
+  },
+  {
+    "label": "Kyiv",
+    "timezone": "Europe/Kyiv"
+  },
+  {
+    "label": "Kyoto",
+    "timezone": "Asia/Tokyo"
+  },
+  {
+    "label": "La Paz",
+    "timezone": "America/La_Paz"
+  },
+  {
+    "label": "La Rioja",
+    "timezone": "America/Argentina/La_Rioja"
+  },
+  {
+    "label": "Lagos",
+    "timezone": "Africa/Lagos"
+  },
+  {
+    "label": "Lahore",
+    "timezone": "Asia/Karachi"
+  },
+  {
+    "label": "Las Vegas",
+    "timezone": "America/Los_Angeles"
+  },
+  {
+    "label": "Lausanne",
+    "timezone": "Europe/Zurich"
+  },
+  {
+    "label": "Leeds",
+    "timezone": "Europe/London"
+  },
+  {
+    "label": "Lima",
+    "timezone": "America/Lima"
+  },
+  {
+    "label": "Lindeman",
+    "timezone": "Australia/Lindeman"
+  },
+  {
+    "label": "Lisbon",
+    "timezone": "Europe/Lisbon"
+  },
+  {
+    "label": "Liverpool",
+    "timezone": "Europe/London"
+  },
+  {
+    "label": "Ljubljana",
+    "timezone": "Europe/Ljubljana"
+  },
+  {
+    "label": "Lodz",
+    "timezone": "Europe/Warsaw"
+  },
+  {
+    "label": "London",
+    "timezone": "Europe/London"
+  },
+  {
+    "label": "Long Beach",
+    "timezone": "America/Los_Angeles"
+  },
+  {
+    "label": "Lord Howe",
+    "timezone": "Australia/Lord_Howe"
+  },
+  {
+    "label": "Los Angeles",
+    "timezone": "America/Los_Angeles"
+  },
+  {
+    "label": "Luanda",
+    "timezone": "Africa/Luanda"
+  },
+  {
+    "label": "Lubumbashi",
+    "timezone": "Africa/Lubumbashi"
+  },
+  {
+    "label": "Lusaka",
+    "timezone": "Africa/Lusaka"
+  },
+  {
+    "label": "Luxor",
+    "timezone": "Africa/Cairo"
+  },
+  {
+    "label": "Lviv",
+    "timezone": "Europe/Kyiv"
+  },
+  {
+    "label": "Lyon",
+    "timezone": "Europe/Paris"
+  },
+  {
+    "label": "Maceio",
+    "timezone": "America/Maceio"
+  },
+  {
+    "label": "Macquarie",
+    "timezone": "Antarctica/Macquarie"
+  },
+  {
+    "label": "Madison",
+    "timezone": "America/Chicago"
+  },
+  {
+    "label": "Madrid",
+    "timezone": "Europe/Madrid"
+  },
+  {
+    "label": "Madurai",
+    "timezone": "Asia/Kolkata"
+  },
+  {
+    "label": "Managua",
+    "timezone": "America/Managua"
+  },
+  {
+    "label": "Manama",
+    "timezone": "Asia/Bahrain"
+  },
+  {
+    "label": "Manaus",
+    "timezone": "America/Manaus"
+  },
+  {
+    "label": "Manila",
+    "timezone": "Asia/Manila"
+  },
+  {
+    "label": "Mannheim",
+    "timezone": "Europe/Berlin"
+  },
+  {
+    "label": "Maputo",
+    "timezone": "Africa/Maputo"
+  },
+  {
+    "label": "Maracaibo",
+    "timezone": "America/Caracas"
+  },
+  {
+    "label": "Mariehamn",
+    "timezone": "Europe/Mariehamn"
+  },
+  {
+    "label": "Marrakesh",
+    "timezone": "Africa/Casablanca"
+  },
+  {
+    "label": "Marseille",
+    "timezone": "Europe/Paris"
+  },
+  {
+    "label": "Mashhad",
+    "timezone": "Asia/Tehran"
+  },
+  {
+    "label": "Mawson",
+    "timezone": "Antarctica/Mawson"
+  },
+  {
+    "label": "McMurdo",
+    "timezone": "Antarctica/McMurdo"
+  },
+  {
+    "label": "Medan",
+    "timezone": "Asia/Jakarta"
+  },
+  {
+    "label": "Medellin",
+    "timezone": "America/Bogota"
+  },
+  {
+    "label": "Melbourne",
+    "timezone": "Australia/Melbourne"
+  },
+  {
+    "label": "Memphis",
+    "timezone": "America/Chicago"
+  },
+  {
+    "label": "Mendoza",
+    "timezone": "America/Argentina/Mendoza"
+  },
+  {
+    "label": "Mexico City",
+    "timezone": "America/Mexico_City"
+  },
+  {
+    "label": "Miami",
+    "timezone": "America/New_York"
+  },
+  {
+    "label": "Milan",
+    "timezone": "Europe/Rome"
+  },
+  {
+    "label": "Minsk",
+    "timezone": "Europe/Minsk"
+  },
+  {
+    "label": "Mogadishu",
+    "timezone": "Africa/Mogadishu"
+  },
+  {
+    "label": "Moncton",
+    "timezone": "America/Moncton"
+  },
+  {
+    "label": "Monrovia",
+    "timezone": "Africa/Monrovia"
+  },
+  {
+    "label": "Monterrey",
+    "timezone": "America/Monterrey"
+  },
+  {
+    "label": "Montreal",
+    "timezone": "America/Toronto"
+  },
+  {
+    "label": "Moscow",
+    "timezone": "Europe/Moscow"
+  },
+  {
+    "label": "Mumbai",
+    "timezone": "Asia/Kolkata"
+  },
+  {
+    "label": "Munich",
+    "timezone": "Europe/Berlin"
+  },
+  {
+    "label": "Muscat",
+    "timezone": "Asia/Muscat"
+  },
+  {
+    "label": "Nagoya",
+    "timezone": "Asia/Tokyo"
+  },
+  {
+    "label": "Nagpur",
+    "timezone": "Asia/Kolkata"
+  },
+  {
+    "label": "Nairobi",
+    "timezone": "Africa/Nairobi"
+  },
+  {
+    "label": "Nanjing",
+    "timezone": "Asia/Shanghai"
+  },
+  {
+    "label": "Nantes",
+    "timezone": "Europe/Paris"
+  },
+  {
+    "label": "Naples",
+    "timezone": "Europe/Rome"
+  },
+  {
+    "label": "Nashville",
+    "timezone": "America/Chicago"
+  },
+  {
+    "label": "Nassau",
+    "timezone": "America/Nassau"
+  },
+  {
+    "label": "New Delhi",
+    "timezone": "Asia/Kolkata"
+  },
+  {
+    "label": "New Orleans",
+    "timezone": "America/Chicago"
+  },
+  {
+    "label": "Newark",
+    "timezone": "America/New_York"
+  },
+  {
+    "label": "Nice",
+    "timezone": "Europe/Paris"
+  },
+  {
+    "label": "Nicosia",
+    "timezone": "Asia/Nicosia"
+  },
+  {
+    "label": "Ningbo",
+    "timezone": "Asia/Shanghai"
+  },
+  {
+    "label": "Noronha",
+    "timezone": "America/Noronha"
+  },
+  {
+    "label": "Nouakchott",
+    "timezone": "Africa/Nouakchott"
+  },
+  {
+    "label": "Novosibirsk",
+    "timezone": "Asia/Novosibirsk"
+  },
+  {
+    "label": "Nuremberg",
+    "timezone": "Europe/Berlin"
+  },
+  {
+    "label": "Odessa",
+    "timezone": "Europe/Kyiv"
+  },
+  {
+    "label": "Oklahoma City",
+    "timezone": "America/Chicago"
+  },
+  {
+    "label": "Omsk",
+    "timezone": "Asia/Omsk"
+  },
+  {
+    "label": "Oran",
+    "timezone": "Africa/Algiers"
+  },
+  {
+    "label": "Orlando",
+    "timezone": "America/New_York"
+  },
+  {
+    "label": "Osaka",
+    "timezone": "Asia/Tokyo"
+  },
+  {
+    "label": "Oslo",
+    "timezone": "Europe/Oslo"
+  },
+  {
+    "label": "Ottawa",
+    "timezone": "America/Toronto"
+  },
+  {
+    "label": "Ouagadougou",
+    "timezone": "Africa/Ouagadougou"
+  },
+  {
+    "label": "Pago Pago",
+    "timezone": "Pacific/Pago_Pago"
+  },
+  {
+    "label": "Palembang",
+    "timezone": "Asia/Jakarta"
+  },
+  {
+    "label": "Palermo",
+    "timezone": "Europe/Rome"
+  },
+  {
+    "label": "Palma de Mallorca",
+    "timezone": "Europe/Madrid"
+  },
+  {
+    "label": "Palmer",
+    "timezone": "Antarctica/Palmer"
+  },
+  {
+    "label": "Panama City",
+    "timezone": "America/Panama"
+  },
+  {
+    "label": "Paramaribo",
+    "timezone": "America/Paramaribo"
+  },
+  {
+    "label": "Paris",
+    "timezone": "Europe/Paris"
+  },
+  {
+    "label": "Patna",
+    "timezone": "Asia/Kolkata"
+  },
+  {
+    "label": "Perth",
+    "timezone": "Australia/Perth"
+  },
+  {
+    "label": "Philadelphia",
+    "timezone": "America/New_York"
+  },
+  {
+    "label": "Phnom Penh",
+    "timezone": "Asia/Phnom_Penh"
+  },
+  {
+    "label": "Phoenix",
+    "timezone": "America/Phoenix"
+  },
+  {
+    "label": "Phuket",
+    "timezone": "Asia/Bangkok"
+  },
+  {
+    "label": "Pittsburgh",
+    "timezone": "America/New_York"
+  },
+  {
+    "label": "Port Elizabeth",
+    "timezone": "Africa/Johannesburg"
+  },
+  {
+    "label": "Port Harcourt",
+    "timezone": "Africa/Lagos"
+  },
+  {
+    "label": "Port Louis",
+    "timezone": "Indian/Mauritius"
+  },
+  {
+    "label": "Port Moresby",
+    "timezone": "Pacific/Port_Moresby"
+  },
+  {
+    "label": "Port-au-Prince",
+    "timezone": "America/Port-au-Prince"
+  },
+  {
+    "label": "Portland",
+    "timezone": "America/Los_Angeles"
+  },
+  {
+    "label": "Porto",
+    "timezone": "Europe/Lisbon"
+  },
+  {
+    "label": "Porto Alegre",
+    "timezone": "America/Sao_Paulo"
+  },
+  {
+    "label": "Porto Velho",
+    "timezone": "America/Porto_Velho"
+  },
+  {
+    "label": "Porto-Novo",
+    "timezone": "Africa/Porto-Novo"
+  },
+  {
+    "label": "Prague",
+    "timezone": "Europe/Prague"
+  },
+  {
+    "label": "Pretoria",
+    "timezone": "Africa/Johannesburg"
+  },
+  {
+    "label": "Puebla",
+    "timezone": "America/Mexico_City"
+  },
+  {
+    "label": "Pune",
+    "timezone": "Asia/Kolkata"
+  },
+  {
+    "label": "Punta Arenas",
+    "timezone": "America/Punta_Arenas"
+  },
+  {
+    "label": "Qingdao",
+    "timezone": "Asia/Shanghai"
+  },
+  {
+    "label": "Quito",
+    "timezone": "America/Guayaquil"
+  },
+  {
+    "label": "Rabat",
+    "timezone": "Africa/Casablanca"
+  },
+  {
+    "label": "Rajkot",
+    "timezone": "Asia/Kolkata"
+  },
+  {
+    "label": "Raleigh",
+    "timezone": "America/New_York"
+  },
+  {
+    "label": "Rangoon",
+    "timezone": "Asia/Yangon"
+  },
+  {
+    "label": "Rankin Inlet",
+    "timezone": "America/Rankin_Inlet"
+  },
+  {
+    "label": "Rarotonga",
+    "timezone": "Pacific/Rarotonga"
+  },
+  {
+    "label": "Rawalpindi",
+    "timezone": "Asia/Karachi"
+  },
+  {
+    "label": "Recife",
+    "timezone": "America/Recife"
+  },
+  {
+    "label": "Regina",
+    "timezone": "America/Regina"
+  },
+  {
+    "label": "Resolute",
+    "timezone": "America/Resolute"
+  },
+  {
+    "label": "Reykjavik",
+    "timezone": "Atlantic/Reykjavik"
+  },
+  {
+    "label": "Richmond",
+    "timezone": "America/New_York"
+  },
+  {
+    "label": "Riga",
+    "timezone": "Europe/Riga"
+  },
+  {
+    "label": "Rio Branco",
+    "timezone": "America/Rio_Branco"
+  },
+  {
+    "label": "Rio Gallegos",
+    "timezone": "America/Argentina/Rio_Gallegos"
+  },
+  {
+    "label": "Riyadh",
+    "timezone": "Asia/Riyadh"
+  },
+  {
+    "label": "Rome",
+    "timezone": "Europe/Rome"
+  },
+  {
+    "label": "Rosario",
+    "timezone": "America/Argentina/Cordoba"
+  },
+  {
+    "label": "Rothera",
+    "timezone": "Antarctica/Rothera"
+  },
+  {
+    "label": "Rotterdam",
+    "timezone": "Europe/Amsterdam"
+  },
+  {
+    "label": "Sacramento",
+    "timezone": "America/Los_Angeles"
+  },
+  {
+    "label": "Saint Louis",
+    "timezone": "America/Chicago"
+  },
+  {
+    "label": "Saint Petersburg",
+    "timezone": "Europe/Moscow"
+  },
+  {
+    "label": "Salta",
+    "timezone": "America/Argentina/Salta"
+  },
+  {
+    "label": "Salvador",
+    "timezone": "America/Bahia"
+  },
+  {
+    "label": "San Antonio",
+    "timezone": "America/Chicago"
+  },
+  {
+    "label": "San Diego",
+    "timezone": "America/Los_Angeles"
+  },
+  {
+    "label": "San Francisco",
+    "timezone": "America/Los_Angeles"
+  },
+  {
+    "label": "San Jose",
+    "timezone": "America/Los_Angeles"
+  },
+  {
+    "label": "San Juan",
+    "timezone": "America/Puerto_Rico"
+  },
+  {
+    "label": "San Luis",
+    "timezone": "America/Argentina/San_Luis"
+  },
+  {
+    "label": "San Salvador",
+    "timezone": "America/El_Salvador"
+  },
+  {
+    "label": "San Sebastian",
+    "timezone": "Europe/Madrid"
+  },
+  {
+    "label": "Santa Cruz de la Sierra",
+    "timezone": "America/La_Paz"
+  },
+  {
+    "label": "Santarem",
+    "timezone": "America/Santarem"
+  },
+  {
+    "label": "Santiago",
+    "timezone": "America/Santiago"
+  },
+  {
+    "label": "Santiago de Chile",
+    "timezone": "America/Santiago"
+  },
+  {
+    "label": "Santiago de Cuba",
+    "timezone": "America/Havana"
+  },
+  {
+    "label": "Santo Domingo",
+    "timezone": "America/Santo_Domingo"
+  },
+  {
+    "label": "Sao Luis",
+    "timezone": "America/Fortaleza"
+  },
+  {
+    "label": "Sao Paulo",
+    "timezone": "America/Sao_Paulo"
+  },
+  {
+    "label": "Sapporo",
+    "timezone": "Asia/Tokyo"
+  },
+  {
+    "label": "Sarajevo",
+    "timezone": "Europe/Sarajevo"
+  },
+  {
+    "label": "Sarasota",
+    "timezone": "America/New_York"
+  },
+  {
+    "label": "Seattle",
+    "timezone": "America/Los_Angeles"
+  },
+  {
+    "label": "Seoul",
+    "timezone": "Asia/Seoul"
+  },
+  {
+    "label": "Seville",
+    "timezone": "Europe/Madrid"
+  },
+  {
+    "label": "Shanghai",
+    "timezone": "Asia/Shanghai"
+  },
+  {
+    "label": "Sharjah",
+    "timezone": "Asia/Dubai"
+  },
+  {
+    "label": "Sheffield",
+    "timezone": "Europe/London"
+  },
+  {
+    "label": "Shenyang",
+    "timezone": "Asia/Shanghai"
+  },
+  {
+    "label": "Shenzhen",
+    "timezone": "Asia/Shanghai"
+  },
+  {
+    "label": "Shijiazhuang",
+    "timezone": "Asia/Shanghai"
+  },
+  {
+    "label": "Shiraz",
+    "timezone": "Asia/Tehran"
+  },
+  {
+    "label": "Shizuoka",
+    "timezone": "Asia/Tokyo"
+  },
+  {
+    "label": "Singapore",
+    "timezone": "Asia/Singapore"
+  },
+  {
+    "label": "Skopje",
+    "timezone": "Europe/Skopje"
+  },
+  {
+    "label": "Sofia",
+    "timezone": "Europe/Sofia"
+  },
+  {
+    "label": "St Barthelemy",
+    "timezone": "America/St_Barthelemy"
+  },
+  {
+    "label": "St Johns",
+    "timezone": "America/St_Johns"
+  },
+  {
+    "label": "Stockholm",
+    "timezone": "Europe/Stockholm"
+  },
+  {
+    "label": "Strasbourg",
+    "timezone": "Europe/Paris"
+  },
+  {
+    "label": "Stuttgart",
+    "timezone": "Europe/Berlin"
+  },
+  {
+    "label": "Surabaya",
+    "timezone": "Asia/Jakarta"
+  },
+  {
+    "label": "Surat",
+    "timezone": "Asia/Kolkata"
+  },
+  {
+    "label": "Suzhou",
+    "timezone": "Asia/Shanghai"
+  },
+  {
+    "label": "Swift Current",
+    "timezone": "America/Swift_Current"
+  },
+  {
+    "label": "Sydney",
+    "timezone": "Australia/Sydney"
+  },
+  {
+    "label": "Syowa",
+    "timezone": "Antarctica/Syowa"
+  },
+  {
+    "label": "Tabriz",
+    "timezone": "Asia/Tehran"
+  },
+  {
+    "label": "Taipei",
+    "timezone": "Asia/Taipei"
+  },
+  {
+    "label": "Tallinn",
+    "timezone": "Europe/Tallinn"
+  },
+  {
+    "label": "Tampa",
+    "timezone": "America/New_York"
+  },
+  {
+    "label": "Tangier",
+    "timezone": "Africa/Casablanca"
+  },
+  {
+    "label": "Tashkent",
+    "timezone": "Asia/Tashkent"
+  },
+  {
+    "label": "Tegucigalpa",
+    "timezone": "America/Tegucigalpa"
+  },
+  {
+    "label": "Tehran",
+    "timezone": "Asia/Tehran"
+  },
+  {
+    "label": "Tel Aviv",
+    "timezone": "Asia/Jerusalem"
+  },
+  {
+    "label": "Thane",
+    "timezone": "Asia/Kolkata"
+  },
+  {
+    "label": "Thessaloniki",
+    "timezone": "Europe/Athens"
+  },
+  {
+    "label": "Thimphu",
+    "timezone": "Asia/Thimphu"
+  },
+  {
+    "label": "Tianjin",
+    "timezone": "Asia/Shanghai"
+  },
+  {
+    "label": "Tijuana",
+    "timezone": "America/Tijuana"
+  },
+  {
+    "label": "Tilburg",
+    "timezone": "Europe/Amsterdam"
+  },
+  {
+    "label": "Tirane",
+    "timezone": "Europe/Tirane"
+  },
+  {
+    "label": "Tokyo",
+    "timezone": "Asia/Tokyo"
+  },
+  {
+    "label": "Toluca",
+    "timezone": "America/Mexico_City"
+  },
+  {
+    "label": "Toronto",
+    "timezone": "America/Toronto"
+  },
+  {
+    "label": "Toulouse",
+    "timezone": "Europe/Paris"
+  },
+  {
+    "label": "Tripoli",
+    "timezone": "Africa/Tripoli"
+  },
+  {
+    "label": "Troll",
+    "timezone": "Antarctica/Troll"
+  },
+  {
+    "label": "Tucuman",
+    "timezone": "America/Argentina/Tucuman"
+  },
+  {
+    "label": "Tunis",
+    "timezone": "Africa/Tunis"
+  },
+  {
+    "label": "Turin",
+    "timezone": "Europe/Rome"
+  },
+  {
+    "label": "Ulaanbaatar",
+    "timezone": "Asia/Ulaanbaatar"
+  },
+  {
+    "label": "Urumqi",
+    "timezone": "Asia/Urumqi"
+  },
+  {
+    "label": "Ushuaia",
+    "timezone": "America/Argentina/Ushuaia"
+  },
+  {
+    "label": "Vadodara",
+    "timezone": "Asia/Kolkata"
+  },
+  {
+    "label": "Valencia",
+    "timezone": "Europe/Madrid"
+  },
+  {
+    "label": "Valletta",
+    "timezone": "Europe/Malta"
+  },
+  {
+    "label": "Valparaiso",
+    "timezone": "America/Santiago"
+  },
+  {
+    "label": "Vancouver",
+    "timezone": "America/Vancouver"
+  },
+  {
+    "label": "Varanasi",
+    "timezone": "Asia/Kolkata"
+  },
+  {
+    "label": "Venice",
+    "timezone": "Europe/Rome"
+  },
+  {
+    "label": "Veracruz",
+    "timezone": "America/Mexico_City"
+  },
+  {
+    "label": "Vienna",
+    "timezone": "Europe/Vienna"
+  },
+  {
+    "label": "Vientiane",
+    "timezone": "Asia/Vientiane"
+  },
+  {
+    "label": "Vilnius",
+    "timezone": "Europe/Vilnius"
+  },
+  {
+    "label": "Virginia Beach",
+    "timezone": "America/New_York"
+  },
+  {
+    "label": "Visakhapatnam",
+    "timezone": "Asia/Kolkata"
+  },
+  {
+    "label": "Vladivostok",
+    "timezone": "Asia/Vladivostok"
+  },
+  {
+    "label": "Vostok",
+    "timezone": "Antarctica/Vostok"
+  },
+  {
+    "label": "Warsaw",
+    "timezone": "Europe/Warsaw"
+  },
+  {
+    "label": "Washington",
+    "timezone": "America/New_York"
+  },
+  {
+    "label": "Wellington",
+    "timezone": "Pacific/Auckland"
+  },
+  {
+    "label": "Whitehorse",
+    "timezone": "America/Whitehorse"
+  },
+  {
+    "label": "Winnipeg",
+    "timezone": "America/Winnipeg"
+  },
+  {
+    "label": "Wroclaw",
+    "timezone": "Europe/Warsaw"
+  },
+  {
+    "label": "Wuhan",
+    "timezone": "Asia/Shanghai"
+  },
+  {
+    "label": "Wuxi",
+    "timezone": "Asia/Shanghai"
+  },
+  {
+    "label": "Xi'an",
+    "timezone": "Asia/Shanghai"
+  },
+  {
+    "label": "Xiamen",
+    "timezone": "Asia/Shanghai"
+  },
+  {
+    "label": "Yangon",
+    "timezone": "Asia/Yangon"
+  },
+  {
+    "label": "Yaounde",
+    "timezone": "Africa/Douala"
+  },
+  {
+    "label": "Yekaterinburg",
+    "timezone": "Asia/Yekaterinburg"
+  },
+  {
+    "label": "Yerevan",
+    "timezone": "Asia/Yerevan"
+  },
+  {
+    "label": "Yokohama",
+    "timezone": "Asia/Tokyo"
+  },
+  {
+    "label": "Zagreb",
+    "timezone": "Europe/Zagreb"
+  },
+  {
+    "label": "Zamboanga City",
+    "timezone": "Asia/Manila"
+  },
+  {
+    "label": "Zaragoza",
+    "timezone": "Europe/Madrid"
+  },
+  {
+    "label": "Zhengzhou",
+    "timezone": "Asia/Shanghai"
+  },
+  {
+    "label": "Zhongshan",
+    "timezone": "Asia/Shanghai"
+  },
+  {
+    "label": "Zibo",
+    "timezone": "Asia/Shanghai"
+  },
+  {
+    "label": "Zurich",
+    "timezone": "Europe/Zurich"
+  }
+]

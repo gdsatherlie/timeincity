@@ -1,0 +1,17 @@
+{
+  "rewrites": [
+    { "source": "/city/(.*)", "destination": "/index.html" },
+    { "source": "/world-time-converter", "destination": "/index.html" },
+    { "source": "/time-zone-map", "destination": "/index.html" },
+    { "source": "/what-time-is-it-around-the-world", "destination": "/index.html" },
+    { "source": "/why-time-zones-exist", "destination": "/index.html" },
+    { "source": "/daylight-saving-time", "destination": "/index.html" },
+    { "source": "/utc-explained", "destination": "/index.html" },
+    { "source": "/about", "destination": "/index.html" },
+    { "source": "/privacy", "destination": "/index.html" },
+    { "source": "/terms", "destination": "/index.html" },
+    { "source": "/contact", "destination": "/index.html" },
+    { "source": "/cities", "destination": "/index.html" },
+    { "source": "/cities/(.*)", "destination": "/index.html" }
+  ]
+}
