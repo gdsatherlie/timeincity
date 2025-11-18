@@ -12,6 +12,16 @@ export function HomeSeoSection(): JSX.Element {
         Each /city/ page doubles as a world clock with live meteorological data and quick-share links so teammates load the same
         time. Use the tools below to compare time zones, plan meetings, or embed a branded widget on your website in seconds.
       </p>
+      <p className="text-base leading-relaxed">
+        Search for any destination to see the current time in that city, then jump straight into “what time is it in [city]”
+        answers without doing mental math. TimeInCity keeps offsets accurate by pairing browser clocks with precise IANA time zones,
+        so you can rely on it when planning calls, travel, or broadcasts.
+      </p>
+      <p className="text-base leading-relaxed">
+        Live weather cards highlight temperature, precipitation, wind, and sunrise/sunset, while the meeting planner and compare
+        tools explain how multiple time zones line up. Copy the embed code to add a live clock to your own site and keep everyone in
+        sync.
+      </p>
       <div className="grid gap-3 text-sm sm:grid-cols-4">
         <div className="rounded-2xl border border-slate-200 bg-white/80 p-4 shadow-sm dark:border-slate-700 dark:bg-slate-900/70">
           <p className="text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">Check current time by city</p>

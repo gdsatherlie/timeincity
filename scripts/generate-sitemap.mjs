@@ -25,8 +25,16 @@ const cities = Object.values(CITY_CONFIGS);
 const baseUrl = "https://www.timeincity.com";
 const today = new Date().toISOString().split("T")[0];
 
+const staticPages = [
+  { loc: `${baseUrl}/about`, priority: "0.5" },
+  { loc: `${baseUrl}/privacy`, priority: "0.5" },
+  { loc: `${baseUrl}/terms`, priority: "0.5" },
+  { loc: `${baseUrl}/contact`, priority: "0.5" }
+];
+
 const urls = [
   { loc: `${baseUrl}/`, priority: "1.0" },
+  ...staticPages,
   ...cities.map((city) => ({
     loc: `${baseUrl}/city/${city.slug}`,
     priority: FEATURED_CITY_SLUGS.includes(city.slug) ? "0.9" : "0.7"

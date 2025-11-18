@@ -19,7 +19,7 @@ export function PopularCities({ selectedLabel, onSelect }: PopularCitiesProps): 
       <header className="flex flex-col gap-1">
         <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100">Popular cities</h2>
         <p className="text-sm text-slate-600 dark:text-slate-400">
-          Browse {POPULAR_CITIES_COUNT.toLocaleString()} cities. Tap any city name to open its clock.
+          Browse {POPULAR_CITIES_COUNT.toLocaleString()} cities in alphabetical order. Tap any name to open its clock.
         </p>
       </header>
       <div className="overflow-x-auto pb-1">

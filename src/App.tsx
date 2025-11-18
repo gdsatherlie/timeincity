@@ -12,10 +12,13 @@ import { FavoriteCities } from "./components/FavoriteCities";
 import { HomeSeoSection } from "./components/HomeSeoSection";
 import { MeetingPlanner } from "./components/MeetingPlanner";
 import { PopularCities } from "./components/PopularCities";
+import { SiteFooter } from "./components/SiteFooter";
+import { StaticPage } from "./components/StaticPage";
 import { TimezoneSelector } from "./components/TimezoneSelector";
 import { WeatherCard } from "./components/WeatherCard";
 import { usePersistentState } from "./hooks/usePersistentState";
 import { CITY_CONFIGS, CITY_CONFIG_LIST, type CityConfig } from "./data/cities";
+import { STATIC_PAGE_CONTENT, type StaticPageSlug } from "./data/staticPages";
 import { SHOW_AD_SLOTS } from "./config";
 import { slugifyCity } from "./utils/slugifyCity";
 import { guessDefaultCityFromTimezone } from "./utils/guessDefaultCity";
@@ -60,6 +63,35 @@ type WeatherSummary = {
 function decodeTimezoneToLabel(timezone: string): string {
   const lastSegment = timezone.split("/").pop() ?? timezone;
   return lastSegment.replace(/_/g, " ");
+}
+
+const STATIC_PAGE_PATHS: Record<StaticPageSlug, string> = {
+  about: "/about",
+  privacy: "/privacy",
+  terms: "/terms",
+  contact: "/contact"
+};
+
+function normalizePathname(pathname: string): string {
+  const trimmed = pathname.replace(/\/+$/, "");
+  if (!trimmed) {
+    return "/";
+  }
+  return trimmed.startsWith("/") ? trimmed.toLowerCase() : `/${trimmed.toLowerCase()}`;
+}
+
+function getStaticPageFromPath(pathname: string): StaticPageSlug | null {
+  const normalized = normalizePathname(pathname);
+  for (const [slug, path] of Object.entries(STATIC_PAGE_PATHS)) {
+    if (normalized === path) {
+      return slug as StaticPageSlug;
+    }
+  }
+  return null;
+}
+
+function getStaticPagePath(slug: StaticPageSlug): string {
+  return STATIC_PAGE_PATHS[slug];
 }
 
 async function fetchWeather(timezone: string, explicitLabel?: string): Promise<WeatherSummary> {
@@ -175,8 +207,16 @@ export default function App(): JSX.Element {
     return getCitySlugFromPath(window.location.pathname);
   });
 
+  const [staticPage, setStaticPage] = useState<StaticPageSlug | null>(() => {
+    if (typeof window === "undefined") {
+      return null;
+    }
+    return getStaticPageFromPath(window.location.pathname);
+  });
+
   const activeCityConfig = routeSlug ? CITY_CONFIGS[routeSlug] : undefined;
   const isCityRoute = Boolean(routeSlug && activeCityConfig);
+  const staticContent = staticPage ? STATIC_PAGE_CONTENT[staticPage] : undefined;
 
   const guessedCity = useMemo(() => guessDefaultCityFromTimezone(), []);
   const shouldUseGuess = !isCityRoute && !savedLocation && Boolean(guessedCity);
@@ -225,6 +265,7 @@ export default function App(): JSX.Element {
     }
 
     setRouteSlug(slug);
+    setStaticPage(null);
   };
 
   useEffect(() => {
@@ -248,7 +289,14 @@ export default function App(): JSX.Element {
       return;
     }
     const handler = () => {
-      setRouteSlug(getCitySlugFromPath(window.location.pathname));
+      const path = window.location.pathname;
+      const slug = getCitySlugFromPath(path);
+      setRouteSlug(slug);
+      if (slug) {
+        setStaticPage(null);
+      } else {
+        setStaticPage(getStaticPageFromPath(path));
+      }
     };
     window.addEventListener("popstate", handler);
     return () => window.removeEventListener("popstate", handler);
@@ -374,13 +422,17 @@ export default function App(): JSX.Element {
   }, [weatherData]);
 
   useEffect(() => {
+    if (staticPage && staticContent) {
+      document.title = `${staticContent.title} — TimeInCity`;
+      return;
+    }
     if (isCityRoute && activeCityConfig) {
       const copy = getCitySeoCopy(activeCityConfig);
       document.title = copy.title;
     } else {
       document.title = `Time in ${cityLabel} – TimeInCity`;
     }
-  }, [cityLabel, isCityRoute, activeCityConfig]);
+  }, [cityLabel, isCityRoute, activeCityConfig, staticPage, staticContent]);
 
   const selectedLabel = customLabel ?? decodeTimezoneToLabel(selectedTimezone);
   const defaultLabel = savedLocation?.label ?? (savedLocation?.timezone ? decodeTimezoneToLabel(savedLocation.timezone) : undefined);
@@ -455,6 +507,44 @@ export default function App(): JSX.Element {
     );
   };
 
+  const handleNavigateToStaticPage = (slug: StaticPageSlug) => {
+    if (typeof window !== "undefined") {
+      const path = getStaticPagePath(slug);
+      if (window.location.pathname !== path) {
+        window.history.pushState(window.history.state, "", path);
+      }
+    }
+    setStaticPage(slug);
+    setRouteSlug(undefined);
+  };
+
+  if (staticPage && staticContent) {
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-slate-100 via-white to-slate-100 text-slate-900 transition-colors dark:from-slate-950 dark:via-slate-950 dark:to-slate-900 dark:text-slate-100">
+        {SHOW_AD_SLOTS && <AdSlot label="Top banner" slotId="1234567890" sticky="top" />}
+        <main className="mx-auto flex w-full max-w-4xl flex-col gap-8 px-4 pb-10 pt-6 sm:px-6 lg:px-8">
+          <header className="flex flex-wrap items-center justify-between gap-4 rounded-3xl border border-slate-200/70 bg-white/80 px-6 py-4 shadow-lg shadow-slate-900/5 backdrop-blur dark:border-slate-800 dark:bg-slate-900/70">
+            <div>
+              <p className="text-sm font-semibold uppercase tracking-[0.2em] text-indigo-500">TimeInCity</p>
+              <p className="text-sm text-slate-600 dark:text-slate-400">Learn more about {staticContent.title}.</p>
+            </div>
+            <button
+              type="button"
+              onClick={() => updateRouteForSlug(undefined)}
+              className="rounded-full border border-slate-200 px-4 py-2 text-sm font-semibold text-slate-700 transition hover:border-indigo-200 hover:text-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-400 dark:border-slate-700 dark:text-slate-200"
+            >
+              Back to homepage
+            </button>
+          </header>
+          <StaticPage content={staticContent} />
+        </main>
+        <SiteFooter onNavigate={handleNavigateToStaticPage} currentPage={staticPage} />
+        {SHOW_AD_SLOTS && <AdSlot label="Footer banner" slotId="1234567892" sticky="bottom" />}
+        <Analytics />
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-100 via-white to-slate-100 text-slate-900 transition-colors dark:from-slate-950 dark:via-slate-950 dark:to-slate-900 dark:text-slate-100">
       {SHOW_AD_SLOTS && <AdSlot label="Top banner" slotId="1234567890" sticky="top" />}
@@ -523,6 +613,7 @@ export default function App(): JSX.Element {
 
         <PopularCities selectedLabel={selectedLabel} onSelect={handleTimezoneChange} />
       </main>
+      <SiteFooter onNavigate={handleNavigateToStaticPage} currentPage={staticPage} />
       {SHOW_AD_SLOTS && <AdSlot label="Footer banner" slotId="1234567892" sticky="bottom" />}
       <Analytics />
     </div>
