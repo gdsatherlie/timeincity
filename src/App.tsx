@@ -459,28 +459,14 @@ export default function App(): JSX.Element {
     <div className="min-h-screen bg-gradient-to-b from-slate-100 via-white to-slate-100 text-slate-900 transition-colors dark:from-slate-950 dark:via-slate-950 dark:to-slate-900 dark:text-slate-100">
       {SHOW_AD_SLOTS && <AdSlot label="Top banner" slotId="1234567890" sticky="top" />}
       <main className="mx-auto flex w-full max-w-6xl flex-col gap-10 px-4 pb-10 pt-6 sm:px-6 lg:px-8">
-        <header className="flex flex-col gap-6 rounded-3xl border border-slate-200/70 bg-white/80 p-6 shadow-lg shadow-slate-900/5 backdrop-blur dark:border-slate-800 dark:bg-slate-900/70">
-          <div>
-            <p className="mb-3 text-sm font-semibold uppercase tracking-[0.2em] text-indigo-500">TimeInCity</p>
-            <h1 className="text-3xl font-black uppercase tracking-tight text-slate-900 dark:text-slate-100 sm:text-4xl">
-              Track the time & weather anywhere
-            </h1>
-            <p className="mt-3 max-w-2xl text-base text-slate-600 dark:text-slate-300">
-              Instantly switch between global cities, see live weather conditions, and grab an embed for your own site.
-            </p>
-          </div>
-          <div className="flex flex-col gap-4 lg:flex-row lg:items-stretch">
-            <CitySearch onSelectCity={handleCityConfigSelect} className="flex-1" />
-            <TimezoneSelector
-              className="flex-1"
-              variant="embedded"
-              timezones={timezones}
-              selectedTimezone={selectedTimezone}
-              onSelect={handleTimezoneChange}
-              title="Choose a city or time zone"
-              description="Select any IANA time zone"
-            />
-          </div>
+        <header className="flex flex-col gap-4 rounded-3xl border border-slate-200/70 bg-white/80 p-6 shadow-lg shadow-slate-900/5 backdrop-blur dark:border-slate-800 dark:bg-slate-900/70">
+          <p className="text-sm font-semibold uppercase tracking-[0.2em] text-indigo-500">TimeInCity</p>
+          <h1 className="text-3xl font-black uppercase tracking-tight text-slate-900 dark:text-slate-100 sm:text-4xl">
+            Track the time & weather anywhere
+          </h1>
+          <p className="max-w-2xl text-base text-slate-600 dark:text-slate-300">
+            Instantly switch between global cities, see live weather conditions, and grab an embed for your own site.
+          </p>
         </header>
 
         <ClockDisplay
@@ -497,13 +483,23 @@ export default function App(): JSX.Element {
           defaultDifference={defaultDifference}
         />
 
+        <WeatherCard status={weatherStatus} cityLabel={cityLabel} data={weatherData ?? undefined} error={weatherError} />
+
         {autoDetectedCity && !isCityRoute && (
           <div className="rounded-2xl border border-dashed border-indigo-200 bg-indigo-50/60 px-4 py-3 text-sm text-indigo-700 shadow-sm dark:border-indigo-500/60 dark:bg-indigo-500/10 dark:text-indigo-200">
             Showing your local time in {autoDetectedCity.name} based on your device time zone.
           </div>
         )}
 
-        <WeatherCard status={weatherStatus} cityLabel={cityLabel} data={weatherData ?? undefined} error={weatherError} />
+        <TimezoneSelector
+          timezones={timezones}
+          selectedTimezone={selectedTimezone}
+          onSelect={handleTimezoneChange}
+          title="Choose a city or time zone"
+          description="Select any IANA time zone"
+        >
+          <CitySearch onSelectCity={handleCityConfigSelect} className="mt-2 w-full" />
+        </TimezoneSelector>
 
         {SHOW_AD_SLOTS && <AdSlot label="Inline ad" slotId="1234567891" />}
 

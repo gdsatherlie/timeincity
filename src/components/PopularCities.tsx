@@ -19,11 +19,11 @@ export function PopularCities({ selectedLabel, onSelect }: PopularCitiesProps): 
       <header className="flex flex-col gap-1">
         <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100">Popular cities</h2>
         <p className="text-sm text-slate-600 dark:text-slate-400">
-          Browse {POPULAR_CITIES_COUNT.toLocaleString()} major destinations in alphabetical order. Tap any city name to open its clock.
+          Browse {POPULAR_CITIES_COUNT.toLocaleString()} cities. Tap any city name to open its clock.
         </p>
       </header>
-      <div className="max-h-[32rem] overflow-y-auto pr-1">
-        <ul className="grid gap-x-4 gap-y-2 text-sm leading-relaxed text-slate-700 dark:text-slate-300 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="overflow-x-auto pb-1">
+        <ul className="grid min-w-max grid-flow-col grid-rows-4 auto-cols-max gap-x-8 gap-y-2 whitespace-nowrap text-xs font-medium leading-relaxed text-slate-700 dark:text-slate-300 sm:text-sm">
           {POPULAR_CITIES.map((city) => {
             const slug = slugifyCity(city.label);
             const hasLandingPage = Boolean(slug && CITY_CONFIGS[slug]);
@@ -34,7 +34,7 @@ export function PopularCities({ selectedLabel, onSelect }: PopularCitiesProps): 
               <li key={city.label}>
                 <a
                   href={href}
-                  className={`inline-flex items-center text-sm ${
+                  className={`inline-flex items-center transition ${
                     isActive
                       ? "font-semibold text-indigo-600 dark:text-indigo-300"
                       : "text-slate-700 hover:text-indigo-600 dark:text-slate-300 dark:hover:text-indigo-300"

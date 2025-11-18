@@ -1,3 +1,5 @@
+import type { ReactNode } from "react";
+
 interface TimezoneSelectorProps {
   timezones: string[];
   selectedTimezone: string;
@@ -6,6 +8,7 @@ interface TimezoneSelectorProps {
   title?: string;
   description?: string;
   className?: string;
+  children?: ReactNode;
 }
 
 export function TimezoneSelector({
@@ -15,7 +18,8 @@ export function TimezoneSelector({
   variant = "card",
   title = "Choose a city or time zone",
   description = "Select any IANA time zone",
-  className
+  className,
+  children
 }: TimezoneSelectorProps): JSX.Element {
   const ContainerTag = variant === "embedded" ? "div" : "section";
   const baseContainerClasses =
@@ -46,6 +50,7 @@ export function TimezoneSelector({
           ))}
         </select>
       </label>
+      {children ? <div className="pt-2">{children}</div> : null}
     </ContainerTag>
   );
 }
