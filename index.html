@@ -1,11 +1,97 @@
-<!DOCTYPE html>
-<html>
+<!doctype html>
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <title>TimeInCity Test</title>
+    <link
+      rel="icon"
+      type="image/svg+xml"
+      href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2032%2032'%3E%3Crect%20width='32'%20height='32'%20rx='6'%20fill='%230f172a'/%3E%3Ctext%20x='16'%20y='21'%20text-anchor='middle'%20font-size='14'%20font-family='Inter'%20fill='white'%3ETC%3C/text%3E%3C/svg%3E"
+    />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <title>World Clock, Weather &amp; Local Time in 500+ Cities | TimeInCity</title>
+    <meta
+      name="description"
+      content="Check the current time, weather, sunrise, sunset, and world time zone data for cities worldwide. Compare times, plan meetings, and explore global clocks with TimeInCity."
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="TimeInCity" />
+    <meta property="og:title" content="World Clock, Weather &amp; Local Time in 500+ Cities | TimeInCity" />
+    <meta
+      property="og:description"
+      content="Check the current time, weather, sunrise, sunset, and world time zone data for cities worldwide. Compare times, plan meetings, and explore global clocks with TimeInCity."
+    />
+    <meta property="og:url" content="https://www.timeincity.com/" />
+    <meta property="og:image" content="https://dummyimage.com/1200x630/0f172a/ffffff&text=TimeInCity" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="World Clock, Weather &amp; Local Time in 500+ Cities | TimeInCity" />
+    <meta
+      name="twitter:description"
+      content="Check the current time, weather, sunrise, sunset, and world time zone data for cities worldwide. Compare times, plan meetings, and explore global clocks with TimeInCity."
+    />
+    <meta
+      name="twitter:image"
+      content="https://dummyimage.com/1200x630/0f172a/ffffff&text=TimeInCity"
+    />
+    <meta name="robots" content="index,follow" />
+    <link rel="canonical" href="https://www.timeincity.com/" />
+    <meta name="google-adsense-account" content="ca-pub-8663179222160693" />
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-REGPRCWJRH"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag("js", new Date());
+      gtag("config", "G-REGPRCWJRH");
+    </script>
+    <script
+      async
+      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8663179222160693"
+      crossorigin="anonymous"
+    ></script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "How does TimeInCity calculate the current time?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "TimeInCity relies on the browser's clock combined with the selected IANA time zone to render the exact current time, date, and offset."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Does TimeInCity show weather for each city?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes. TimeInCity fetches live temperature, precipitation, wind, sunrise, and sunset data for the selected city using the Open-Meteo APIs."
+            }
+          }
+        ]
+      }
+    </script>
+    <script>
+      const savedTheme = localStorage.getItem("timeincity-theme");
+      const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+      const initialTheme = savedTheme ?? (prefersDark ? "dark" : "light");
+      if (initialTheme === "dark") {
+        document.documentElement.classList.add("dark");
+        document.documentElement.dataset.theme = "dark";
+      }
+    </script>
   </head>
-  <body>
-    <h1>Hello from TimeInCity</h1>
-    <p>If you see this, the site is deploying correctly.</p>
+  <body class="min-h-screen bg-slate-950 font-sans text-slate-100 transition-colors duration-300 dark:bg-slate-950 dark:text-slate-100">
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
