@@ -460,17 +460,19 @@ export default function App(): JSX.Element {
       {SHOW_AD_SLOTS && <AdSlot label="Top banner" slotId="1234567890" sticky="top" />}
       <main className="mx-auto flex w-full max-w-6xl flex-col gap-10 px-4 pb-10 pt-6 sm:px-6 lg:px-8">
         <header className="flex flex-col gap-6 rounded-3xl border border-slate-200/70 bg-white/80 p-6 shadow-lg shadow-slate-900/5 backdrop-blur dark:border-slate-800 dark:bg-slate-900/70">
-          <div className="grid gap-6 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)] lg:items-start">
-            <div>
-              <p className="mb-3 text-sm font-semibold uppercase tracking-[0.2em] text-indigo-500">TimeInCity</p>
-              <h1 className="text-3xl font-black uppercase tracking-tight text-slate-900 dark:text-slate-100 sm:text-4xl">
-                Track the time & weather anywhere
-              </h1>
-              <p className="mt-3 max-w-2xl text-base text-slate-600 dark:text-slate-300">
-                Instantly switch between global cities, see live weather conditions, and grab an embed for your own site.
-              </p>
-            </div>
+          <div>
+            <p className="mb-3 text-sm font-semibold uppercase tracking-[0.2em] text-indigo-500">TimeInCity</p>
+            <h1 className="text-3xl font-black uppercase tracking-tight text-slate-900 dark:text-slate-100 sm:text-4xl">
+              Track the time & weather anywhere
+            </h1>
+            <p className="mt-3 max-w-2xl text-base text-slate-600 dark:text-slate-300">
+              Instantly switch between global cities, see live weather conditions, and grab an embed for your own site.
+            </p>
+          </div>
+          <div className="flex flex-col gap-4 lg:flex-row lg:items-stretch">
+            <CitySearch onSelectCity={handleCityConfigSelect} className="flex-1" />
             <TimezoneSelector
+              className="flex-1"
               variant="embedded"
               timezones={timezones}
               selectedTimezone={selectedTimezone}
@@ -480,8 +482,6 @@ export default function App(): JSX.Element {
             />
           </div>
         </header>
-
-        <CitySearch onSelectCity={handleCityConfigSelect} />
 
         <ClockDisplay
           timezone={selectedTimezone}

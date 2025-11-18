@@ -29,10 +29,11 @@ for (const entry of [...extraCities, ...baseCities]) {
   seen.add(key);
   orderedUnique.push(entry);
 }
-if (orderedUnique.length < 500) {
-  throw new Error(`Need at least 500 cities, only have ${orderedUnique.length}`);
+const REQUIRED_COUNT = 1000;
+if (orderedUnique.length < REQUIRED_COUNT) {
+  throw new Error(`Need at least ${REQUIRED_COUNT} cities, only have ${orderedUnique.length}`);
 }
-const limited = orderedUnique.slice(0, 500);
+const limited = orderedUnique.slice(0, REQUIRED_COUNT);
 const cities = limited.sort((a, b) => a.label.localeCompare(b.label));
 const filePath = resolve(__dirname, '../src/data/popularCities.ts');
 const header = `export interface PopularCity {\n  label: string;\n  timezone: string;\n}\n\nexport const POPULAR_CITIES: PopularCity[] = [\n`;
