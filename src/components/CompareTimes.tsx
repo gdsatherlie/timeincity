@@ -2,6 +2,7 @@ import { DateTime } from "luxon";
 import { useMemo, useState } from "react";
 
 import type { CityConfig } from "../data/cities";
+import { formatCityDisplay } from "../utils/formatCityDisplay";
 
 interface CompareTimesProps {
   cities: CityConfig[];
@@ -13,18 +14,15 @@ function formatNow(timezone: string): string {
   return now.isValid ? now.toFormat("ccc, MMM d • h:mm a") : "--";
 }
 
-function formatCityLabel(city: CityConfig): string {
-  const details = [city.region, city.country].filter(Boolean).join(", ");
-  return details ? `${city.name} (${details})` : city.name;
-}
-
 function describeDifference(cityA: CityConfig, cityB: CityConfig): string {
   const base = DateTime.now();
   const offsetA = base.setZone(cityA.timezone).offset;
   const offsetB = base.setZone(cityB.timezone).offset;
   const diffMinutes = offsetA - offsetB;
+  const labelA = formatCityDisplay(cityA);
+  const labelB = formatCityDisplay(cityB);
   if (diffMinutes === 0) {
-    return `${cityA.name} and ${cityB.name} share the same current time.`;
+    return `${labelA} and ${labelB} share the same current time.`;
   }
   const ahead = diffMinutes > 0;
   const absMinutes = Math.abs(diffMinutes);
@@ -37,7 +35,7 @@ function describeDifference(cityA: CityConfig, cityB: CityConfig): string {
   if (minutes > 0) {
     parts.push(`${minutes}m`);
   }
-  return `${cityA.name} is ${parts.join(" ")} ${ahead ? "ahead of" : "behind"} ${cityB.name}.`;
+  return `${labelA} is ${parts.join(" ")} ${ahead ? "ahead of" : "behind"} ${labelB}.`;
 }
 
 export function CompareTimes({ cities, initialCitySlug }: CompareTimesProps): JSX.Element {
@@ -73,7 +71,7 @@ export function CompareTimes({ cities, initialCitySlug }: CompareTimesProps): JS
             >
               {cities.map((city) => (
                 <option key={city.slug} value={city.slug}>
-                  {formatCityLabel(city)}
+                  {formatCityDisplay(city)}
                 </option>
               ))}
             </select>

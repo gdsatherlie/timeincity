@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
 
 import type { CityConfig } from "../data/cities";
+import { formatCityDisplay } from "../utils/formatCityDisplay";
 
 interface CitySearchProps {
   cities: CityConfig[];
@@ -15,7 +16,7 @@ export function CitySearch({ cities, onSelectCity }: CitySearchProps): JSX.Eleme
     () =>
       cities.map((city) => ({
         city,
-        haystack: [city.name, city.region, city.country]
+        haystack: [formatCityDisplay(city), city.name, city.region, city.country]
           .filter(Boolean)
           .join(" ")
           .toLowerCase()
@@ -36,7 +37,7 @@ export function CitySearch({ cities, onSelectCity }: CitySearchProps): JSX.Eleme
 
   const handleSelect = (city: CityConfig) => {
     onSelectCity(city);
-    setQuery(city.name);
+    setQuery(formatCityDisplay(city));
     setIsFocused(false);
   };
 
@@ -65,10 +66,7 @@ export function CitySearch({ cities, onSelectCity }: CitySearchProps): JSX.Eleme
                   onClick={() => handleSelect(city)}
                   className="flex w-full flex-col rounded-xl px-3 py-2 text-left text-sm text-slate-700 transition hover:bg-indigo-50 hover:text-indigo-600 dark:text-slate-200 dark:hover:bg-slate-800"
                 >
-                  <span className="font-semibold">{city.name}</span>
-                  <span className="text-xs text-slate-500 dark:text-slate-400">
-                    {[city.region, city.country].filter(Boolean).join(", ") || city.timezone}
-                  </span>
+                  <span className="font-semibold">{formatCityDisplay(city)}</span>
                 </button>
               </li>
             ))}

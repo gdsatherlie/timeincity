@@ -2,6 +2,7 @@ import { DateTime } from "luxon";
 import { useMemo, useState } from "react";
 
 import type { CityConfig } from "../data/cities";
+import { formatCityDisplay } from "../utils/formatCityDisplay";
 
 interface MeetingPlannerProps {
   cities: CityConfig[];
@@ -10,11 +11,6 @@ interface MeetingPlannerProps {
 
 function formatInputValue(date: DateTime): string {
   return date.toFormat("yyyy-LL-dd'T'HH:mm");
-}
-
-function formatCityLabel(city: CityConfig): string {
-  const details = [city.region, city.country].filter(Boolean).join(", ");
-  return details ? `${city.name} (${details})` : city.name;
 }
 
 export function MeetingPlanner({ cities, initialCitySlug }: MeetingPlannerProps): JSX.Element {
@@ -29,7 +25,9 @@ export function MeetingPlanner({ cities, initialCitySlug }: MeetingPlannerProps)
       return "Select a date and time to convert.";
     }
     const converted = base.setZone(toCity.timezone);
-    return `If it is ${base.toFormat("MMM d, h:mm a")} in ${fromCity.name}, it will be ${converted.toFormat("MMM d, h:mm a")} in ${toCity.name}.`;
+    return `If it is ${base.toFormat("MMM d, h:mm a")} in ${formatCityDisplay(fromCity)}, it will be ${converted.toFormat(
+      "MMM d, h:mm a"
+    )} in ${formatCityDisplay(toCity)}.`;
   }, [fromCity, inputValue, toCity]);
 
   return (
@@ -72,7 +70,7 @@ export function MeetingPlanner({ cities, initialCitySlug }: MeetingPlannerProps)
               >
                 {cities.map((city) => (
                   <option key={city.slug} value={city.slug}>
-                    {formatCityLabel(city)}
+                    {formatCityDisplay(city)}
                   </option>
                 ))}
               </select>

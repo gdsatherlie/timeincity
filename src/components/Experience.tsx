@@ -12,6 +12,7 @@ import { TimezoneSelector } from "./TimezoneSelector";
 import { WeatherCard } from "./WeatherCard";
 import { usePersistentState } from "../hooks/usePersistentState";
 import { slugifyCity } from "../utils/slugifyCity";
+import { formatCityDisplay } from "../utils/formatCityDisplay";
 import { CITY_LIST, type CityConfig } from "../data/cities";
 import { SHOW_AD_SLOTS } from "../config";
 import { guessDefaultCityFromTimezone } from "../utils/guessDefaultCity";
@@ -166,6 +167,10 @@ export function Experience({ initialTimezone, initialLabel, initialCitySlug, onS
   }, []);
 
   const autoDetectedCity = useMemo(() => guessDefaultCityFromTimezone(), []);
+  const autoDetectedCityLabel = useMemo(
+    () => (autoDetectedCity ? formatCityDisplay(autoDetectedCity) : undefined),
+    [autoDetectedCity]
+  );
 
   const timezones = useMemo(() => {
     try {
@@ -273,9 +278,16 @@ export function Experience({ initialTimezone, initialLabel, initialCitySlug, onS
     const resolvedLabel = label ?? decodeTimezoneToLabel(timezone);
     setCustomLabel(resolvedLabel);
 
+    const normalizedLabel = label?.toLowerCase();
     const derivedSlug =
       slug ??
-      CITY_LIST.find((city) => city.timezone === timezone && (!label || city.name.toLowerCase() === label.toLowerCase()))?.slug;
+      CITY_LIST.find(
+        (city) =>
+          city.timezone === timezone &&
+          (!normalizedLabel ||
+            city.name.toLowerCase() === normalizedLabel ||
+            formatCityDisplay(city).toLowerCase() === normalizedLabel)
+      )?.slug;
     setCurrentSlug(derivedSlug);
 
     if (options?.navigate === false) {
@@ -354,7 +366,7 @@ export function Experience({ initialTimezone, initialLabel, initialCitySlug, onS
   const showAutoNotice = Boolean(!savedLocation && !initialTimezone && autoDetectedCity && selectedTimezone === autoDetectedCity.timezone);
 
   const handleCitySearchSelect = (city: CityConfig) => {
-    handleTimezoneChange(city.timezone, city.name, city.slug);
+    handleTimezoneChange(city.timezone, formatCityDisplay(city), city.slug);
   };
 
   return (
@@ -369,7 +381,7 @@ export function Experience({ initialTimezone, initialLabel, initialCitySlug, onS
         </p>
         {showAutoNotice ? (
           <div className="rounded-2xl border border-indigo-200/80 bg-indigo-50/80 px-4 py-3 text-sm font-medium text-indigo-700 dark:border-indigo-500/40 dark:bg-indigo-500/10 dark:text-indigo-200">
-            Showing your local time in {autoDetectedCity?.name} based on your browser time zone.
+            Showing your local time in {autoDetectedCityLabel ?? autoDetectedCity?.name} based on your browser time zone.
           </div>
         ) : null}
       </section>
@@ -402,7 +414,7 @@ export function Experience({ initialTimezone, initialLabel, initialCitySlug, onS
 
       <MeetingPlanner cities={CITY_LIST} initialCitySlug={selectedCityConfig?.slug ?? currentSlug} />
 
-      <PopularCities selectedLabel={selectedLabel} onSelect={handleTimezoneChange} />
+      <PopularCities selectedSlug={currentSlug} selectedLabel={selectedLabel} onSelect={handleTimezoneChange} />
     </div>
   );
 }
