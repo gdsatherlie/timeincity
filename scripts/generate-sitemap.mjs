@@ -7,7 +7,7 @@ const __dirname = dirname(__filename);
 
 const baseUrl = 'https://www.timeincity.com';
 
-const cityDataPath = resolve(__dirname, '../src/data/cities_over_50000.json');
+const cityDataPath = resolve(__dirname, '../src/data/cities_over_50000_clean.json');
 const rawCities = JSON.parse(readFileSync(cityDataPath, 'utf8'));
 
 const staticRoutes = [

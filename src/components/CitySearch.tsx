@@ -56,7 +56,7 @@ export function CitySearch({ onSelectCity, placeholder = "Search city…", label
   };
 
   return (
-    <div className="relative z-10">
+    <div className="relative z-30">
       {label ? (
         <p className="mb-2 text-sm font-semibold text-slate-600 dark:text-slate-200">{label}</p>
       ) : null}

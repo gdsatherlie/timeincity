@@ -1,4 +1,4 @@
-import rawCityData from "../data/cities_over_50000.json";
+import rawCityData from "../data/cities_over_50000_clean.json";
 import { slugifyCity } from "./slugifyCity";
 
 export interface NormalizedCity {

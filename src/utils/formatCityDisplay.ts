@@ -8,7 +8,8 @@ function normalizeCountryLabel(country: string | undefined, countryCode?: string
   if (!country) {
     return undefined;
   }
-  if (countryCode?.toUpperCase() === "US") {
+  const upperCode = countryCode?.toUpperCase();
+  if (upperCode === "US" || country.toLowerCase() === "united states" || country.toLowerCase() === "united states of america") {
     return "USA";
   }
   return country;

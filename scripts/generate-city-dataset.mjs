@@ -64,6 +64,6 @@ const dataset = popularCities.map((entry) => {
   };
 });
 
-const outputPath = resolve(__dirname, '../src/data/cities_over_50000.json');
+const outputPath = resolve(__dirname, '../src/data/cities_over_50000_clean.json');
 writeFileSync(outputPath, JSON.stringify(dataset, null, 2));
 console.log(`Wrote ${dataset.length} cities to ${outputPath}`);
