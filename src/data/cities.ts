@@ -1,24 +1,6 @@
-import { loadCities, type NormalizedCity } from "../utils/cityData";
+import { loadCities } from "../utils/cityData";
 
 const normalizedCities = loadCities();
-
-const REGION_OVERRIDES: Record<string, string> = {
-  "america/new_york": "New York",
-  "america/chicago": "Illinois",
-  "america/los_angeles": "California",
-  "america/denver": "Colorado",
-  "america/phoenix": "Arizona",
-  "america/seattle": "Washington",
-  "america/detroit": "Michigan",
-  "america/dallas": "Texas",
-  "america/houston": "Texas",
-  "america/miami": "Florida",
-  "america/boston": "Massachusetts",
-  "america/anchorage": "Alaska",
-  "asia/tokyo": "Tokyo Prefecture",
-  "europe/london": "England",
-  "europe/paris": "Île-de-France"
-};
 
 export type RegionSlug =
   | "all"
@@ -96,7 +78,7 @@ function deriveRegion(countryCode?: string, timezone?: string): RegionSlug | und
 
 const configs: CityConfig[] = normalizedCities.map((city) => ({
   ...city,
-  region: city.state ?? REGION_OVERRIDES[city.timezone.toLowerCase()] ?? undefined,
+  region: city.state ?? undefined,
   continent: deriveRegion(city.countryCode, city.timezone)
 }));
 

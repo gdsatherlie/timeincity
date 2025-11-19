@@ -460,18 +460,13 @@ export function Experience({ initialTimezone, initialLabel, initialCitySlug, onS
         <p className="text-base text-slate-600 dark:text-slate-300">
           Instantly switch between global cities, check sunrise and weather, compare time zones, and grab a live embed for your own site.
         </p>
-        <div className="flex flex-col gap-3 md:flex-row md:items-center">
-          <div className="flex-1">
-            <CitySearch label="Search any city" onSelectCity={handleCitySearchSelect} placeholder="Search 500+ cities…" />
-          </div>
-          <button
-            type="button"
-            onClick={handleUseMyLocation}
-            className="inline-flex items-center justify-center rounded-2xl border border-indigo-200 bg-indigo-50 px-4 py-3 text-sm font-semibold text-indigo-700 transition hover:border-indigo-300 hover:bg-indigo-100 dark:border-indigo-500/40 dark:bg-indigo-500/10 dark:text-indigo-200"
-          >
-            Use my location
-          </button>
-        </div>
+        <button
+          type="button"
+          onClick={handleUseMyLocation}
+          className="inline-flex w-full items-center justify-center rounded-2xl border border-indigo-200 bg-indigo-50 px-4 py-3 text-sm font-semibold text-indigo-700 transition hover:border-indigo-300 hover:bg-indigo-100 dark:border-indigo-500/40 dark:bg-indigo-500/10 dark:text-indigo-200 md:w-auto"
+        >
+          Use my location
+        </button>
         {geoMessage ? (
           <p
             className={`text-sm ${
@@ -509,9 +504,12 @@ export function Experience({ initialTimezone, initialLabel, initialCitySlug, onS
       <WeatherCard status={weatherStatus} cityLabel={cityLabel} data={weatherData ?? undefined} error={weatherError} />
 
       <TimezoneSelector timezones={timezones} selectedTimezone={selectedTimezone} onSelect={handleTimezoneChange}>
-        <p className="text-sm text-slate-500 dark:text-slate-400">
-          Select any IANA time zone to update the live clock instantly.
-        </p>
+        <div className="flex flex-col gap-4">
+          <p className="text-sm text-slate-500 dark:text-slate-400">
+            Select any IANA time zone to update the live clock instantly or jump directly to a city below.
+          </p>
+          <CitySearch onSelectCity={handleCitySearchSelect} placeholder="Search any city" />
+        </div>
       </TimezoneSelector>
 
       {SHOW_AD_SLOTS ? <AdSlot label="Inline ad" /> : null}
