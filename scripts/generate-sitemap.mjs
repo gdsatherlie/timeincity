@@ -7,15 +7,8 @@ const __dirname = dirname(__filename);
 
 const baseUrl = 'https://www.timeincity.com';
 
-const cityDataPath = resolve(__dirname, 'popularCities.json');
+const cityDataPath = resolve(__dirname, '../src/data/cities_over_50000.json');
 const rawCities = JSON.parse(readFileSync(cityDataPath, 'utf8'));
-
-const slugify = (label) =>
-  label
-    .trim()
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/^-+|-+$/g, '');
 
 const staticRoutes = [
   { path: '/', priority: 1.0 },
@@ -38,9 +31,12 @@ const staticRoutes = [
   { path: '/cities/oceania', priority: 0.8 }
 ];
 
+const sortedByPopulation = [...rawCities].sort((a, b) => (b.population ?? 0) - (a.population ?? 0));
+const topCitySet = new Set(sortedByPopulation.slice(0, 200).map((city) => city.slug));
+
 const cityRoutes = rawCities.map((city) => ({
-  path: `/city/${slugify(city.label)}`,
-  priority: 0.7
+  path: `/city/${city.slug}`,
+  priority: topCitySet.has(city.slug) ? 0.9 : 0.7
 }));
 
 const urls = [...staticRoutes, ...cityRoutes];
@@ -49,7 +45,7 @@ const xml = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.s
   urls
     .map(
       (entry) =>
-        `  <url>\n    <loc>${baseUrl}${entry.path}</loc>\n    <priority>${entry.priority.toFixed(1)}</priority>\n  </url>`
+        `  <url>\n    <loc>${baseUrl}${entry.path}</loc>\n    <priority>${entry.priority.toFixed(1)}</priority>\n    <changefreq>daily</changefreq>\n  </url>`
     )
     .join('\n')
 }\n</urlset>\n`;

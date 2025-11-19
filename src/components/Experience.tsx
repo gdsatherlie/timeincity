@@ -2,7 +2,6 @@ import { DateTime } from "luxon";
 import { useEffect, useMemo, useState } from "react";
 
 import { AdSlot } from "./AdSlot";
-import { CitySearch } from "./CitySearch";
 import { ClockDisplay } from "./ClockDisplay";
 import { CompareTimes } from "./CompareTimes";
 import { EmbedConfigurator } from "./EmbedConfigurator";
@@ -10,12 +9,14 @@ import { MeetingPlanner } from "./MeetingPlanner";
 import { PopularCities } from "./PopularCities";
 import { TimezoneSelector } from "./TimezoneSelector";
 import { WeatherCard } from "./WeatherCard";
+import { CitySearch } from "./CitySearch";
 import { usePersistentState } from "../hooks/usePersistentState";
 import { slugifyCity } from "../utils/slugifyCity";
 import { formatCityDisplay } from "../utils/formatCityDisplay";
-import { CITY_LIST, type CityConfig } from "../data/cities";
+import { CITY_CONFIGS, CITY_LIST, type CityConfig } from "../data/cities";
 import { SHOW_AD_SLOTS } from "../config";
 import { guessDefaultCityFromTimezone } from "../utils/guessDefaultCity";
+import { searchCities } from "../utils/cityData";
 
 const FALLBACK_TIMEZONES = [
   "Pacific/Midway",
@@ -195,6 +196,8 @@ export function Experience({ initialTimezone, initialLabel, initialCitySlug, onS
   const [weatherStatus, setWeatherStatus] = useState<"idle" | "loading" | "error" | "success">("loading");
   const [weatherData, setWeatherData] = useState<WeatherSummary | null>(null);
   const [weatherError, setWeatherError] = useState<string | undefined>();
+  const [geoStatus, setGeoStatus] = useState<"idle" | "loading" | "error" | "success">("idle");
+  const [geoMessage, setGeoMessage] = useState<string | null>(null);
 
   useEffect(() => {
     if (!selectedTimezone) {
@@ -365,8 +368,86 @@ export function Experience({ initialTimezone, initialLabel, initialCitySlug, onS
 
   const showAutoNotice = Boolean(!savedLocation && !initialTimezone && autoDetectedCity && selectedTimezone === autoDetectedCity.timezone);
 
-  const handleCitySearchSelect = (city: CityConfig) => {
+  const handleCitySearchSelect = (citySlug: string) => {
+    const city = CITY_CONFIGS[citySlug];
+    if (!city) return;
     handleTimezoneChange(city.timezone, formatCityDisplay(city), city.slug);
+  };
+
+  const findNearestCity = (latitude: number, longitude: number): CityConfig | undefined => {
+    let best: { city: CityConfig; distance: number } | null = null;
+    for (const city of CITY_LIST) {
+      const lat = city.lat;
+      const lon = city.lon;
+      if (!Number.isFinite(lat) || !Number.isFinite(lon)) {
+        continue;
+      }
+      const dLat = ((lat - latitude) * Math.PI) / 180;
+      const dLon = ((lon - longitude) * Math.PI) / 180;
+      const originLat = (latitude * Math.PI) / 180;
+      const targetLat = (lat * Math.PI) / 180;
+      const a = Math.sin(dLat / 2) ** 2 + Math.cos(originLat) * Math.cos(targetLat) * Math.sin(dLon / 2) ** 2;
+      const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+      const earthRadiusKm = 6371;
+      const distance = earthRadiusKm * c;
+      if (!best || distance < best.distance) {
+        best = { city, distance };
+      }
+    }
+    return best?.city;
+  };
+
+  const handleUseMyLocation = () => {
+    if (!navigator.geolocation) {
+      setGeoStatus("error");
+      setGeoMessage("Geolocation isn’t supported in this browser.");
+      return;
+    }
+    setGeoStatus("loading");
+    setGeoMessage("Looking up your city…");
+    navigator.geolocation.getCurrentPosition(
+      async (position) => {
+        try {
+          const { latitude, longitude } = position.coords;
+          const params = new URLSearchParams({
+            latitude: latitude.toString(),
+            longitude: longitude.toString(),
+            count: "1",
+            language: "en",
+            format: "json"
+          });
+          const response = await fetch(`https://geocoding-api.open-meteo.com/v1/reverse?${params.toString()}`);
+          if (!response.ok) {
+            throw new Error("Could not reverse geocode your location.");
+          }
+          const json = (await response.json()) as {
+            results?: Array<{
+              name: string;
+              timezone: string;
+              country?: string;
+            }>;
+          };
+          const result = json.results?.[0];
+          const fallbackCity = findNearestCity(latitude, longitude);
+          const matchedSlug = result ? searchCities(result.name, 1)[0]?.slug : undefined;
+          const matchedCity = (matchedSlug && CITY_CONFIGS[matchedSlug]) || fallbackCity;
+          if (matchedCity) {
+            handleTimezoneChange(matchedCity.timezone, formatCityDisplay(matchedCity), matchedCity.slug);
+            setGeoStatus("success");
+            setGeoMessage(`Showing ${formatCityDisplay(matchedCity)} based on your location.`);
+          } else {
+            throw new Error("Unable to find a nearby city.");
+          }
+        } catch (error) {
+          setGeoStatus("error");
+          setGeoMessage(error instanceof Error ? error.message : "Could not use your location.");
+        }
+      },
+      (error) => {
+        setGeoStatus("error");
+        setGeoMessage(error.message || "Location request was denied.");
+      }
+    );
   };
 
   return (
@@ -379,6 +460,31 @@ export function Experience({ initialTimezone, initialLabel, initialCitySlug, onS
         <p className="text-base text-slate-600 dark:text-slate-300">
           Instantly switch between global cities, check sunrise and weather, compare time zones, and grab a live embed for your own site.
         </p>
+        <div className="flex flex-col gap-3 md:flex-row md:items-center">
+          <div className="flex-1">
+            <CitySearch label="Search any city" onSelectCity={handleCitySearchSelect} placeholder="Search 500+ cities…" />
+          </div>
+          <button
+            type="button"
+            onClick={handleUseMyLocation}
+            className="inline-flex items-center justify-center rounded-2xl border border-indigo-200 bg-indigo-50 px-4 py-3 text-sm font-semibold text-indigo-700 transition hover:border-indigo-300 hover:bg-indigo-100 dark:border-indigo-500/40 dark:bg-indigo-500/10 dark:text-indigo-200"
+          >
+            Use my location
+          </button>
+        </div>
+        {geoMessage ? (
+          <p
+            className={`text-sm ${
+              geoStatus === "error"
+                ? "text-rose-500"
+                : geoStatus === "success"
+                  ? "text-emerald-600"
+                  : "text-slate-500"
+            }`}
+          >
+            {geoMessage}
+          </p>
+        ) : null}
         {showAutoNotice ? (
           <div className="rounded-2xl border border-indigo-200/80 bg-indigo-50/80 px-4 py-3 text-sm font-medium text-indigo-700 dark:border-indigo-500/40 dark:bg-indigo-500/10 dark:text-indigo-200">
             Showing your local time in {autoDetectedCityLabel ?? autoDetectedCity?.name} based on your browser time zone.
@@ -403,7 +509,9 @@ export function Experience({ initialTimezone, initialLabel, initialCitySlug, onS
       <WeatherCard status={weatherStatus} cityLabel={cityLabel} data={weatherData ?? undefined} error={weatherError} />
 
       <TimezoneSelector timezones={timezones} selectedTimezone={selectedTimezone} onSelect={handleTimezoneChange}>
-        <CitySearch cities={CITY_LIST} onSelectCity={handleCitySearchSelect} />
+        <p className="text-sm text-slate-500 dark:text-slate-400">
+          Select any IANA time zone to update the live clock instantly.
+        </p>
       </TimezoneSelector>
 
       {SHOW_AD_SLOTS ? <AdSlot label="Inline ad" /> : null}

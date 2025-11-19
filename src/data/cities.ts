@@ -1,6 +1,24 @@
-import { POPULAR_CITIES, POPULAR_CITIES_COUNT } from "./popularCities";
-import { TIMEZONE_COUNTRIES } from "./timezoneCountries";
-import { slugifyCity } from "../utils/slugifyCity";
+import { loadCities, type NormalizedCity } from "../utils/cityData";
+
+const normalizedCities = loadCities();
+
+const REGION_OVERRIDES: Record<string, string> = {
+  "america/new_york": "New York",
+  "america/chicago": "Illinois",
+  "america/los_angeles": "California",
+  "america/denver": "Colorado",
+  "america/phoenix": "Arizona",
+  "america/seattle": "Washington",
+  "america/detroit": "Michigan",
+  "america/dallas": "Texas",
+  "america/houston": "Texas",
+  "america/miami": "Florida",
+  "america/boston": "Massachusetts",
+  "america/anchorage": "Alaska",
+  "asia/tokyo": "Tokyo Prefecture",
+  "europe/london": "England",
+  "europe/paris": "Île-de-France"
+};
 
 export type RegionSlug =
   | "all"
@@ -11,13 +29,8 @@ export type RegionSlug =
   | "africa"
   | "oceania";
 
-export interface CityConfig {
-  slug: string;
-  name: string;
-  timezone: string;
-  country?: string;
-  countryCode?: string;
-  region?: string;
+export interface CityConfig extends NormalizedCity {
+  region?: string | null;
   continent?: RegionSlug;
 }
 
@@ -61,21 +74,6 @@ const REGION_BY_PREFIX: Record<string, RegionSlug> = {
   Pacific: "oceania"
 };
 
-const overrides: Record<string, Partial<CityConfig>> = {
-  "america/new_york": { region: "New York" },
-  "america/chicago": { region: "Illinois" },
-  "america/los_angeles": { region: "California" },
-  "america/denver": { region: "Colorado" },
-  "america/phoenix": { region: "Arizona" },
-  "america/seattle": { region: "Washington" },
-  "america/detroit": { region: "Michigan" },
-  "america/dallas": { region: "Texas" },
-  "america/houston": { region: "Texas" },
-  "america/miami": { region: "Florida" },
-  "america/boston": { region: "Massachusetts" },
-  "america/anchorage": { region: "Alaska" }
-};
-
 function deriveRegion(countryCode?: string, timezone?: string): RegionSlug | undefined {
   if (!countryCode && timezone) {
     const prefix = timezone.split("/")[0];
@@ -96,25 +94,11 @@ function deriveRegion(countryCode?: string, timezone?: string): RegionSlug | und
   return undefined;
 }
 
-const configs: CityConfig[] = POPULAR_CITIES.map((city) => {
-  const slug = slugifyCity(city.label);
-  const timezoneKey = city.timezone;
-  const overrideKey = timezoneKey.toLowerCase();
-  const countryMeta = TIMEZONE_COUNTRIES[timezoneKey];
-  const baseCountry = countryMeta?.countryName;
-  const baseCountryCode = countryMeta?.countryCode;
-  const continent = deriveRegion(baseCountryCode, timezoneKey);
-
-  return {
-    slug,
-    name: city.label,
-    timezone: timezoneKey,
-    country: baseCountry,
-    countryCode: baseCountryCode,
-    continent,
-    ...overrides[overrideKey]
-  } satisfies CityConfig;
-});
+const configs: CityConfig[] = normalizedCities.map((city) => ({
+  ...city,
+  region: city.state ?? REGION_OVERRIDES[city.timezone.toLowerCase()] ?? undefined,
+  continent: deriveRegion(city.countryCode, city.timezone)
+}));
 
 export const CITY_CONFIGS: Record<string, CityConfig> = configs.reduce<Record<string, CityConfig>>((acc, city) => {
   acc[city.slug] = city;
@@ -122,4 +106,4 @@ export const CITY_CONFIGS: Record<string, CityConfig> = configs.reduce<Record<st
 }, {});
 
 export const CITY_LIST = configs;
-export const CITY_COUNT = POPULAR_CITIES_COUNT;
+export const CITY_COUNT = configs.length;

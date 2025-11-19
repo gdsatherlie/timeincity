@@ -3,6 +3,7 @@ import { useMemo, useState } from "react";
 
 import type { CityConfig } from "../data/cities";
 import { formatCityDisplay } from "../utils/formatCityDisplay";
+import { CityPickerField } from "./CityPickerField";
 
 interface CompareTimesProps {
   cities: CityConfig[];
@@ -39,10 +40,19 @@ function describeDifference(cityA: CityConfig, cityB: CityConfig): string {
 }
 
 export function CompareTimes({ cities, initialCitySlug }: CompareTimesProps): JSX.Element {
-  const [cityA, setCityA] = useState(() => cities.find((city) => city.slug === initialCitySlug) ?? cities[0]);
-  const [cityB, setCityB] = useState(() => cities.find((city) => city.slug === "london") ?? cities[1] ?? cities[0]);
+  const fallbackCity = cities.find((city) => city.slug === initialCitySlug) ?? cities[0];
+  const [cityA, setCityA] = useState<CityConfig>(fallbackCity);
+  const [cityB, setCityB] = useState<CityConfig>(() => cities.find((city) => city.slug === "london") ?? cities[1] ?? fallbackCity);
 
   const difference = useMemo(() => describeDifference(cityA, cityB), [cityA, cityB]);
+  const now = DateTime.now();
+  const timeA = now.setZone(cityA.timezone);
+  const timeB = now.setZone(cityB.timezone);
+
+  const swapCities = () => {
+    setCityA(cityB);
+    setCityB(cityA);
+  };
 
   return (
     <section
@@ -52,36 +62,35 @@ export function CompareTimes({ cities, initialCitySlug }: CompareTimesProps): JS
       <header className="flex flex-col gap-1">
         <h2 className="text-2xl font-semibold">Compare city times</h2>
         <p className="text-sm text-slate-300">
-          Pick any two cities to see the live time difference. Perfect for quick check-ins or planning across time zones.
+          Search for any two cities to see their live times side by side and understand the exact offset in hours and minutes.
         </p>
       </header>
       <div className="grid gap-6 md:grid-cols-2">
-        {[{ value: cityA, setter: setCityA, label: "City A" }, { value: cityB, setter: setCityB, label: "City B" }].map((entry) => (
-          <label key={entry.label} className="flex flex-col gap-2 text-sm font-medium">
-            <span className="text-slate-200">{entry.label}</span>
-            <select
-              value={entry.value.slug}
-              onChange={(event) => {
-                const selected = cities.find((city) => city.slug === event.target.value);
-                if (selected) {
-                  entry.setter(selected);
-                }
-              }}
-              className="rounded-2xl border border-slate-700 bg-slate-800/80 px-4 py-3 text-base text-slate-100 shadow-inner shadow-slate-950 focus:border-indigo-300 focus:outline-none focus:ring-2 focus:ring-indigo-400"
-            >
-              {cities.map((city) => (
-                <option key={city.slug} value={city.slug}>
-                  {formatCityDisplay(city)}
-                </option>
-              ))}
-            </select>
-            <span className="text-xs font-normal text-slate-400">{formatNow(entry.value.timezone)}</span>
-          </label>
-        ))}
+        <CityPickerField label="City A" value={cityA} onSelect={setCityA} />
+        <div className="flex flex-col gap-4">
+          <CityPickerField label="City B" value={cityB} onSelect={setCityB} />
+          <button
+            type="button"
+            onClick={swapCities}
+            className="inline-flex items-center justify-center rounded-2xl border border-slate-700 bg-slate-800/60 px-4 py-2 text-sm font-semibold text-slate-100 transition hover:border-indigo-400 hover:bg-indigo-500/10"
+          >
+            Swap cities
+          </button>
+        </div>
       </div>
-      <div className="rounded-2xl border border-slate-800 bg-slate-800/80 px-4 py-3 text-sm text-indigo-100">
-        {difference}
+      <div className="grid gap-4 text-sm md:grid-cols-2">
+        <div className="rounded-2xl border border-slate-800 bg-slate-800/80 px-4 py-3">
+          <p className="text-xs uppercase tracking-[0.2em] text-slate-400">{formatCityDisplay(cityA)}</p>
+          <p className="text-2xl font-semibold text-white">{timeA.isValid ? timeA.toFormat("HH:mm") : "--:--"}</p>
+          <p className="text-xs text-slate-400">{formatNow(cityA.timezone)}</p>
+        </div>
+        <div className="rounded-2xl border border-slate-800 bg-slate-800/80 px-4 py-3">
+          <p className="text-xs uppercase tracking-[0.2em] text-slate-400">{formatCityDisplay(cityB)}</p>
+          <p className="text-2xl font-semibold text-white">{timeB.isValid ? timeB.toFormat("HH:mm") : "--:--"}</p>
+          <p className="text-xs text-slate-400">{formatNow(cityB.timezone)}</p>
+        </div>
       </div>
+      <div className="rounded-2xl border border-slate-800 bg-slate-800/80 px-4 py-3 text-sm text-indigo-100">{difference}</div>
     </section>
   );
 }

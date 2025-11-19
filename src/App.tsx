@@ -2,7 +2,6 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 
 import { Experience } from "./components/Experience";
 import { HomeSeoSection } from "./components/HomeSeoSection";
-import { CitySeoSection } from "./components/CitySeoSection";
 import { SiteHeader } from "./components/SiteHeader";
 import { SiteFooter } from "./components/SiteFooter";
 import { RichTextPage } from "./components/RichTextPage";
@@ -15,6 +14,7 @@ import { REGION_PAGES } from "./data/regionPages";
 import { getCitySeoCopy } from "./utils/citySeo";
 import { slugifyCity } from "./utils/slugifyCity";
 import { SHOW_AD_SLOTS } from "./config";
+import { CityPage } from "./pages/city/[slug]";
 
 const DEFAULT_TITLE = "TimeInCity — Exact Time & Weather in Any City";
 const DEFAULT_DESCRIPTION =
@@ -220,17 +220,7 @@ export default function App(): JSX.Element {
           </div>
         );
       case "city":
-        return (
-          <div className="flex flex-col gap-10">
-            <Experience
-              initialTimezone={route.city.timezone}
-              initialLabel={route.city.name}
-              initialCitySlug={route.city.slug}
-              onSelectCity={handleCityNavigate}
-            />
-            <CitySeoSection city={route.city} />
-          </div>
-        );
+        return <CityPage city={route.city} onSelectCity={handleCityNavigate} />;
       case "static":
         return <RichTextPage heading={route.page.heading} paragraphs={route.page.body} />;
       case "legal":
