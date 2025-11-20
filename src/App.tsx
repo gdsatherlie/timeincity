@@ -192,6 +192,9 @@ export default function App(): JSX.Element {
     if (route.slug === "united-states") {
       return CITY_LIST.filter((city) => city.countryCode === "US");
     }
+    if (route.slug === "north-america") {
+      return CITY_LIST.filter((city) => city.continent === "north-america");
+    }
     if (route.slug === "south-america") {
       return CITY_LIST.filter((city) => city.continent === "south-america");
     }

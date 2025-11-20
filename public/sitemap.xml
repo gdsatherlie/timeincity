@@ -66,6 +66,11 @@
     <changefreq>daily</changefreq>
   </url>
   <url>
+    <loc>https://www.timeincity.com/cities/north-america</loc>
+    <priority>0.8</priority>
+    <changefreq>daily</changefreq>
+  </url>
+  <url>
     <loc>https://www.timeincity.com/cities/europe</loc>
     <priority>0.8</priority>
     <changefreq>daily</changefreq>
@@ -131,6 +136,11 @@
     <changefreq>daily</changefreq>
   </url>
   <url>
+    <loc>https://www.timeincity.com/city/albuquerque</loc>
+    <priority>0.9</priority>
+    <changefreq>daily</changefreq>
+  </url>
+  <url>
     <loc>https://www.timeincity.com/city/aleppo</loc>
     <priority>0.9</priority>
     <changefreq>daily</changefreq>
@@ -158,6 +168,11 @@
   <url>
     <loc>https://www.timeincity.com/city/amsterdam</loc>
     <priority>0.9</priority>
+    <changefreq>daily</changefreq>
+  </url>
+  <url>
+    <loc>https://www.timeincity.com/city/anchorage</loc>
+    <priority>0.7</priority>
     <changefreq>daily</changefreq>
   </url>
   <url>
@@ -203,6 +218,11 @@
   <url>
     <loc>https://www.timeincity.com/city/araguaina</loc>
     <priority>0.9</priority>
+    <changefreq>daily</changefreq>
+  </url>
+  <url>
+    <loc>https://www.timeincity.com/city/arlington</loc>
+    <priority>0.7</priority>
     <changefreq>daily</changefreq>
   </url>
   <url>
@@ -311,6 +331,11 @@
     <changefreq>daily</changefreq>
   </url>
   <url>
+    <loc>https://www.timeincity.com/city/baton-rouge</loc>
+    <priority>0.7</priority>
+    <changefreq>daily</changefreq>
+  </url>
+  <url>
     <loc>https://www.timeincity.com/city/beijing</loc>
     <priority>0.9</priority>
     <changefreq>daily</changefreq>
@@ -362,7 +387,7 @@
   </url>
   <url>
     <loc>https://www.timeincity.com/city/birmingham</loc>
-    <priority>0.9</priority>
+    <priority>0.7</priority>
     <changefreq>daily</changefreq>
   </url>
   <url>
@@ -383,6 +408,11 @@
   <url>
     <loc>https://www.timeincity.com/city/bogota</loc>
     <priority>0.9</priority>
+    <changefreq>daily</changefreq>
+  </url>
+  <url>
+    <loc>https://www.timeincity.com/city/boise</loc>
+    <priority>0.7</priority>
     <changefreq>daily</changefreq>
   </url>
   <url>
@@ -591,6 +621,11 @@
     <changefreq>daily</changefreq>
   </url>
   <url>
+    <loc>https://www.timeincity.com/city/charlotte</loc>
+    <priority>0.9</priority>
+    <changefreq>daily</changefreq>
+  </url>
+  <url>
     <loc>https://www.timeincity.com/city/chengdu</loc>
     <priority>0.9</priority>
     <changefreq>daily</changefreq>
@@ -607,6 +642,11 @@
   </url>
   <url>
     <loc>https://www.timeincity.com/city/chiba</loc>
+    <priority>0.9</priority>
+    <changefreq>daily</changefreq>
+  </url>
+  <url>
+    <loc>https://www.timeincity.com/city/chicago</loc>
     <priority>0.9</priority>
     <changefreq>daily</changefreq>
   </url>
@@ -771,6 +811,11 @@
     <changefreq>daily</changefreq>
   </url>
   <url>
+    <loc>https://www.timeincity.com/city/des-moines</loc>
+    <priority>0.7</priority>
+    <changefreq>daily</changefreq>
+  </url>
+  <url>
     <loc>https://www.timeincity.com/city/detroit</loc>
     <priority>0.9</priority>
     <changefreq>daily</changefreq>
@@ -926,6 +971,11 @@
     <changefreq>daily</changefreq>
   </url>
   <url>
+    <loc>https://www.timeincity.com/city/fremont</loc>
+    <priority>0.7</priority>
+    <changefreq>daily</changefreq>
+  </url>
+  <url>
     <loc>https://www.timeincity.com/city/fresno</loc>
     <priority>0.9</priority>
     <changefreq>daily</changefreq>
@@ -981,6 +1031,11 @@
     <changefreq>daily</changefreq>
   </url>
   <url>
+    <loc>https://www.timeincity.com/city/glendale</loc>
+    <priority>0.7</priority>
+    <changefreq>daily</changefreq>
+  </url>
+  <url>
     <loc>https://www.timeincity.com/city/goiania</loc>
     <priority>0.9</priority>
     <changefreq>daily</changefreq>
@@ -1003,6 +1058,11 @@
   <url>
     <loc>https://www.timeincity.com/city/granada</loc>
     <priority>0.9</priority>
+    <changefreq>daily</changefreq>
+  </url>
+  <url>
+    <loc>https://www.timeincity.com/city/greensboro</loc>
+    <priority>0.7</priority>
     <changefreq>daily</changefreq>
   </url>
   <url>
@@ -1062,32 +1122,37 @@
   </url>
   <url>
     <loc>https://www.timeincity.com/city/harbin</loc>
-    <priority>0.9</priority>
+    <priority>0.7</priority>
     <changefreq>daily</changefreq>
   </url>
   <url>
     <loc>https://www.timeincity.com/city/hartford</loc>
-    <priority>0.9</priority>
+    <priority>0.7</priority>
     <changefreq>daily</changefreq>
   </url>
   <url>
     <loc>https://www.timeincity.com/city/havana</loc>
-    <priority>0.9</priority>
+    <priority>0.7</priority>
     <changefreq>daily</changefreq>
   </url>
   <url>
     <loc>https://www.timeincity.com/city/helsinki</loc>
-    <priority>0.9</priority>
+    <priority>0.7</priority>
+    <changefreq>daily</changefreq>
+  </url>
+  <url>
+    <loc>https://www.timeincity.com/city/henderson</loc>
+    <priority>0.7</priority>
     <changefreq>daily</changefreq>
   </url>
   <url>
     <loc>https://www.timeincity.com/city/ho-chi-minh-city</loc>
-    <priority>0.9</priority>
+    <priority>0.7</priority>
     <changefreq>daily</changefreq>
   </url>
   <url>
     <loc>https://www.timeincity.com/city/hobart</loc>
-    <priority>0.9</priority>
+    <priority>0.7</priority>
     <changefreq>daily</changefreq>
   </url>
   <url>
@@ -1186,6 +1251,11 @@
     <changefreq>daily</changefreq>
   </url>
   <url>
+    <loc>https://www.timeincity.com/city/jersey-city</loc>
+    <priority>0.7</priority>
+    <changefreq>daily</changefreq>
+  </url>
+  <url>
     <loc>https://www.timeincity.com/city/jerusalem</loc>
     <priority>0.7</priority>
     <changefreq>daily</changefreq>
@@ -1271,6 +1341,11 @@
     <changefreq>daily</changefreq>
   </url>
   <url>
+    <loc>https://www.timeincity.com/city/knoxville</loc>
+    <priority>0.7</priority>
+    <changefreq>daily</changefreq>
+  </url>
+  <url>
     <loc>https://www.timeincity.com/city/kobe</loc>
     <priority>0.7</priority>
     <changefreq>daily</changefreq>
@@ -1351,6 +1426,11 @@
     <changefreq>daily</changefreq>
   </url>
   <url>
+    <loc>https://www.timeincity.com/city/laredo</loc>
+    <priority>0.7</priority>
+    <changefreq>daily</changefreq>
+  </url>
+  <url>
     <loc>https://www.timeincity.com/city/las-vegas</loc>
     <priority>0.7</priority>
     <changefreq>daily</changefreq>
@@ -1366,7 +1446,17 @@
     <changefreq>daily</changefreq>
   </url>
   <url>
+    <loc>https://www.timeincity.com/city/lexington</loc>
+    <priority>0.7</priority>
+    <changefreq>daily</changefreq>
+  </url>
+  <url>
     <loc>https://www.timeincity.com/city/lima</loc>
+    <priority>0.7</priority>
+    <changefreq>daily</changefreq>
+  </url>
+  <url>
+    <loc>https://www.timeincity.com/city/lincoln</loc>
     <priority>0.7</priority>
     <changefreq>daily</changefreq>
   </url>
@@ -1413,6 +1503,11 @@
   <url>
     <loc>https://www.timeincity.com/city/los-angeles</loc>
     <priority>0.7</priority>
+    <changefreq>daily</changefreq>
+  </url>
+  <url>
+    <loc>https://www.timeincity.com/city/louisville</loc>
+    <priority>0.9</priority>
     <changefreq>daily</changefreq>
   </url>
   <url>
@@ -1561,6 +1656,11 @@
     <changefreq>daily</changefreq>
   </url>
   <url>
+    <loc>https://www.timeincity.com/city/mesa</loc>
+    <priority>0.9</priority>
+    <changefreq>daily</changefreq>
+  </url>
+  <url>
     <loc>https://www.timeincity.com/city/mexico-city</loc>
     <priority>0.7</priority>
     <changefreq>daily</changefreq>
@@ -1576,7 +1676,22 @@
     <changefreq>daily</changefreq>
   </url>
   <url>
+    <loc>https://www.timeincity.com/city/milwaukee</loc>
+    <priority>0.9</priority>
+    <changefreq>daily</changefreq>
+  </url>
+  <url>
+    <loc>https://www.timeincity.com/city/minneapolis</loc>
+    <priority>0.7</priority>
+    <changefreq>daily</changefreq>
+  </url>
+  <url>
     <loc>https://www.timeincity.com/city/minsk</loc>
+    <priority>0.7</priority>
+    <changefreq>daily</changefreq>
+  </url>
+  <url>
+    <loc>https://www.timeincity.com/city/modesto</loc>
     <priority>0.7</priority>
     <changefreq>daily</changefreq>
   </url>
@@ -1696,6 +1811,11 @@
     <changefreq>daily</changefreq>
   </url>
   <url>
+    <loc>https://www.timeincity.com/city/norfolk</loc>
+    <priority>0.7</priority>
+    <changefreq>daily</changefreq>
+  </url>
+  <url>
     <loc>https://www.timeincity.com/city/noronha</loc>
     <priority>0.7</priority>
     <changefreq>daily</changefreq>
@@ -1716,12 +1836,22 @@
     <changefreq>daily</changefreq>
   </url>
   <url>
+    <loc>https://www.timeincity.com/city/oakland</loc>
+    <priority>0.7</priority>
+    <changefreq>daily</changefreq>
+  </url>
+  <url>
     <loc>https://www.timeincity.com/city/odessa</loc>
     <priority>0.7</priority>
     <changefreq>daily</changefreq>
   </url>
   <url>
     <loc>https://www.timeincity.com/city/oklahoma-city</loc>
+    <priority>0.7</priority>
+    <changefreq>daily</changefreq>
+  </url>
+  <url>
+    <loc>https://www.timeincity.com/city/omaha</loc>
     <priority>0.7</priority>
     <changefreq>daily</changefreq>
   </url>
@@ -1836,6 +1966,11 @@
     <changefreq>daily</changefreq>
   </url>
   <url>
+    <loc>https://www.timeincity.com/city/plano</loc>
+    <priority>0.7</priority>
+    <changefreq>daily</changefreq>
+  </url>
+  <url>
     <loc>https://www.timeincity.com/city/port-elizabeth</loc>
     <priority>0.7</priority>
     <changefreq>daily</changefreq>
@@ -1852,6 +1987,11 @@
   </url>
   <url>
     <loc>https://www.timeincity.com/city/port-moresby</loc>
+    <priority>0.7</priority>
+    <changefreq>daily</changefreq>
+  </url>
+  <url>
+    <loc>https://www.timeincity.com/city/port-st-lucie</loc>
     <priority>0.7</priority>
     <changefreq>daily</changefreq>
   </url>
@@ -2036,6 +2176,11 @@
     <changefreq>daily</changefreq>
   </url>
   <url>
+    <loc>https://www.timeincity.com/city/salt-lake-city</loc>
+    <priority>0.7</priority>
+    <changefreq>daily</changefreq>
+  </url>
+  <url>
     <loc>https://www.timeincity.com/city/salta</loc>
     <priority>0.7</priority>
     <changefreq>daily</changefreq>
@@ -2082,6 +2227,11 @@
   </url>
   <url>
     <loc>https://www.timeincity.com/city/san-sebastian</loc>
+    <priority>0.7</priority>
+    <changefreq>daily</changefreq>
+  </url>
+  <url>
+    <loc>https://www.timeincity.com/city/santa-ana</loc>
     <priority>0.7</priority>
     <changefreq>daily</changefreq>
   </url>
@@ -2137,6 +2287,11 @@
   </url>
   <url>
     <loc>https://www.timeincity.com/city/sarasota</loc>
+    <priority>0.7</priority>
+    <changefreq>daily</changefreq>
+  </url>
+  <url>
+    <loc>https://www.timeincity.com/city/scottsdale</loc>
     <priority>0.7</priority>
     <changefreq>daily</changefreq>
   </url>
@@ -2221,7 +2376,17 @@
     <changefreq>daily</changefreq>
   </url>
   <url>
+    <loc>https://www.timeincity.com/city/st-paul</loc>
+    <priority>0.7</priority>
+    <changefreq>daily</changefreq>
+  </url>
+  <url>
     <loc>https://www.timeincity.com/city/stockholm</loc>
+    <priority>0.7</priority>
+    <changefreq>daily</changefreq>
+  </url>
+  <url>
+    <loc>https://www.timeincity.com/city/stockton</loc>
     <priority>0.7</priority>
     <changefreq>daily</changefreq>
   </url>
@@ -2351,6 +2516,11 @@
     <changefreq>daily</changefreq>
   </url>
   <url>
+    <loc>https://www.timeincity.com/city/toledo</loc>
+    <priority>0.7</priority>
+    <changefreq>daily</changefreq>
+  </url>
+  <url>
     <loc>https://www.timeincity.com/city/toluca</loc>
     <priority>0.7</priority>
     <changefreq>daily</changefreq>
@@ -2376,7 +2546,17 @@
     <changefreq>daily</changefreq>
   </url>
   <url>
+    <loc>https://www.timeincity.com/city/tucson</loc>
+    <priority>0.9</priority>
+    <changefreq>daily</changefreq>
+  </url>
+  <url>
     <loc>https://www.timeincity.com/city/tucuman</loc>
+    <priority>0.7</priority>
+    <changefreq>daily</changefreq>
+  </url>
+  <url>
+    <loc>https://www.timeincity.com/city/tulsa</loc>
     <priority>0.7</priority>
     <changefreq>daily</changefreq>
   </url>
@@ -2497,6 +2677,11 @@
   </url>
   <url>
     <loc>https://www.timeincity.com/city/whitehorse</loc>
+    <priority>0.7</priority>
+    <changefreq>daily</changefreq>
+  </url>
+  <url>
+    <loc>https://www.timeincity.com/city/wichita</loc>
     <priority>0.7</priority>
     <changefreq>daily</changefreq>
   </url>

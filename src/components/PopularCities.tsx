@@ -6,6 +6,7 @@ type CityGroup = { region: string; label: string; cities: CityConfig[] };
 
 const REGION_LABELS: Record<Exclude<RegionSlug, "all">, string> = {
   "united-states": "United States",
+  "north-america": "North America",
   europe: "Europe",
   asia: "Asia",
   "south-america": "South America",
@@ -15,6 +16,7 @@ const REGION_LABELS: Record<Exclude<RegionSlug, "all">, string> = {
 
 const REGION_ORDER: Array<Exclude<RegionSlug, "all">> = [
   "united-states",
+  "north-america",
   "europe",
   "asia",
   "south-america",
@@ -36,20 +38,15 @@ export function PopularCities({ selectedSlug, selectedLabel, onSelect }: Popular
   const grouped: CityGroup[] = REGION_ORDER
     .map((region) => {
       const cities = sortCities(
-        CITY_LIST.filter((city) =>
-          region === "united-states" ? city.countryCode === "US" : city.continent === region
-        )
+        CITY_LIST.filter((city) => {
+          if (region === "united-states") return city.countryCode === "US";
+          if (region === "north-america") return city.continent === "north-america";
+          return city.continent === region;
+        })
       );
       return { region, label: REGION_LABELS[region], cities };
     })
     .filter((group) => group.cities.length > 0);
-
-  const accounted = new Set(grouped.flatMap((group) => group.cities.map((city) => city.slug)));
-  const otherCities = sortCities(CITY_LIST.filter((city) => !accounted.has(city.slug)));
-  const groups: CityGroup[] = [...grouped];
-  if (otherCities.length) {
-    groups.push({ region: "other", label: "More cities", cities: otherCities });
-  }
 
   return (
     <section className="flex flex-col gap-4 rounded-3xl border border-slate-200/70 bg-white/70 p-6 shadow-lg shadow-slate-900/5 backdrop-blur dark:border-slate-800 dark:bg-slate-900/70">
@@ -60,7 +57,7 @@ export function PopularCities({ selectedSlug, selectedLabel, onSelect }: Popular
         </p>
       </header>
       <div className="max-h-[32rem] overflow-y-auto pr-1">
-        {groups.map((group) => (
+        {grouped.map((group) => (
           <div key={group.region} className="mb-4 last:mb-0">
             <p className="mb-2 text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">{group.label}</p>
             <div className="grid grid-cols-2 gap-y-2 gap-x-4 md:grid-cols-4">

@@ -3,6 +3,7 @@ import { useEffect, useMemo } from "react";
 import type { CityConfig } from "../../data/cities";
 import { Experience } from "../../components/Experience";
 import { CitySeoSection } from "../../components/CitySeoSection";
+import { formatCityDisplay } from "../../utils/formatCityDisplay";
 
 interface CityPageProps {
   city: CityConfig;
@@ -44,7 +45,7 @@ export function CityPage({ city, onSelectCity }: CityPageProps): JSX.Element {
     <div className="flex flex-col gap-10">
       <Experience
         initialTimezone={city.timezone}
-        initialLabel={city.name}
+        initialLabel={formatCityDisplay(city)}
         initialCitySlug={city.slug}
         onSelectCity={onSelectCity}
       />

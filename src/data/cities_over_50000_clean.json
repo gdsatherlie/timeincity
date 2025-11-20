@@ -2,7 +2,7 @@
   {
     "name": "Abidjan",
     "slug": "abidjan",
-    "country": "C\u00f4te d\u2019Ivoire",
+    "country": "Côte d’Ivoire",
     "countryCode": "CI",
     "state": null,
     "timezone": "Africa/Abidjan",
@@ -46,7 +46,7 @@
   {
     "name": "Adana",
     "slug": "adana",
-    "country": "T\u00fcrkiye",
+    "country": "Türkiye",
     "countryCode": "TR",
     "state": null,
     "timezone": "Europe/Istanbul",
@@ -86,6 +86,17 @@
     "lat": 22.533333,
     "lon": 88.366667,
     "population": 500000
+  },
+  {
+    "name": "Albuquerque",
+    "slug": "albuquerque",
+    "country": "United States",
+    "countryCode": "US",
+    "state": "New Mexico",
+    "timezone": "America/Denver",
+    "lat": 35.0844,
+    "lon": -106.6504,
+    "population": 562599
   },
   {
     "name": "Aleppo",
@@ -154,6 +165,17 @@
     "population": 500000
   },
   {
+    "name": "Anchorage",
+    "slug": "anchorage",
+    "country": "United States",
+    "countryCode": "US",
+    "state": "Alaska",
+    "timezone": "America/Anchorage",
+    "lat": 61.2181,
+    "lon": -149.9003,
+    "population": 288121
+  },
+  {
     "name": "Andorra",
     "slug": "andorra",
     "country": "Andorra",
@@ -178,7 +200,7 @@
   {
     "name": "Ankara",
     "slug": "ankara",
-    "country": "T\u00fcrkiye",
+    "country": "Türkiye",
     "countryCode": "TR",
     "state": null,
     "timezone": "Europe/Istanbul",
@@ -200,7 +222,7 @@
   {
     "name": "Antalya",
     "slug": "antalya",
-    "country": "T\u00fcrkiye",
+    "country": "Türkiye",
     "countryCode": "TR",
     "state": null,
     "timezone": "Europe/Istanbul",
@@ -251,6 +273,17 @@
     "lat": -7.2,
     "lon": -48.2,
     "population": 500000
+  },
+  {
+    "name": "Arlington",
+    "slug": "arlington",
+    "country": "United States",
+    "countryCode": "US",
+    "state": "Texas",
+    "timezone": "America/Chicago",
+    "lat": 32.7357,
+    "lon": -97.1081,
+    "population": 394602
   },
   {
     "name": "Aruba",
@@ -314,9 +347,9 @@
     "countryCode": "US",
     "state": "Texas",
     "timezone": "America/Chicago",
-    "lat": 41.85,
-    "lon": -87.65,
-    "population": 500000
+    "lat": 30.2672,
+    "lon": -97.7431,
+    "population": 974447
   },
   {
     "name": "Bacolod",
@@ -484,6 +517,17 @@
     "population": 500000
   },
   {
+    "name": "Baton Rouge",
+    "slug": "baton-rouge",
+    "country": "United States",
+    "countryCode": "US",
+    "state": "Louisiana",
+    "timezone": "America/Chicago",
+    "lat": 30.4515,
+    "lon": -91.1871,
+    "population": 221599
+  },
+  {
     "name": "Beijing",
     "slug": "beijing",
     "country": "China",
@@ -596,13 +640,13 @@
   {
     "name": "Birmingham",
     "slug": "birmingham",
-    "country": "United Kingdom",
-    "countryCode": "GB",
-    "state": null,
-    "timezone": "Europe/London",
-    "lat": 51.508333,
-    "lon": -0.125278,
-    "population": 500000
+    "country": "United States",
+    "countryCode": "US",
+    "state": "Alabama",
+    "timezone": "America/Chicago",
+    "lat": 33.5186,
+    "lon": -86.8104,
+    "population": 197575
   },
   {
     "name": "Blanc-Sablon",
@@ -647,6 +691,17 @@
     "lat": 4.6,
     "lon": -74.083333,
     "population": 500000
+  },
+  {
+    "name": "Boise",
+    "slug": "boise",
+    "country": "United States",
+    "countryCode": "US",
+    "state": "Idaho",
+    "timezone": "America/Boise",
+    "lat": 43.615,
+    "lon": -116.2023,
+    "population": 240713
   },
   {
     "name": "Bologna",
@@ -1100,6 +1155,17 @@
     "population": 500000
   },
   {
+    "name": "Charlotte",
+    "slug": "charlotte",
+    "country": "United States",
+    "countryCode": "US",
+    "state": "North Carolina",
+    "timezone": "America/New_York",
+    "lat": 35.2271,
+    "lon": -80.8431,
+    "population": 897720
+  },
+  {
     "name": "Chengdu",
     "slug": "chengdu",
     "country": "China",
@@ -1142,6 +1208,17 @@
     "lat": 35.654444,
     "lon": 139.744722,
     "population": 500000
+  },
+  {
+    "name": "Chicago",
+    "slug": "chicago",
+    "country": "United States",
+    "countryCode": "US",
+    "state": "Illinois",
+    "timezone": "America/Chicago",
+    "lat": 41.8781,
+    "lon": -87.6298,
+    "population": 2746388
   },
   {
     "name": "Chittagong",
@@ -1322,7 +1399,7 @@
   {
     "name": "Curacao",
     "slug": "curacao",
-    "country": "Cura\u00e7ao",
+    "country": "Curaçao",
     "countryCode": "CW",
     "state": null,
     "timezone": "America/Curacao",
@@ -1494,6 +1571,17 @@
     "lat": 39.739167,
     "lon": -104.984167,
     "population": 500000
+  },
+  {
+    "name": "Des Moines",
+    "slug": "des-moines",
+    "country": "United States",
+    "countryCode": "US",
+    "state": "Iowa",
+    "timezone": "America/Chicago",
+    "lat": 41.5868,
+    "lon": -93.625,
+    "population": 214133
   },
   {
     "name": "Detroit",
@@ -1837,6 +1925,17 @@
     "population": 500000
   },
   {
+    "name": "Fremont",
+    "slug": "fremont",
+    "country": "United States",
+    "countryCode": "US",
+    "state": "California",
+    "timezone": "America/Los_Angeles",
+    "lat": 37.5483,
+    "lon": -121.9886,
+    "population": 230504
+  },
+  {
     "name": "Fresno",
     "slug": "fresno",
     "country": "United States",
@@ -1958,6 +2057,17 @@
     "population": 500000
   },
   {
+    "name": "Glendale",
+    "slug": "glendale",
+    "country": "United States",
+    "countryCode": "US",
+    "state": "Arizona",
+    "timezone": "America/Phoenix",
+    "lat": 33.5387,
+    "lon": -112.186,
+    "population": 248325
+  },
+  {
     "name": "Goiania",
     "slug": "goiania",
     "country": "Brazil",
@@ -2011,6 +2121,17 @@
     "lat": 40.4,
     "lon": -3.683333,
     "population": 500000
+  },
+  {
+    "name": "Greensboro",
+    "slug": "greensboro",
+    "country": "United States",
+    "countryCode": "US",
+    "state": "North Carolina",
+    "timezone": "America/New_York",
+    "lat": 36.0726,
+    "lon": -79.792,
+    "population": 299035
   },
   {
     "name": "Guadalajara",
@@ -2176,6 +2297,17 @@
     "lat": 60.166667,
     "lon": 24.966667,
     "population": 500000
+  },
+  {
+    "name": "Henderson",
+    "slug": "henderson",
+    "country": "United States",
+    "countryCode": "US",
+    "state": "Nevada",
+    "timezone": "America/Los_Angeles",
+    "lat": 36.0395,
+    "lon": -114.9817,
+    "population": 336534
   },
   {
     "name": "Ho Chi Minh City",
@@ -2345,7 +2477,7 @@
   {
     "name": "Istanbul",
     "slug": "istanbul",
-    "country": "T\u00fcrkiye",
+    "country": "Türkiye",
     "countryCode": "TR",
     "state": null,
     "timezone": "Europe/Istanbul",
@@ -2356,7 +2488,7 @@
   {
     "name": "Izmir",
     "slug": "izmir",
-    "country": "T\u00fcrkiye",
+    "country": "Türkiye",
     "countryCode": "TR",
     "state": null,
     "timezone": "Europe/Istanbul",
@@ -2407,6 +2539,17 @@
     "lat": 24.633333,
     "lon": 46.716667,
     "population": 500000
+  },
+  {
+    "name": "Jersey City",
+    "slug": "jersey-city",
+    "country": "United States",
+    "countryCode": "US",
+    "state": "New Jersey",
+    "timezone": "America/New_York",
+    "lat": 40.7178,
+    "lon": -74.0431,
+    "population": 292449
   },
   {
     "name": "Jerusalem",
@@ -2596,6 +2739,17 @@
     "population": 500000
   },
   {
+    "name": "Knoxville",
+    "slug": "knoxville",
+    "country": "United States",
+    "countryCode": "US",
+    "state": "Tennessee",
+    "timezone": "America/New_York",
+    "lat": 35.9606,
+    "lon": -83.9207,
+    "population": 192648
+  },
+  {
     "name": "Kobe",
     "slug": "kobe",
     "country": "Japan",
@@ -2772,6 +2926,17 @@
     "population": 500000
   },
   {
+    "name": "Laredo",
+    "slug": "laredo",
+    "country": "United States",
+    "countryCode": "US",
+    "state": "Texas",
+    "timezone": "America/Chicago",
+    "lat": 27.5306,
+    "lon": -99.4803,
+    "population": 255205
+  },
+  {
     "name": "Las Vegas",
     "slug": "las-vegas",
     "country": "United States",
@@ -2805,6 +2970,17 @@
     "population": 500000
   },
   {
+    "name": "Lexington",
+    "slug": "lexington",
+    "country": "United States",
+    "countryCode": "US",
+    "state": "Kentucky",
+    "timezone": "America/New_York",
+    "lat": 38.0406,
+    "lon": -84.5037,
+    "population": 322570
+  },
+  {
     "name": "Lima",
     "slug": "lima",
     "country": "Peru",
@@ -2814,6 +2990,17 @@
     "lat": -12.05,
     "lon": -77.05,
     "population": 500000
+  },
+  {
+    "name": "Lincoln",
+    "slug": "lincoln",
+    "country": "United States",
+    "countryCode": "US",
+    "state": "Nebraska",
+    "timezone": "America/Chicago",
+    "lat": 40.8136,
+    "lon": -96.7026,
+    "population": 293905
   },
   {
     "name": "Lindeman",
@@ -2913,6 +3100,17 @@
     "lat": 34.052222,
     "lon": -118.242778,
     "population": 500000
+  },
+  {
+    "name": "Louisville",
+    "slug": "louisville",
+    "country": "United States",
+    "countryCode": "US",
+    "state": "Kentucky",
+    "timezone": "America/New_York",
+    "lat": 38.2527,
+    "lon": -85.7585,
+    "population": 617790
   },
   {
     "name": "Luanda",
@@ -3115,7 +3313,7 @@
   {
     "name": "Mariehamn",
     "slug": "mariehamn",
-    "country": "\u00c5land Islands",
+    "country": "Åland Islands",
     "countryCode": "AX",
     "state": null,
     "timezone": "Europe/Mariehamn",
@@ -3234,6 +3432,17 @@
     "population": 500000
   },
   {
+    "name": "Mesa",
+    "slug": "mesa",
+    "country": "United States",
+    "countryCode": "US",
+    "state": "Arizona",
+    "timezone": "America/Phoenix",
+    "lat": 33.4152,
+    "lon": -111.8315,
+    "population": 504258
+  },
+  {
     "name": "Mexico City",
     "slug": "mexico-city",
     "country": "Mexico",
@@ -3267,6 +3476,28 @@
     "population": 500000
   },
   {
+    "name": "Milwaukee",
+    "slug": "milwaukee",
+    "country": "United States",
+    "countryCode": "US",
+    "state": "Wisconsin",
+    "timezone": "America/Chicago",
+    "lat": 43.0389,
+    "lon": -87.9065,
+    "population": 569330
+  },
+  {
+    "name": "Minneapolis",
+    "slug": "minneapolis",
+    "country": "United States",
+    "countryCode": "US",
+    "state": "Minnesota",
+    "timezone": "America/Chicago",
+    "lat": 44.9778,
+    "lon": -93.265,
+    "population": 429954
+  },
+  {
     "name": "Minsk",
     "slug": "minsk",
     "country": "Belarus",
@@ -3276,6 +3507,17 @@
     "lat": 53.9,
     "lon": 27.566667,
     "population": 500000
+  },
+  {
+    "name": "Modesto",
+    "slug": "modesto",
+    "country": "United States",
+    "countryCode": "US",
+    "state": "California",
+    "timezone": "America/Los_Angeles",
+    "lat": 37.6391,
+    "lon": -120.9969,
+    "population": 218069
   },
   {
     "name": "Mogadishu",
@@ -3531,6 +3773,17 @@
     "population": 500000
   },
   {
+    "name": "Norfolk",
+    "slug": "norfolk",
+    "country": "United States",
+    "countryCode": "US",
+    "state": "Virginia",
+    "timezone": "America/New_York",
+    "lat": 36.8508,
+    "lon": -76.2859,
+    "population": 238005
+  },
+  {
     "name": "Noronha",
     "slug": "noronha",
     "country": "Brazil",
@@ -3575,6 +3828,17 @@
     "population": 500000
   },
   {
+    "name": "Oakland",
+    "slug": "oakland",
+    "country": "United States",
+    "countryCode": "US",
+    "state": "California",
+    "timezone": "America/Los_Angeles",
+    "lat": 37.8044,
+    "lon": -122.2712,
+    "population": 433823
+  },
+  {
     "name": "Odessa",
     "slug": "odessa",
     "country": "Ukraine",
@@ -3595,6 +3859,17 @@
     "lat": 41.85,
     "lon": -87.65,
     "population": 500000
+  },
+  {
+    "name": "Omaha",
+    "slug": "omaha",
+    "country": "United States",
+    "countryCode": "US",
+    "state": "Nebraska",
+    "timezone": "America/Chicago",
+    "lat": 41.2565,
+    "lon": -95.9345,
+    "population": 486051
   },
   {
     "name": "Omsk",
@@ -3839,6 +4114,17 @@
     "population": 500000
   },
   {
+    "name": "Plano",
+    "slug": "plano",
+    "country": "United States",
+    "countryCode": "US",
+    "state": "Texas",
+    "timezone": "America/Chicago",
+    "lat": 33.0198,
+    "lon": -96.6989,
+    "population": 285494
+  },
+  {
     "name": "Port Elizabeth",
     "slug": "port-elizabeth",
     "country": "South Africa",
@@ -3881,6 +4167,17 @@
     "lat": -9.5,
     "lon": 147.166667,
     "population": 500000
+  },
+  {
+    "name": "Port St. Lucie",
+    "slug": "port-st-lucie",
+    "country": "United States",
+    "countryCode": "US",
+    "state": "Florida",
+    "timezone": "America/New_York",
+    "lat": 27.273,
+    "lon": -80.3582,
+    "population": 231790
   },
   {
     "name": "Port-au-Prince",
@@ -4279,6 +4576,17 @@
     "population": 500000
   },
   {
+    "name": "Salt Lake City",
+    "slug": "salt-lake-city",
+    "country": "United States",
+    "countryCode": "US",
+    "state": "Utah",
+    "timezone": "America/Denver",
+    "lat": 40.7608,
+    "lon": -111.891,
+    "population": 200133
+  },
+  {
     "name": "Salta",
     "slug": "salta",
     "country": "Argentina",
@@ -4387,6 +4695,17 @@
     "lat": 40.4,
     "lon": -3.683333,
     "population": 500000
+  },
+  {
+    "name": "Santa Ana",
+    "slug": "santa-ana",
+    "country": "United States",
+    "countryCode": "US",
+    "state": "California",
+    "timezone": "America/Los_Angeles",
+    "lat": 33.7455,
+    "lon": -117.8677,
+    "population": 310227
   },
   {
     "name": "Santa Cruz de la Sierra",
@@ -4508,6 +4827,17 @@
     "lat": 40.714167,
     "lon": -74.006389,
     "population": 500000
+  },
+  {
+    "name": "Scottsdale",
+    "slug": "scottsdale",
+    "country": "United States",
+    "countryCode": "US",
+    "state": "Arizona",
+    "timezone": "America/Phoenix",
+    "lat": 33.4942,
+    "lon": -111.9261,
+    "population": 243050
   },
   {
     "name": "Seattle",
@@ -4666,7 +4996,7 @@
   {
     "name": "St Barthelemy",
     "slug": "st-barthelemy",
-    "country": "St. Barth\u00e9lemy",
+    "country": "St. Barthélemy",
     "countryCode": "BL",
     "state": null,
     "timezone": "America/St_Barthelemy",
@@ -4686,6 +5016,17 @@
     "population": 500000
   },
   {
+    "name": "St. Paul",
+    "slug": "st-paul",
+    "country": "United States",
+    "countryCode": "US",
+    "state": "Minnesota",
+    "timezone": "America/Chicago",
+    "lat": 44.9537,
+    "lon": -93.09,
+    "population": 307193
+  },
+  {
     "name": "Stockholm",
     "slug": "stockholm",
     "country": "Sweden",
@@ -4695,6 +5036,17 @@
     "lat": 59.333333,
     "lon": 18.05,
     "population": 500000
+  },
+  {
+    "name": "Stockton",
+    "slug": "stockton",
+    "country": "United States",
+    "countryCode": "US",
+    "state": "California",
+    "timezone": "America/Los_Angeles",
+    "lat": 37.9577,
+    "lon": -121.2908,
+    "population": 320804
   },
   {
     "name": "Strasbourg",
@@ -4972,6 +5324,17 @@
     "population": 500000
   },
   {
+    "name": "Toledo",
+    "slug": "toledo",
+    "country": "United States",
+    "countryCode": "US",
+    "state": "Ohio",
+    "timezone": "America/New_York",
+    "lat": 41.6528,
+    "lon": -83.5379,
+    "population": 270871
+  },
+  {
     "name": "Toluca",
     "slug": "toluca",
     "country": "Mexico",
@@ -5027,6 +5390,17 @@
     "population": 500000
   },
   {
+    "name": "Tucson",
+    "slug": "tucson",
+    "country": "United States",
+    "countryCode": "US",
+    "state": "Arizona",
+    "timezone": "America/Phoenix",
+    "lat": 32.2226,
+    "lon": -110.9747,
+    "population": 542629
+  },
+  {
     "name": "Tucuman",
     "slug": "tucuman",
     "country": "Argentina",
@@ -5036,6 +5410,17 @@
     "lat": -26.816667,
     "lon": -65.216667,
     "population": 500000
+  },
+  {
+    "name": "Tulsa",
+    "slug": "tulsa",
+    "country": "United States",
+    "countryCode": "US",
+    "state": "Oklahoma",
+    "timezone": "America/Chicago",
+    "lat": 36.154,
+    "lon": -95.9928,
+    "population": 411867
   },
   {
     "name": "Tunis",
@@ -5300,6 +5685,17 @@
     "lat": 60.716667,
     "lon": -135.05,
     "population": 500000
+  },
+  {
+    "name": "Wichita",
+    "slug": "wichita",
+    "country": "United States",
+    "countryCode": "US",
+    "state": "Kansas",
+    "timezone": "America/Chicago",
+    "lat": 37.6872,
+    "lon": -97.3301,
+    "population": 395699
   },
   {
     "name": "Winnipeg",

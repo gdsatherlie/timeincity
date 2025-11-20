@@ -22,6 +22,13 @@ export const REGION_PAGES: Record<RegionSlug, RegionPageContent> = {
     description:
       "The United States spans multiple time zones, from Eastern Time to Hawaii Time. This page highlights major U.S. cities with accurate local times, weather updates, and sunrise/sunset information. Use it to coordinate meetings, plan travel, or explore regional time differences across the country."
   },
+  "north-america": {
+    slug: "north-america",
+    title: "Current Time in North America — TimeInCity",
+    heading: "North America — Canada, Mexico, and Caribbean hubs",
+    description:
+      "North America’s cities span Pacific to Atlantic time zones across Canada, Mexico, and the Caribbean. Browse local times, weather, and sunrise/sunset details to coordinate trips or calls across the region."
+  },
   "europe": {
     slug: "europe",
     title: "Current Time in Europe — TimeInCity",

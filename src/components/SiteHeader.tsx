@@ -20,6 +20,7 @@ const cityNav: NavSection = {
   items: [
     { label: "All Cities", path: "/cities" },
     { label: "United States", path: "/cities/united-states" },
+    { label: "North America", path: "/cities/north-america" },
     { label: "Europe", path: "/cities/europe" },
     { label: "Asia", path: "/cities/asia" },
     { label: "South America", path: "/cities/south-america" },

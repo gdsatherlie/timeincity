@@ -24,6 +24,7 @@ const staticRoutes = [
   { path: '/contact', priority: 0.5 },
   { path: '/cities', priority: 0.8 },
   { path: '/cities/united-states', priority: 0.8 },
+  { path: '/cities/north-america', priority: 0.8 },
   { path: '/cities/europe', priority: 0.8 },
   { path: '/cities/asia', priority: 0.8 },
   { path: '/cities/south-america', priority: 0.8 },
