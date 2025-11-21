@@ -68,3 +68,10 @@ Follow these steps the moment you are ready to go live:
 6. **Share the live URL.** As soon as the build succeeds you’ll receive a `https://<project>.vercel.app` link that stays updated every time you push.
 
 Because all time and weather data loads client-side, you don’t need any backend configuration—Vercel simply hosts the static bundle.
+
+## City page template notes
+
+- City detail pages live in `src/pages/city/[slug].tsx` and pull data from the shared catalog (`src/data/cities_over_50000_clean.json`).
+- Update the reference list for the "Time difference from major cities" table inside that component if you want to compare against other hubs.
+- The sunrise/sunset outlook shows the first few days returned by Open-Meteo; adjust the slice in the same file to change the number of rows.
+- Per-city SEO copy comes from `src/utils/citySeo.ts` and renders through `CitySeoSection` so one edit updates every city page.

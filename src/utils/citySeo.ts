@@ -5,11 +5,11 @@ export function getCitySeoCopy(city: CityConfig) {
   const resolvedLocation = location || city.name;
 
   return {
-    title: `Current time in ${city.name}${city.country ? `, ${city.country}` : ""} — Weather, Sunrise & Sunset | TimeInCity`,
-    description: `See the exact current time in ${resolvedLocation}, plus local weather, sunrise, and sunset. TimeInCity helps you compare time zones and plan meetings in ${resolvedLocation}.`,
-    heading: `Current time in ${city.name}${city.country ? `, ${city.country}` : ""}`,
-    intro: `See the exact current time in ${resolvedLocation}, including today’s date, time zone, live weather, and sunrise and sunset details.`,
-    paragraph: `TimeInCity helps you quickly check what time it is in ${resolvedLocation}, compare it with other cities, and share a simple link when scheduling meetings or planning travel.`,
+    title: `Current Time in ${resolvedLocation} — Live Clock & Weather | TimeInCity`,
+    description: `See the current local time in ${resolvedLocation} with live clock, weather, sunrise, sunset, day length, time difference to major cities, and timezone details.`,
+    heading: `Current time in ${resolvedLocation}`,
+    intro: `See the exact current time in ${resolvedLocation}, including the local date, time zone, weather, and sunrise and sunset times.`,
+    paragraph: `Use TimeInCity to check what time it is right now in ${resolvedLocation}, plan calls across time zones, or share a simple link when you schedule meetings or travel.`,
     location: resolvedLocation
   };
 }

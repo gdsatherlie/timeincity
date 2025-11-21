@@ -16,7 +16,7 @@ import { slugifyCity } from "./utils/slugifyCity";
 import { SHOW_AD_SLOTS } from "./config";
 import { CityPage } from "./pages/city/[slug]";
 
-const DEFAULT_TITLE = "TimeInCity — Exact Time & Weather in Any City";
+const DEFAULT_TITLE = "World Clock, Weather & Local Time in 500+ Cities | TimeInCity";
 const DEFAULT_DESCRIPTION =
   "Check the current time, weather, sunrise, sunset, and world time zone data for cities worldwide. Compare times, plan meetings, and explore global clocks with TimeInCity.";
 
