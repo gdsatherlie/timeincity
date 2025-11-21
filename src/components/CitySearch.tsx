@@ -56,7 +56,7 @@ export function CitySearch({ onSelectCity, placeholder = "Search city…", label
   };
 
   return (
-    <div className="relative z-30">
+    <div className="relative z-[60]">
       {label ? (
         <p className="mb-2 text-sm font-semibold text-slate-600 dark:text-slate-200">{label}</p>
       ) : null}
@@ -71,7 +71,7 @@ export function CitySearch({ onSelectCity, placeholder = "Search city…", label
         className="w-full rounded-2xl border border-slate-200 bg-white/90 px-5 py-3 text-base text-slate-900 shadow-lg shadow-slate-900/5 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-300 dark:border-slate-800 dark:bg-slate-900/80 dark:text-slate-100"
       />
       {visible ? (
-        <ul className="absolute left-0 right-0 z-50 mt-2 max-h-80 overflow-y-auto rounded-2xl border border-slate-200 bg-white/95 p-2 shadow-2xl shadow-slate-900/20 dark:border-slate-800 dark:bg-slate-900">
+        <ul className="absolute left-0 right-0 z-[70] mt-2 max-h-80 overflow-y-auto rounded-2xl border border-slate-200 bg-white/95 p-2 shadow-2xl shadow-slate-900/20 dark:border-slate-800 dark:bg-slate-900">
           {results.map((city, index) => (
             <li key={city.slug}>
               <button
