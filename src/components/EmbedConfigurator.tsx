@@ -89,8 +89,12 @@ export function EmbedConfigurator({ timezone, locationLabel, weatherSummary }: E
       showWeather: includeWeather ? "1" : "0"
     });
 
+    if (locationLabel) {
+      params.set("city", locationLabel);
+    }
+
     return `\n<iframe\n  src="https://timeincity.com/embed?${params.toString()}"\n  width="${dimensions.width}"\n  height="${dimensions.height}"\n  style="border:0;border-radius:12px;overflow:hidden"\n  loading="lazy"\n></iframe>\n`.trim();
-  }, [dimensions.height, dimensions.width, includeDate, includeWeather, theme, timezone]);
+  }, [dimensions.height, dimensions.width, includeDate, includeWeather, locationLabel, theme, timezone]);
 
   return (
     <section className="flex flex-col gap-6 rounded-3xl border border-slate-200/70 bg-white/70 p-6 shadow-lg shadow-slate-900/5 backdrop-blur dark:border-slate-800 dark:bg-slate-900/70">

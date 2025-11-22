@@ -75,4 +75,6 @@ Because all time and weather data loads client-side, you don’t need any backen
 - Slug handling (short and expanded slugs) is centralized in `src/utils/citySlug.ts` and exposed through `findCityBySlug` in `src/data/cities.ts`.
 - Update the reference list for the "Time difference from major cities" table inside the city page component if you want to compare against other hubs.
 - The sunrise/sunset outlook shows the first few days returned by Open-Meteo; adjust the slice in the city page to change the number of rows.
+- Business-hour call windows live in `src/pages/city/[slug].tsx` (`BUSINESS_HOURS_START/END`) and drive the "Is it a good time to call?" card.
 - Per-city SEO copy comes from `src/utils/citySeo.ts` (used by the meta updater in `src/App.tsx` and rendered through `CitySeoSection`) so one edit updates every city page.
+- The city-specific embed snippet is powered by `EmbedConfigurator`, which now pre-fills the current city's timezone and label.

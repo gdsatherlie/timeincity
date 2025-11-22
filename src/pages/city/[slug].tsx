@@ -42,6 +42,51 @@ function formatOffset(minutes: number): string {
   return `UTC${sign}${hours}:${mins}`;
 }
 
+const BUSINESS_HOURS_START = 9;
+const BUSINESS_HOURS_END = 17;
+
+function getCallStatus(now: DateTime, displayName: string) {
+  const hour = now.hour;
+
+  if (hour >= BUSINESS_HOURS_START && hour < BUSINESS_HOURS_END) {
+    return {
+      label: "Within normal business hours",
+      tone: "good",
+      message: `This is generally a good time to schedule calls or meetings in ${displayName}.`
+    } as const;
+  }
+
+  if (hour >= 7 && hour < BUSINESS_HOURS_START) {
+    return {
+      label: "Early morning",
+      tone: "caution",
+      message: `People in ${displayName} may just be starting their day. Consider a later time for better availability.`
+    } as const;
+  }
+
+  if (hour >= BUSINESS_HOURS_END && hour < 22) {
+    return {
+      label: "Evening",
+      tone: "caution",
+      message: `${displayName} is winding down for the day. Double-check availability before scheduling.`
+    } as const;
+  }
+
+  if (hour >= 22 || hour < 7) {
+    return {
+      label: "Overnight",
+      tone: "bad",
+      message: `This is outside typical hours in ${displayName}. Consider scheduling during the local workday.`
+    } as const;
+  }
+
+  return {
+    label: "Check local time",
+    tone: "neutral",
+    message: `Confirm availability in ${displayName} before scheduling.`
+  } as const;
+}
+
 function describeDayLength(sunrise?: string, sunset?: string, timezone?: string): number {
   if (!sunrise || !sunset || !timezone) return NaN;
   const start = DateTime.fromISO(sunrise).setZone(timezone);
@@ -167,6 +212,7 @@ export function CityPage({ city, onSelectCity }: CityPageProps): JSX.Element {
 
   const utcOffset = useMemo(() => formatOffset(now.offset), [now.offset]);
   const isDst = useMemo(() => now.isInDST, [now]);
+  const callStatus = useMemo(() => getCallStatus(now, displayName), [now, displayName]);
 
   const referenceDifferences = useMemo(() => {
     return REFERENCE_CITIES.map((reference) => {
@@ -176,14 +222,13 @@ export function CityPage({ city, onSelectCity }: CityPageProps): JSX.Element {
       const absMinutes = Math.abs(diffMinutes);
       const hours = Math.floor(absMinutes / 60);
       const minutes = absMinutes % 60;
-      const diffLabel =
-        diffMinutes === 0
-          ? "Same time"
-          : `${hours || minutes ? `${hours}h${minutes ? ` ${minutes}m` : ""}` : "0h"} ${sign === "ahead of" ? "ahead" : "behind"}`;
+      const timeText = hours || minutes ? `${hours}h${minutes ? ` ${minutes}m` : ""}` : "0h";
+      const diffLabel = diffMinutes === 0 ? "Same time" : `${timeText} ${sign}`;
       return {
         label: reference.label,
         localTime: refTime.isValid ? refTime.toFormat("h:mm a") : "--:--",
         diffLabel,
+        diffMinutes,
         summary: `${displayName} is ${hours || minutes ? `${hours}h${minutes ? ` ${minutes}m` : ""}` : "0h"} ${sign} ${reference.label}.`
       };
     });
@@ -191,7 +236,12 @@ export function CityPage({ city, onSelectCity }: CityPageProps): JSX.Element {
 
   const newYorkDiff = referenceDifferences.find((entry) => entry.label === "New York");
   const londonDiff = referenceDifferences.find((entry) => entry.label === "London");
-  const highlightSummary = londonDiff?.summary ?? referenceDifferences[0]?.summary;
+  const highlightSummary = useMemo(() => {
+    if (newYorkDiff && londonDiff) {
+      return `${displayName} is ${newYorkDiff.diffLabel.toLowerCase()} New York and ${londonDiff.diffLabel.toLowerCase()} London right now.`;
+    }
+    return londonDiff?.summary ?? referenceDifferences[0]?.summary;
+  }, [displayName, londonDiff, newYorkDiff, referenceDifferences]);
 
   const nearbyCities = useMemo(() => {
     const sameRegion = CITY_LIST.filter(
@@ -215,12 +265,15 @@ export function CityPage({ city, onSelectCity }: CityPageProps): JSX.Element {
   const outlookRows = weather?.outlook.slice(0, 4) ?? [];
   const todayDayLength = weather?.outlook[0]?.dayLengthMinutes;
 
-  const introLine = useMemo(() => {
-    const nyLine = newYorkDiff ? `${newYorkDiff.localTime} in New York` : null;
-    const londonLine = londonDiff ? `${londonDiff.localTime} in London` : null;
-    const segments = [nyLine, londonLine].filter(Boolean).join(" and ");
-    if (!segments) return `${displayName} is in the ${city.timezone} time zone.`;
-    return `${displayName} is in the ${city.timezone} time zone. When it is ${now.toFormat("h:mm a")} here, it is ${segments}.`;
+  const introParagraph = useMemo(() => {
+    const parts = [`${displayName} is in the ${city.timezone} time zone.`];
+    if (newYorkDiff && londonDiff) {
+      parts.push(
+        `When it is ${now.toFormat("h:mm a")} in ${displayName}, it is ${newYorkDiff.localTime} in New York and ${londonDiff.localTime} in London.`
+      );
+    }
+    parts.push("Use this page to check the live clock, decide if it's a good time to call, and review sunrise, sunset, and local weather updates.");
+    return parts.join(" ");
   }, [city.timezone, displayName, londonDiff, newYorkDiff, now]);
 
   return (
@@ -231,7 +284,7 @@ export function CityPage({ city, onSelectCity }: CityPageProps): JSX.Element {
         <p className="mt-2 text-5xl font-semibold tracking-tight text-slate-900 dark:text-slate-50 sm:text-6xl">{now.toFormat("HH:mm:ss")}</p>
         <p className="text-lg text-slate-600 dark:text-slate-300">{now.toFormat("cccc, MMMM d, yyyy")}</p>
         <p className="mt-3 text-sm text-slate-500 dark:text-slate-400">Local time in {displayName} right now.</p>
-        <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">{introLine}</p>
+        <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">{introParagraph}</p>
       </section>
 
       <div className="grid gap-6 lg:grid-cols-3">
@@ -252,7 +305,26 @@ export function CityPage({ city, onSelectCity }: CityPageProps): JSX.Element {
           </ul>
         </section>
 
-        <section className="rounded-3xl border border-slate-200/70 bg-white/80 p-6 shadow-lg shadow-slate-900/5 backdrop-blur dark:border-slate-800 dark:bg-slate-900/80 lg:col-span-2">
+        <section className="rounded-3xl border border-slate-200/70 bg-white/80 p-6 shadow-lg shadow-slate-900/5 backdrop-blur dark:border-slate-800 dark:bg-slate-900/80">
+          <h2 className="text-xl font-semibold text-slate-900 dark:text-slate-100">Is it a good time to call?</h2>
+          <p
+            className={`mt-3 inline-flex rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-[0.1em] ${
+              callStatus.tone === "good"
+                ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-100"
+                : callStatus.tone === "bad"
+                  ? "bg-rose-100 text-rose-700 dark:bg-rose-900/40 dark:text-rose-100"
+                  : "bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-100"
+            }`}
+          >
+            {callStatus.label}
+          </p>
+          <p className="mt-3 text-sm text-slate-600 dark:text-slate-300">{callStatus.message}</p>
+          <p className="mt-2 text-xs text-slate-500 dark:text-slate-400">
+            Local hour: {now.toFormat("h:mm a")} ({city.timezone})
+          </p>
+        </section>
+
+        <section className="rounded-3xl border border-slate-200/70 bg-white/80 p-6 shadow-lg shadow-slate-900/5 backdrop-blur dark:border-slate-800 dark:bg-slate-900/80 lg:col-span-3">
           <h2 className="text-xl font-semibold text-slate-900 dark:text-slate-100">Time difference from major cities</h2>
           <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">
             Right now in {displayName}, the offsets below show how other hubs compare.
