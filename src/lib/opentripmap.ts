@@ -1,7 +1,7 @@
 import type { CityMeta, CityPoi, CityPoisResponse } from "../types/cityTypes";
 
 const OPEN_TRIPMAP_BASE = "https://api.opentripmap.com/0.1/en/places";
-const OPEN_TRIPMAP_API_KEY = (globalThis as any).process?.env?.OPEN_TRIPMAP_API_KEY as string | undefined;
+const OPEN_TRIPMAP_API_KEY = process.env.OPEN_TRIPMAP_API_KEY as string | undefined;
 
 const ATTRACTION_KINDS = "interesting_places,tourist_facilities,museums,architecture,historic,cultural";
 const RESTAURANT_KINDS = "catering.restaurant,catering.cafe";
@@ -23,10 +23,6 @@ type OtmFeatureCollection = {
 };
 
 async function fetchRadiusPois(lat: number, lon: number, kinds: string, limit: number): Promise<OtmFeatureCollection> {
-  if (!OPEN_TRIPMAP_API_KEY) {
-    throw new Error("OPEN_TRIPMAP_API_KEY is not configured");
-  }
-
   const url = new URL(`${OPEN_TRIPMAP_BASE}/radius`);
   url.searchParams.set("lat", String(lat));
   url.searchParams.set("lon", String(lon));
@@ -76,6 +72,10 @@ function sortByRatingThenDistance(a: CityPoi, b: CityPoi) {
 }
 
 export async function getCityPois(city: CityMeta): Promise<CityPoisResponse> {
+  if (!OPEN_TRIPMAP_API_KEY) {
+    throw new Error("Missing OPEN_TRIPMAP_API_KEY env var");
+  }
+
   const [attractionsRaw, restaurantsRaw] = await Promise.all([
     fetchRadiusPois(city.lat, city.lon, ATTRACTION_KINDS, 8),
     fetchRadiusPois(city.lat, city.lon, RESTAURANT_KINDS, 8),
