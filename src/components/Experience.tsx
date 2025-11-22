@@ -13,7 +13,7 @@ import { CitySearch } from "./CitySearch";
 import { usePersistentState } from "../hooks/usePersistentState";
 import { slugifyCity } from "../utils/slugifyCity";
 import { formatCityDisplay } from "../utils/formatCityDisplay";
-import { CITY_CONFIGS, CITY_LIST, type CityConfig } from "../data/cities";
+import { CITY_LIST, findCityBySlug, type CityConfig } from "../data/cities";
 import { SHOW_AD_SLOTS } from "../config";
 import { guessDefaultCityFromTimezone } from "../utils/guessDefaultCity";
 import { searchCities } from "../utils/cityData";
@@ -369,7 +369,7 @@ export function Experience({ initialTimezone, initialLabel, initialCitySlug, onS
   const showAutoNotice = Boolean(!savedLocation && !initialTimezone && autoDetectedCity && selectedTimezone === autoDetectedCity.timezone);
 
   const handleCitySearchSelect = (citySlug: string) => {
-    const city = CITY_CONFIGS[citySlug];
+    const city = findCityBySlug(citySlug);
     if (!city) return;
     handleTimezoneChange(city.timezone, formatCityDisplay(city), city.slug);
   };
@@ -430,7 +430,7 @@ export function Experience({ initialTimezone, initialLabel, initialCitySlug, onS
           const result = json.results?.[0];
           const fallbackCity = findNearestCity(latitude, longitude);
           const matchedSlug = result ? searchCities(result.name, 1)[0]?.slug : undefined;
-          const matchedCity = (matchedSlug && CITY_CONFIGS[matchedSlug]) || fallbackCity;
+          const matchedCity = (matchedSlug && findCityBySlug(matchedSlug)) || fallbackCity;
           if (matchedCity) {
             handleTimezoneChange(matchedCity.timezone, formatCityDisplay(matchedCity), matchedCity.slug);
             setGeoStatus("success");

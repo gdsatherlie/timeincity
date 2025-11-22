@@ -1,8 +1,8 @@
 import type { CityConfig } from "../data/cities";
+import { formatCityDisplay } from "./formatCityDisplay";
 
 export function getCitySeoCopy(city: CityConfig) {
-  const location = [city.name, city.region, city.country].filter(Boolean).join(", ");
-  const resolvedLocation = location || city.name;
+  const resolvedLocation = formatCityDisplay(city) || city.name;
 
   return {
     title: `Current Time in ${resolvedLocation} — Live Clock & Weather | TimeInCity`,

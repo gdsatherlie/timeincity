@@ -1,4 +1,5 @@
 import { loadCities } from "../utils/cityData";
+import { candidateSlugs, normalizeSlugCandidate } from "../utils/citySlug";
 
 const normalizedCities = loadCities();
 
@@ -256,10 +257,29 @@ const configs: CityConfig[] = normalizedCities.map((city) => ({
   continent: deriveRegion(city.countryCode, city.timezone)
 }));
 
+const slugLookup = new Map<string, CityConfig>();
+
+for (const city of configs) {
+  for (const slug of candidateSlugs(city)) {
+    const key = normalizeSlugCandidate(slug);
+    if (!slugLookup.has(key)) {
+      slugLookup.set(key, city);
+    }
+  }
+}
+
 export const CITY_CONFIGS: Record<string, CityConfig> = configs.reduce<Record<string, CityConfig>>((acc, city) => {
-  acc[city.slug] = city;
+  acc[normalizeSlugCandidate(city.slug)] = city;
   return acc;
 }, {});
+
+export function findCityBySlug(slug: string): CityConfig | undefined {
+  const normalized = normalizeSlugCandidate(slug);
+  if (slugLookup.has(normalized)) {
+    return slugLookup.get(normalized);
+  }
+  return undefined;
+}
 
 export const CITY_LIST = configs;
 export const CITY_COUNT = configs.length;

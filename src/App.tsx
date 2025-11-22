@@ -7,7 +7,7 @@ import { SiteFooter } from "./components/SiteFooter";
 import { RichTextPage } from "./components/RichTextPage";
 import { RegionDirectory } from "./components/RegionDirectory";
 import { AdSlot } from "./components/AdSlot";
-import { CITY_CONFIGS, CITY_LIST, type CityConfig, type RegionSlug } from "./data/cities";
+import { CITY_LIST, findCityBySlug, type CityConfig, type RegionSlug } from "./data/cities";
 import { STATIC_PAGES, type StaticPageContent } from "./data/staticPages";
 import { LEGAL_PAGES, type LegalPageContent } from "./data/legalPages";
 import { REGION_PAGES } from "./data/regionPages";
@@ -16,9 +16,9 @@ import { slugifyCity } from "./utils/slugifyCity";
 import { SHOW_AD_SLOTS } from "./config";
 import { CityPage } from "./pages/city/[slug]";
 
-const DEFAULT_TITLE = "World Clock, Weather & Local Time in 500+ Cities | TimeInCity";
+const DEFAULT_TITLE = "TimeInCity — Live World Clock & Weather by City and Time Zone";
 const DEFAULT_DESCRIPTION =
-  "Check the current time, weather, sunrise, sunset, and world time zone data for cities worldwide. Compare times, plan meetings, and explore global clocks with TimeInCity.";
+  "TimeInCity shows the current time, weather, sunrise, and sunset for any IANA time zone. Explore popular cities, embed live clocks, and see world time at a glance.";
 
 const staticPageMap = new Map(STATIC_PAGES.map((page) => [page.path, page]));
 const legalPageMap = new Map(LEGAL_PAGES.map((page) => [page.path, page]));
@@ -30,6 +30,11 @@ interface HomeRoute {
 interface CityRoute {
   kind: "city";
   city: CityConfig;
+}
+
+interface CityNotFoundRoute {
+  kind: "city-not-found";
+  slug: string;
 }
 
 interface StaticRoute {
@@ -47,7 +52,7 @@ interface RegionRoute {
   slug: RegionSlug;
 }
 
-type Route = HomeRoute | CityRoute | StaticRoute | LegalRoute | RegionRoute;
+type Route = HomeRoute | CityRoute | CityNotFoundRoute | StaticRoute | LegalRoute | RegionRoute;
 
 function normalizePath(pathname: string): string {
   if (!pathname || pathname === "/") {
@@ -63,10 +68,11 @@ function parseRoute(pathname: string): Route {
   }
   if (normalized.startsWith("/city/")) {
     const slug = normalized.replace("/city/", "").toLowerCase();
-    const city = CITY_CONFIGS[slug];
+    const city = findCityBySlug(slug);
     if (city) {
       return { kind: "city", city };
     }
+    return { kind: "city-not-found", slug };
   }
   if (staticPageMap.has(normalized)) {
     return { kind: "static", page: staticPageMap.get(normalized)! };
@@ -148,7 +154,7 @@ export default function App(): JSX.Element {
     const slugParam = params.get("city");
     if (slugParam) {
       const normalizedSlug = slugifyCity(slugParam);
-      if (CITY_CONFIGS[normalizedSlug]) {
+      if (findCityBySlug(normalizedSlug)) {
         navigate(`/city/${normalizedSlug}`, { replace: true });
       }
       params.delete("city");
@@ -224,6 +230,22 @@ export default function App(): JSX.Element {
         );
       case "city":
         return <CityPage city={route.city} onSelectCity={handleCityNavigate} />;
+      case "city-not-found":
+        return (
+          <section className="rounded-3xl border border-slate-200/70 bg-white/80 p-10 text-center shadow-lg shadow-slate-900/5 backdrop-blur dark:border-slate-800 dark:bg-slate-900/80">
+            <h1 className="text-3xl font-semibold text-slate-900 dark:text-slate-100">City not found</h1>
+            <p className="mt-3 text-sm text-slate-600 dark:text-slate-300">
+              We couldn&apos;t find that city. Please try another search or return to the homepage.
+            </p>
+            <button
+              type="button"
+              onClick={() => navigate("/", { replace: true })}
+              className="mt-6 inline-flex items-center justify-center rounded-full bg-indigo-600 px-5 py-2 text-sm font-semibold text-white shadow hover:bg-indigo-500"
+            >
+              Back to homepage
+            </button>
+          </section>
+        );
       case "static":
         return <RichTextPage heading={route.page.heading} paragraphs={route.page.body} />;
       case "legal":

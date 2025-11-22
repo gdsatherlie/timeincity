@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import type { KeyboardEvent } from "react";
 
-import { CITY_CONFIGS, type CityConfig } from "../data/cities";
+import { findCityBySlug, type CityConfig } from "../data/cities";
 import { searchCities } from "../utils/cityData";
 import { formatCityDisplay } from "../utils/formatCityDisplay";
 
@@ -25,7 +25,7 @@ export function CityPickerField({ label, value, onSelect, variant = "dark" }: Ci
   useEffect(() => {
     const handle = window.setTimeout(() => {
       const matches = searchCities(query, 8)
-        .map((match) => CITY_CONFIGS[match.slug])
+        .map((match) => findCityBySlug(match.slug))
         .filter((city): city is CityConfig => Boolean(city));
       setResults(matches.length ? matches : [value]);
       setHighlightIndex(0);

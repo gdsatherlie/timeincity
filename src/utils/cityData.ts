@@ -1,4 +1,5 @@
 import rawCityData from "../data/cities_over_50000_clean.json";
+import { buildCitySlug, candidateSlugs, normalizeSlugCandidate } from "./citySlug";
 import { slugifyCity } from "./slugifyCity";
 
 export interface NormalizedCity {
@@ -41,7 +42,7 @@ function formatLabel(city: NormalizedCity): string {
 
 const cache: NormalizedCity[] = (rawCityData as NormalizedCity[]).map((city) => ({
   name: city.name,
-  slug: city.slug || slugifyCity(city.name),
+  slug: normalizeSlugCandidate(city.slug || buildCitySlug(city)),
   country: city.country,
   countryCode: city.countryCode,
   state: city.state,
@@ -51,14 +52,38 @@ const cache: NormalizedCity[] = (rawCityData as NormalizedCity[]).map((city) => 
   population: city.population,
 }));
 
-const slugMap = new Map<string, NormalizedCity>(cache.map((city) => [city.slug, city]));
+const slugMap = new Map<string, NormalizedCity>();
+const nameMap = new Map<string, NormalizedCity>();
+
+for (const city of cache) {
+  for (const slug of candidateSlugs(city)) {
+    if (!slugMap.has(slug)) {
+      slugMap.set(slug, city);
+    }
+  }
+  const nameSlug = slugifyCity(city.name);
+  if (!nameMap.has(nameSlug)) {
+    nameMap.set(nameSlug, city);
+  }
+}
 
 export function loadCities(): NormalizedCity[] {
   return cache;
 }
 
 export function getCityBySlug(slug: string): NormalizedCity | undefined {
-  return slugMap.get(slug.toLowerCase());
+  const normalized = normalizeSlugCandidate(slug);
+  if (slugMap.has(normalized)) {
+    return slugMap.get(normalized);
+  }
+  const fallbackName = slugifyCity(normalized);
+  if (slugMap.has(fallbackName)) {
+    return slugMap.get(fallbackName);
+  }
+  if (nameMap.has(fallbackName)) {
+    return nameMap.get(fallbackName);
+  }
+  return cache.find((city) => slugifyCity(city.name) === fallbackName);
 }
 
 export function searchCities(query: string, limit = 10): NormalizedCity[] {

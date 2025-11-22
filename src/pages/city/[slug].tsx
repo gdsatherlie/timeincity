@@ -62,7 +62,12 @@ function buildJsonLd(city: CityConfig) {
     "@context": "https://schema.org",
     "@type": "Place",
     name: formatCityDisplay(city),
-    address: [city.region, city.country].filter(Boolean).join(", "),
+    address: {
+      "@type": "PostalAddress",
+      addressLocality: city.name,
+      addressRegion: city.region ?? undefined,
+      addressCountry: city.country,
+    },
     geo: city.lat && city.lon ? { "@type": "GeoCoordinates", latitude: city.lat, longitude: city.lon } : undefined
   };
 }
@@ -171,7 +176,10 @@ export function CityPage({ city, onSelectCity }: CityPageProps): JSX.Element {
       const absMinutes = Math.abs(diffMinutes);
       const hours = Math.floor(absMinutes / 60);
       const minutes = absMinutes % 60;
-      const diffLabel = diffMinutes === 0 ? "0h" : `${diffMinutes > 0 ? "+" : "-"}${hours}h${minutes ? ` ${minutes}m` : ""}`;
+      const diffLabel =
+        diffMinutes === 0
+          ? "Same time"
+          : `${hours || minutes ? `${hours}h${minutes ? ` ${minutes}m` : ""}` : "0h"} ${sign === "ahead of" ? "ahead" : "behind"}`;
       return {
         label: reference.label,
         localTime: refTime.isValid ? refTime.toFormat("h:mm a") : "--:--",
@@ -181,14 +189,22 @@ export function CityPage({ city, onSelectCity }: CityPageProps): JSX.Element {
     });
   }, [displayName, now]);
 
-  const highlightSummary = referenceDifferences.find((entry) => entry.label === "London")?.summary ?? referenceDifferences[0]?.summary;
+  const newYorkDiff = referenceDifferences.find((entry) => entry.label === "New York");
+  const londonDiff = referenceDifferences.find((entry) => entry.label === "London");
+  const highlightSummary = londonDiff?.summary ?? referenceDifferences[0]?.summary;
 
   const nearbyCities = useMemo(() => {
-    const candidates = CITY_LIST.filter((candidate) => candidate.countryCode === city.countryCode && candidate.slug !== city.slug);
-    return candidates
+    const sameRegion = CITY_LIST.filter(
+      (candidate) => candidate.countryCode === city.countryCode && candidate.region && candidate.region === city.region && candidate.slug !== city.slug
+    );
+    const sameCountry = CITY_LIST.filter(
+      (candidate) => candidate.countryCode === city.countryCode && candidate.slug !== city.slug && (!candidate.region || candidate.region !== city.region)
+    );
+    const ordered = [...sameRegion, ...sameCountry];
+    return ordered
       .sort((a, b) => (b.population ?? 0) - (a.population ?? 0) || a.name.localeCompare(b.name))
       .slice(0, 6);
-  }, [city.countryCode, city.slug]);
+  }, [city.countryCode, city.region, city.slug]);
 
   const embedWeatherSummary = useMemo(() => {
     if (!weather) return undefined;
@@ -197,6 +213,15 @@ export function CityPage({ city, onSelectCity }: CityPageProps): JSX.Element {
   }, [weather]);
 
   const outlookRows = weather?.outlook.slice(0, 4) ?? [];
+  const todayDayLength = weather?.outlook[0]?.dayLengthMinutes;
+
+  const introLine = useMemo(() => {
+    const nyLine = newYorkDiff ? `${newYorkDiff.localTime} in New York` : null;
+    const londonLine = londonDiff ? `${londonDiff.localTime} in London` : null;
+    const segments = [nyLine, londonLine].filter(Boolean).join(" and ");
+    if (!segments) return `${displayName} is in the ${city.timezone} time zone.`;
+    return `${displayName} is in the ${city.timezone} time zone. When it is ${now.toFormat("h:mm a")} here, it is ${segments}.`;
+  }, [city.timezone, displayName, londonDiff, newYorkDiff, now]);
 
   return (
     <div className="flex flex-col gap-8">
@@ -206,6 +231,7 @@ export function CityPage({ city, onSelectCity }: CityPageProps): JSX.Element {
         <p className="mt-2 text-5xl font-semibold tracking-tight text-slate-900 dark:text-slate-50 sm:text-6xl">{now.toFormat("HH:mm:ss")}</p>
         <p className="text-lg text-slate-600 dark:text-slate-300">{now.toFormat("cccc, MMMM d, yyyy")}</p>
         <p className="mt-3 text-sm text-slate-500 dark:text-slate-400">Local time in {displayName} right now.</p>
+        <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">{introLine}</p>
       </section>
 
       <div className="grid gap-6 lg:grid-cols-3">
@@ -215,6 +241,9 @@ export function CityPage({ city, onSelectCity }: CityPageProps): JSX.Element {
             <li><strong className="font-semibold">Timezone:</strong> {city.timezone}</li>
             <li><strong className="font-semibold">UTC offset:</strong> {utcOffset}</li>
             <li><strong className="font-semibold">Daylight Saving:</strong> {isDst ? "Currently in DST" : "Not in DST"}</li>
+            <li>
+              <strong className="font-semibold">Location:</strong> {displayName}
+            </li>
             {city.population ? (
               <li>
                 <strong className="font-semibold">Population:</strong> {city.population.toLocaleString()}
@@ -264,6 +293,7 @@ export function CityPage({ city, onSelectCity }: CityPageProps): JSX.Element {
           <h2 className="text-xl font-semibold text-slate-900 dark:text-slate-100">Sunrise, sunset &amp; day length</h2>
           <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">
             Sunrise today in {displayName} is at {weather?.sunrise ?? "--"}; sunset is at {weather?.sunset ?? "--"}.
+            {todayDayLength ? ` Day length is ${formatMinutes(todayDayLength)}.` : ""}
           </p>
           <div className="mt-4 overflow-hidden rounded-2xl border border-slate-200/70 dark:border-slate-700">
             <table className="min-w-full divide-y divide-slate-200 text-sm dark:divide-slate-700">
