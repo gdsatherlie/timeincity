@@ -78,3 +78,5 @@ Because all time and weather data loads client-side, you don’t need any backen
 - Business-hour call windows live in `src/pages/city/[slug].tsx` (`BUSINESS_HOURS_START/END`) and drive the "Is it a good time to call?" card.
 - Per-city SEO copy comes from `src/utils/citySeo.ts` (used by the meta updater in `src/App.tsx` and rendered through `CitySeoSection`) so one edit updates every city page.
 - The city-specific embed snippet is powered by `EmbedConfigurator`, which now pre-fills the current city's timezone and label.
+- Programmatic city copy variants for SEO live in `src/lib/cityCopy.ts`; adjust the templates or add variants there.
+- Local highlights pull from OpenTripMap via the serverless route at `/api/cities/[slug]/pois` (client hook in `src/hooks/useCityPois.ts` and UI in `src/components/CityPoiSection.tsx`). Set `OPEN_TRIPMAP_API_KEY` in your Vercel env before deploying.

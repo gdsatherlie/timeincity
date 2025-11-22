@@ -9,6 +9,11 @@ import { MeetingPlanner } from "../../components/MeetingPlanner";
 import { EmbedConfigurator } from "../../components/EmbedConfigurator";
 import { WeatherCard } from "../../components/WeatherCard";
 import { formatCityDisplay } from "../../utils/formatCityDisplay";
+import { buildCityCopy } from "../../lib/cityCopy";
+import { useCityPois } from "../../hooks/useCityPois";
+import { CityPoiSection } from "../../components/CityPoiSection";
+import { toCityMeta } from "../../utils/cityMeta";
+import type { CityMeta } from "../../types/cityTypes";
 
 interface CityPageProps {
   city: CityConfig;
@@ -45,7 +50,7 @@ function formatOffset(minutes: number): string {
 const BUSINESS_HOURS_START = 9;
 const BUSINESS_HOURS_END = 17;
 
-function getCallStatus(now: DateTime, displayName: string) {
+function getCallStatus(now: { hour: number }, displayName: string) {
   const hour = now.hour;
 
   if (hour >= BUSINESS_HOURS_START && hour < BUSINESS_HOURS_END) {
@@ -168,10 +173,13 @@ async function fetchCityWeather(city: CityConfig): Promise<CityWeather> {
 
 export function CityPage({ city, onSelectCity }: CityPageProps): JSX.Element {
   const displayName = formatCityDisplay(city);
+  const cityMeta = useMemo<CityMeta>(() => toCityMeta(city), [city]);
   const [now, setNow] = useState(() => DateTime.now().setZone(city.timezone));
   const [weather, setWeather] = useState<CityWeather | null>(null);
   const [weatherStatus, setWeatherStatus] = useState<"idle" | "loading" | "error" | "success">("loading");
   const [weatherError, setWeatherError] = useState<string | undefined>();
+  const copy = useMemo(() => buildCityCopy(cityMeta), [cityMeta]);
+  const { data: poiData, loading: poiLoading, error: poiError } = useCityPois(city.slug);
 
   useEffect(() => {
     const interval = window.setInterval(() => {
@@ -391,6 +399,26 @@ export function CityPage({ city, onSelectCity }: CityPageProps): JSX.Element {
           </div>
         </section>
       </div>
+
+      <section className="rounded-3xl border border-slate-200/70 bg-white/80 p-6 shadow-lg shadow-slate-900/5 backdrop-blur dark:border-slate-800 dark:bg-slate-900/80">
+        <h2 className="text-xl font-semibold text-slate-900 dark:text-slate-100">About time in {displayName}</h2>
+        <div className="mt-3 space-y-3 text-sm leading-relaxed text-slate-700 dark:text-slate-200">
+          <p>{copy.intro}</p>
+          <p>{copy.timezone}</p>
+          <p>{copy.usage}</p>
+          <p>{copy.compare}</p>
+        </div>
+      </section>
+
+      <section className="space-y-3">
+        {poiLoading ? (
+          <p className="text-sm text-slate-600 dark:text-slate-300">Loading local highlights for {displayName}…</p>
+        ) : null}
+        {poiError ? (
+          <p className="text-sm text-rose-600 dark:text-rose-300">We couldn&apos;t load local highlights right now.</p>
+        ) : null}
+        {poiData ? <CityPoiSection pois={poiData} /> : null}
+      </section>
 
       <section className="rounded-3xl border border-slate-200/70 bg-white/80 p-6 shadow-lg shadow-slate-900/5 backdrop-blur dark:border-slate-800 dark:bg-slate-900/80">
         <h2 className="text-xl font-semibold text-slate-900 dark:text-slate-100">Nearby cities</h2>

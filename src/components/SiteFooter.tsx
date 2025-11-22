@@ -26,6 +26,9 @@ export function SiteFooter({ onNavigate }: SiteFooterProps): JSX.Element {
             </button>
           ))}
         </nav>
+        <p className="text-xs text-slate-500 dark:text-slate-400">
+          Some points-of-interest data are sourced from OpenStreetMap and other open data via OpenTripMap (ODbL).
+        </p>
       </div>
     </footer>
   );

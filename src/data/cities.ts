@@ -1,4 +1,4 @@
-import { loadCities } from "../utils/cityData";
+import { loadCities, type NormalizedCity } from "../utils/cityData";
 import { candidateSlugs, normalizeSlugCandidate } from "../utils/citySlug";
 
 const normalizedCities = loadCities();
