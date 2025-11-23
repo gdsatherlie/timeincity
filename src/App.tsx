@@ -15,6 +15,9 @@ import { getCitySeoCopy } from "./utils/citySeo";
 import { slugifyCity } from "./utils/slugifyCity";
 import { SHOW_AD_SLOTS } from "./config";
 import { CityPage } from "./pages/city/[slug]";
+import { GuidesIndex } from "./pages/GuidesIndex";
+import { GuideArticlePage } from "./pages/GuideArticlePage";
+import { getArticleBySlug } from "./data/articles";
 
 const DEFAULT_TITLE = "TimeInCity — Live World Clock & Weather by City and Time Zone";
 const DEFAULT_DESCRIPTION =
@@ -52,7 +55,31 @@ interface RegionRoute {
   slug: RegionSlug;
 }
 
-type Route = HomeRoute | CityRoute | CityNotFoundRoute | StaticRoute | LegalRoute | RegionRoute;
+interface GuidesIndexRoute {
+  kind: "guides-index";
+}
+
+interface GuideArticleRoute {
+  kind: "guide-article";
+  slug: string;
+  article: ReturnType<typeof getArticleBySlug>;
+}
+
+interface GuideNotFoundRoute {
+  kind: "guide-not-found";
+  slug: string;
+}
+
+type Route =
+  | HomeRoute
+  | CityRoute
+  | CityNotFoundRoute
+  | StaticRoute
+  | LegalRoute
+  | RegionRoute
+  | GuidesIndexRoute
+  | GuideArticleRoute
+  | GuideNotFoundRoute;
 
 function normalizePath(pathname: string): string {
   if (!pathname || pathname === "/") {
@@ -73,6 +100,17 @@ function parseRoute(pathname: string): Route {
       return { kind: "city", city };
     }
     return { kind: "city-not-found", slug };
+  }
+  if (normalized === "/guides") {
+    return { kind: "guides-index" };
+  }
+  if (normalized.startsWith("/guides/")) {
+    const slug = normalized.replace("/guides/", "");
+    const article = getArticleBySlug(slug);
+    if (article) {
+      return { kind: "guide-article", slug, article };
+    }
+    return { kind: "guide-not-found", slug };
   }
   if (staticPageMap.has(normalized)) {
     return { kind: "static", page: staticPageMap.get(normalized)! };
@@ -178,6 +216,22 @@ export default function App(): JSX.Element {
       updateMetaTags(route.page.title, route.page.description, route.page.path);
       return;
     }
+    if (route.kind === "guides-index") {
+      updateMetaTags(
+        "Guides & Articles | TimeInCity",
+        "Long-form guides on time zones, world clocks, and meeting across cities with TimeInCity.",
+        "/guides"
+      );
+      return;
+    }
+    if (route.kind === "guide-article" && route.article) {
+      updateMetaTags(
+        `${route.article.title} | TimeInCity Guides`,
+        route.article.description,
+        `/guides/${route.article.slug}`
+      );
+      return;
+    }
     if (route.kind === "region") {
       const regionPage = REGION_PAGES[route.slug];
       if (regionPage) {
@@ -243,6 +297,39 @@ export default function App(): JSX.Element {
               className="mt-6 inline-flex items-center justify-center rounded-full bg-indigo-600 px-5 py-2 text-sm font-semibold text-white shadow hover:bg-indigo-500"
             >
               Back to homepage
+            </button>
+          </section>
+        );
+      case "guides-index":
+        return <GuidesIndex onNavigate={navigate} />;
+      case "guide-article":
+        if (!route.article) {
+          return (
+            <section className="rounded-3xl border border-slate-200/70 bg-white/80 p-10 text-center shadow-lg shadow-slate-900/5 backdrop-blur dark:border-slate-800 dark:bg-slate-900/80">
+              <h1 className="text-3xl font-semibold text-slate-900 dark:text-slate-100">Article not found</h1>
+              <p className="mt-3 text-sm text-slate-600 dark:text-slate-300">Please return to the guides directory.</p>
+              <button
+                type="button"
+                onClick={() => navigate("/guides", { replace: true })}
+                className="mt-6 inline-flex items-center justify-center rounded-full bg-indigo-600 px-5 py-2 text-sm font-semibold text-white shadow hover:bg-indigo-500"
+              >
+                Back to guides
+              </button>
+            </section>
+          );
+        }
+        return <GuideArticlePage article={route.article} onNavigate={navigate} />;
+      case "guide-not-found":
+        return (
+          <section className="rounded-3xl border border-slate-200/70 bg-white/80 p-10 text-center shadow-lg shadow-slate-900/5 backdrop-blur dark:border-slate-800 dark:bg-slate-900/80">
+            <h1 className="text-3xl font-semibold text-slate-900 dark:text-slate-100">Article not found</h1>
+            <p className="mt-3 text-sm text-slate-600 dark:text-slate-300">We couldn&apos;t find that guide. Please return to the guides list.</p>
+            <button
+              type="button"
+              onClick={() => navigate("/guides", { replace: true })}
+              className="mt-6 inline-flex items-center justify-center rounded-full bg-indigo-600 px-5 py-2 text-sm font-semibold text-white shadow hover:bg-indigo-500"
+            >
+              Back to guides
             </button>
           </section>
         );

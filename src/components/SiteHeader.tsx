@@ -42,6 +42,7 @@ const toolsNav: NavSection = {
 const infoNav: NavSection = {
   label: "Info",
   items: [
+    { label: "Guides", path: "/guides" },
     { label: "About", path: "/about" },
     { label: "Contact", path: "/contact" },
     { label: "Privacy Policy", path: "/privacy" },

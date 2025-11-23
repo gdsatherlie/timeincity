@@ -3,6 +3,7 @@ interface SiteFooterProps {
 }
 
 const footerLinks = [
+  { label: "Guides", path: "/guides" },
   { label: "About", path: "/about" },
   { label: "Contact", path: "/contact" },
   { label: "Privacy Policy", path: "/privacy" },
