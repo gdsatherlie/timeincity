@@ -1,7 +1,5 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
-import type { CityMeta } from "../../../src/types/cityTypes";
 import { findCityBySlug } from "../../../src/data/cities";
-import { toCityMeta } from "../../../src/utils/cityMeta";
 import { getCityPois } from "../../../src/lib/opentripmap";
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
@@ -22,14 +20,17 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       return;
     }
 
-    let cityMeta: CityMeta;
-    try {
-      cityMeta = toCityMeta(cityConfig);
-    } catch (error) {
-      console.error("Failed to prepare city metadata for slug:", slug, error);
-      res.status(500).json({ error: "Failed to prepare city metadata" });
-      return;
-    }
+    const cityMeta = {
+      slug: cityConfig.slug,
+      name: cityConfig.name,
+      region: cityConfig.state ?? cityConfig.region ?? "",
+      country: cityConfig.country,
+      lat: cityConfig.lat,
+      lon: cityConfig.lon,
+      timezoneLabel: cityConfig.timezone,
+      utcOffsetLabel: cityConfig.timezone,
+      observesDst: false,
+    };
 
     const pois = await getCityPois(cityMeta);
 

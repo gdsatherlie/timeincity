@@ -1,7 +1,7 @@
 import type { CityMeta, CityPoi, CityPoisResponse } from "../types/cityTypes";
 
 const OPEN_TRIPMAP_BASE = "https://api.opentripmap.com/0.1/en/places";
-const OPEN_TRIPMAP_API_KEY = process.env.OPEN_TRIPMAP_API_KEY as string | undefined;
+const OPEN_TRIPMAP_API_KEY = process.env.OPEN_TRIPMAP_API_KEY;
 
 const ATTRACTION_KINDS = "interesting_places,tourist_facilities,museums,architecture,historic,cultural";
 const RESTAURANT_KINDS = "catering.restaurant,catering.cafe";
