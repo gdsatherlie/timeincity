@@ -1,0 +1,62 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+}
+
+body {
+  @apply bg-white text-slate-900 antialiased;
+}
+
+a {
+  @apply text-brand-700 hover:text-brand-800 transition-colors;
+}
+
+.section-shell {
+  @apply mx-auto max-w-6xl px-4 sm:px-6 lg:px-8;
+}
+
+.card {
+  @apply rounded-2xl border border-slate-200 bg-white p-6 shadow-sm shadow-slate-100;
+}
+
+.badge {
+  @apply inline-flex items-center rounded-full bg-brand-50 px-3 py-1 text-xs font-semibold text-brand-700;
+}
+
+.pill {
+  @apply inline-flex items-center rounded-full border border-slate-200 px-3 py-1 text-xs font-medium text-slate-600;
+}
+
+.grid-auto-fit {
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+}
+
+input,
+select,
+textarea {
+  @apply w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm shadow-inner shadow-slate-50 outline-none transition focus:border-brand-300 focus:ring-2 focus:ring-brand-100;
+}
+
+label {
+  @apply text-sm font-medium text-slate-700;
+}
+
+button.btn-primary {
+  @apply inline-flex items-center justify-center rounded-xl bg-brand-600 px-4 py-2 text-sm font-semibold text-white shadow-sm shadow-brand-200 transition hover:bg-brand-700 focus:ring-2 focus:ring-brand-200;
+}
+
+button.btn-secondary,
+a.btn-secondary {
+  @apply inline-flex items-center justify-center rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 shadow-sm transition hover:border-brand-200 hover:text-brand-700;
+}
+
+.section-title {
+  @apply text-2xl font-semibold text-slate-900 sm:text-3xl;
+}
+
+.subtext {
+  @apply text-sm text-slate-600;
+}
