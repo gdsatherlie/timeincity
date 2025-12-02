@@ -37,6 +37,17 @@ npm run preview
 
 Open-Meteo’s public APIs do not require authentication, so you don’t need any environment variables.
 
+If you want production builds to render Google AdSense instead of the default placeholders, set the following Vite environment variables:
+
+- `VITE_ADSENSE_CLIENT` – your AdSense publisher ID (for example `ca-pub-XXXXXXXXXXXXXXXX`).
+- `VITE_ADSENSE_SLOT_TOP` – ad slot ID for the sticky top banner.
+- `VITE_ADSENSE_SLOT_INLINE` – ad slot ID for the inline placement between the timezone selector and weather card.
+- `VITE_ADSENSE_SLOT_BOTTOM` – ad slot ID for the sticky bottom banner.
+
+## AdSense ads.txt
+
+The required AdSense declaration is checked into `public/ads.txt`, which Vite and Vercel serve from the site root as `/ads.txt`.
+
 ## Super simple launch guide (explained like I'm five)
 
 1. **Put the project on your computer.** Download or clone this folder so you can open it locally.
