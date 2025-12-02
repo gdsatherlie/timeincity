@@ -44,6 +44,10 @@ If you want production builds to render Google AdSense instead of the default pl
 - `VITE_ADSENSE_SLOT_INLINE` – ad slot ID for the inline placement between the timezone selector and weather card.
 - `VITE_ADSENSE_SLOT_BOTTOM` – ad slot ID for the sticky bottom banner.
 
+## AdSense ads.txt
+
+The required AdSense declaration is checked into `public/ads.txt`, which Vite and Vercel serve from the site root as `/ads.txt`.
+
 ## Super simple launch guide (explained like I'm five)
 
 1. **Put the project on your computer.** Download or clone this folder so you can open it locally.
