@@ -16,6 +16,27 @@ interface AdSlotProps {
 const ADSENSE_SCRIPT_ID = "timeincity-adsense";
 const ADSENSE_ACCOUNT_META = "google-adsense-account";
 
+function findExistingAdsenseScript(client: string): HTMLScriptElement | null {
+  const byId = document.getElementById(ADSENSE_SCRIPT_ID) as
+    | HTMLScriptElement
+    | null;
+  if (byId) {
+    return byId;
+  }
+
+  const existing = document.head.querySelector(
+    "script[src*='pagead2.googlesyndication.com/pagead/js/adsbygoogle.js']"
+  ) as HTMLScriptElement | null;
+
+  if (existing) {
+    existing.id = ADSENSE_SCRIPT_ID;
+    existing.dataset.adsbygoogleClient ||= client;
+    return existing;
+  }
+
+  return null;
+}
+
 function ensureAdsenseAccountMeta(client: string): void {
   const existing = document.head.querySelector(`meta[name='${ADSENSE_ACCOUNT_META}']`) as
     | HTMLMetaElement
@@ -32,8 +53,9 @@ function ensureAdsenseAccountMeta(client: string): void {
 }
 
 function ensureAdsense(client: string): HTMLScriptElement | null {
-  const existing = document.getElementById(ADSENSE_SCRIPT_ID) as HTMLScriptElement | null;
+  const existing = findExistingAdsenseScript(client);
   if (existing) {
+    ensureAdsenseAccountMeta(client);
     return existing;
   }
 

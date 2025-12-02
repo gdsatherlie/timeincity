@@ -46,7 +46,8 @@ type WeatherSummary = {
   sunset: string;
 };
 
-const ADSENSE_CLIENT = import.meta.env.VITE_ADSENSE_CLIENT;
+const ADSENSE_CLIENT =
+  import.meta.env.VITE_ADSENSE_CLIENT ?? "ca-pub-8663179222160693";
 
 const AD_SLOTS = {
   topBanner: import.meta.env.VITE_ADSENSE_SLOT_TOP,
